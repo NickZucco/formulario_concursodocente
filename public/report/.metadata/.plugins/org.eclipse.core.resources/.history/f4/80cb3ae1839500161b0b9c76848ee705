@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2016-10-18T17:40:33 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="hoja_de_vida" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8ea51ec8-cbca-4e2a-bfb8-ecbeaa3a2cec">
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="66" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="10" width="50" height="50" uuid="8db69fa7-7d87-4d52-87cf-38ad4a5870ff"/>
+				<imageExpression><![CDATA["https://www.ingenieria.bogota.unal.edu.co/images/logoconcursoprofesoral_05083.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="420" y="10" width="151" height="20" uuid="fbf608c2-e021-44ab-8c9d-f196caa6397a"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HOJA DE VIDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="30" width="150" height="30" uuid="c9a0f114-5316-4bae-9937-995b9eab7cf7"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[FACULTAD DE INGENIERÍA]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="83" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="253" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="569" height="252" uuid="41eac386-d602-412e-9e59-2ef4152a4e7a"/>
+				<parametersMapExpression><![CDATA[personal_info]]></parametersMapExpression>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["subreport_personal_info.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
