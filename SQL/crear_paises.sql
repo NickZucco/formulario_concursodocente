@@ -1,3 +1,10 @@
 insert into paises values (1, 'Afganistan');
 insert into paises values (2, 'Albania (República De)');
+insert into paises values (3, 'Alemania (República Federal De)');
+insert into paises values (4, 'Andorra (Principado De)');
+insert into paises values (5, 'Angola (República De)');
+insert into paises values (6, 'Antillas Neerlandesas');
+insert into paises values (7, 'Arabia Saudita (Reino De)');
+insert into paises values (8, 'Argelia (República Argelina Democrática Y Popular)');
+insert into paises values (9, 'Argentina (República)');
 insert into paises values (46, 'Colombia');

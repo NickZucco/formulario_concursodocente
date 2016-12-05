@@ -20,7 +20,7 @@
             </div>
             @endif
 
-            <form name="registro" id="registro" method="post" action="{{ env('APP_URL') }}auth/register" class="form-horizontal" style="margin:20px 0" onSubmit = "validate()">
+            <form name="registro" id="registro" method="post" action="{{ env('APP_URL') }}auth/register" class="form-horizontal" style="margin:20px 0">
                 {!! csrf_field() !!}
                 <div class="form-group"> 
                     <label for="name" class="control-label col-sm-5">Nombres y apellidos</label>
@@ -50,7 +50,7 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="g-recaptcha-response" class="control-label col-sm-5">CAPTCHA</label>
+                    <label for="password" class="control-label col-sm-5">CAPTCHA</label>
                     <div class="col-sm-12 col-md-7">
                         {!! Recaptcha::render() !!}
                     </div>
@@ -69,19 +69,18 @@
                         <center><input class="form-control" type="submit" name="envio" value="Continuar"></center>
                     </div>
                 </div>
-            </form>
+            </form>			
 			
-			{{var_dump($errors)}}
-			
-			<script type=text/javascript>
-			function validate(){
+			<script>
+			$("#registro").submit(function(event){
+				var isValid = true;
 				var agreeBox = document.getElementsByName('agree');
 				console.log(agreeBox[0]);
 				if (!agreeBox[0].checked){
 					alert('Debe aceptar los términos y condiciones de la convocatoria para registrarse.');
-					return false;
+					event.preventDefault();
 				}
-			}
+			});
 			</script>
 			
         </div>
