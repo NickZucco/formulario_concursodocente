@@ -48,18 +48,18 @@
                         <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" placeholder="********">
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="password" class="control-label col-sm-5">CAPTCHA</label>
                     <div class="col-sm-12 col-md-7">
                         {!! Recaptcha::render() !!}
                     </div>
                 </div>
-				
-				<div for="agree" class="form-group">					
+
+                <div for="agree" class="form-group">					
                     <center><label align="center" for="name" class="control-label">{{ Form::checkbox('agree', 1, null) }}&nbsp;&nbsp;&nbsp;He leído y acepto los términos y condiciones de la <a href='#'>convocatoria</a>.</label></center>
                 </div>    
-                
+
                 <div class="form-group">
                     <div class="form-group"> 
                         <p align="center"><b>&nbsp;Si tiene usuario y contraseña, por favor ingrese <a href="login">aquí</a>.</b></p>
@@ -70,19 +70,24 @@
                     </div>
                 </div>
             </form>			
-			
-			<script>
-			$("#registro").submit(function(event){
-				var isValid = true;
-				var agreeBox = document.getElementsByName('agree');
-				console.log(agreeBox[0]);
-				if (!agreeBox[0].checked){
-					alert('Debe aceptar los términos y condiciones de la convocatoria para registrarse.');
-					event.preventDefault();
-				}
-			});
-			</script>
-			
+
+            <script>
+                /**///
+                /*
+                 $("#registro").submit(function(event){
+                 var isValid = true;
+                 var agreeBox = document.getElementsByName('agree');
+                 console.log(agreeBox[0]);
+                 if (!agreeBox[0].checked){
+                 alert('Debe aceptar los términos y condiciones de la convocatoria para registrarse.');
+                 event.preventDefault();
+                 }else{
+                 $("#registro").submit()
+                 }
+                 });
+                 */
+            </script>
+
         </div>
     </div>
 </div>
