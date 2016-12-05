@@ -55,7 +55,10 @@
                         {!! Recaptcha::render() !!}
                     </div>
                 </div>
-                
+				
+				<div for="agree" class="form-group">					
+                    <center><label align="center" for="name" class="control-label">{{ Form::checkbox('agree', 1, null) }}&nbsp;&nbsp;&nbsp;He leído y acepto los términos y condiciones de la <a href='#'>convocatoria</a>.</label></center>
+                </div>    
                 
                 <div class="form-group">
                     <div class="form-group"> 
@@ -66,7 +69,20 @@
                         <center><input class="form-control" type="submit" name="envio" value="Continuar"></center>
                     </div>
                 </div>
-            </form>          
+            </form>			
+			
+			<script>
+			$("#registro").submit(function(event){
+				var isValid = true;
+				var agreeBox = document.getElementsByName('agree');
+				console.log(agreeBox[0]);
+				if (!agreeBox[0].checked){
+					alert('Debe aceptar los términos y condiciones de la convocatoria para registrarse.');
+					event.preventDefault();
+				}
+			});
+			</script>
+			
         </div>
     </div>
 </div>
