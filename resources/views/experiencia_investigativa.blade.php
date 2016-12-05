@@ -22,7 +22,12 @@
                     <input type="text" class="form-control" id="nombre_proyecto" name="nombre_proyecto" placeholder="Nombre del proyecto">
                 </div>
             </div>
-
+            <div class="form-group">
+                <label for="institucion" class="col-sm-12 col-md-3 control-label">Institución</label>
+                <div class="col-sm-12 col-md-9">
+                    <input type="text" class="form-control" id="institucion" name="institucion" placeholder="Nombre de la institución">
+                </div>
+            </div>
             <div class="form-group">
                 <label for="area_proyecto" class="col-sm-12 col-md-3 control-label">Área del proyecto</label>
                 <div class="col-sm-12 col-md-9">

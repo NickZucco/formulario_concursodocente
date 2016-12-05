@@ -37,7 +37,6 @@
                 <li><a href="{{ env('APP_URL') }}produccion_intelectual" data-path="produccion_intelectual"><i class="fa fa-lightbulb-o" aria-hidden="true"></i>&nbsp;Producción intelectual</a></li>
                 <li><a href="{{ env('APP_URL') }}idiomas" data-path="idiomas"><i class="fa fa-language" aria-hidden="true"></i>&nbsp;Idiomas</a></li>
                 <li><a href="{{ env('APP_URL') }}perfiles/ensayos" data-path="perfiles/ensayos"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;Ensayos</a></li>
-                <li><a href="{{ env('APP_URL') }}cerrar_formulario" data-path="cerrar_formulario"><i class="fa fa-lock" aria-hidden="true"></i>&nbsp;Cerrar formulario</a></li>
                 @else
                 <li><a href="#" disabled>
                         <i class="hidden-xs hidden-sm fa fa-arrow-left" aria-hidden="true"></i>

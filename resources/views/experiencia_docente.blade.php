@@ -49,15 +49,6 @@
                 </div>
             </div>
 
-            <!--
-            <div class="form-group">
-                <label for="nombre_asignaturas" class="col-sm-12 col-md-2 control-label">Nombre de las asignaturas</label>
-                <div class="col-sm-12 col-md-10">
-                <textarea name="nombre_asignaturas" id="nombre_asignaturas" class="form-control"></textarea>
-                </div>
-            </div>
-            -->
-
             <!---->
             <div class="form-group" id="dynamic-form">
                 <label for="area_trabajo" class="col-sm-12 col-md-2 control-label">Información de asignaturas impartidas</label>
@@ -88,13 +79,14 @@
                     </table>
                 </div>
             </div>
-            <!---->
 
             <div class="form-group">
-                <label for="adjunto" class="col-sm-12 col-md-2 control-label">Documento de soporte: </label>
+                <div class="col-sm-12 col-md-2">
+                    <label for="adjunto" class="col-sm-12 col-md-2 control-label">Documento de soporte: </label>
+                </div>
                 <div class="col-sm-12 col-md-10">
                     <input id="adjunto" type="file" class="form-control" name="adjunto" required />
-                    <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato PDF y no tener un tamaño superior a 10MB</em>
+                    <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato PDF y no tener un tamaño superior a 10MB. No obligatorio para experiencia docente en la Unversidad Nacional de Colombia - Sede Bogotá</em>
                 </div>
             </div>
 
@@ -139,7 +131,7 @@
                 </td>
                 <td>
                     <table class="toJSONTable" data-json="{{$experiencia_docente->info_asignaturas}}">
-                        
+
                     </table>
                 </td>
                 <td>
@@ -188,8 +180,8 @@
 
     // Builds the HTML Table out of myList.
     function buildHtmlTable($selector) {
-        
-        var myList=$selector.data("json");
+
+        var myList = $selector.data("json");
         var columns = addAllColumnHeaders(myList, $selector);
 
         for (var i = 0; i < myList.length; i++) {
@@ -226,6 +218,44 @@
     }
 
     (function ($) {
+        /**/
+        var unal_places = [
+            'Universidad Nacional de Colombia - Sede Bogotá',
+        ];
+
+        var unal_bh = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.whitespace,
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            local: unal_places
+        });
+
+        $('#nombre_institucion').typeahead(
+                null,
+                {
+                    name: 'unal_names',
+                    source: unal_bh
+                }
+        );
+        $("#nombre_institucion").focusout(function () {
+            var i = 0;
+            var unal_selected = false;
+            while (unal_places.length > i && !unal_selected) {
+                if (unal_places[i] == $("#nombre_institucion").val()) {
+                    unal_selected = true;
+                }
+                i++;
+            }
+
+            if (!unal_selected) {
+                $("#adjunto").attr("required", "required");
+            } else {
+                $("#adjunto").removeAttr("required");
+            }
+        });
+        $('#nombre_institucion').bind('typeahead:select', function (ev, suggestion) {
+            unal_selected = true;
+        });
+        /**/
         $("#dynamic-form").on('click', '.addBtn', function (e) {
             e.preventDefault();
             addTableRow($(this));

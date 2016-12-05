@@ -67,11 +67,10 @@
             <div class="form-group">
                 <div class="col-sm-12 col-md-2 ">
                     <label for="adjunto" class="control-label">Documento de soporte: </label>
-                    <br>
-                    <em>No obligatorio para estudios en la Unversidad Nacional de Colombia</em>
                 </div>
                 <div class="col-sm-12 col-md-9">
                     <input id="adjunto" type="file" class="form-control" name="adjunto" required/>
+                    <em>No obligatorio para estudios en la Unversidad Nacional de Colombia - Sede Bogotá</em>
                     <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato PDF y no tener un tamaño superior a 10MB</em>
                 </div>
             </div>
@@ -95,32 +94,6 @@
                     </div>
                 </div>
             </div>
-            <!---->
-            @foreach($perfiles_seleccionados as $perfil_seleccionado)
-            @if($perfil_seleccionado->identificador=='E3')
-
-            <div class="panel-body">
-                <p>Por favor, diligencie estos campos requeridos para aplicar al perfil E3:</p>
-                <br>
-                <div class="form-group">
-                    <label for="adjunto" class="col-sm-12 col-md-5 control-label">Nombre de la tesis: </label>
-                    <div class="col-sm-12 col-md-7">
-                        <input id="nombre_tesis" type="text" class="form-control" name="nombre_tesis" required/>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="adjunto" class="col-sm-12 col-md-7 control-label">Resumen ejecutivo ó tres primeras páginas de la tesis de grado: </label>
-                    <div class="col-sm-12 col-md-9">
-                        <input id="adjunto_resumen_ejecutivo" type="file" class="form-control" name="adjunto_resumen_ejecutivo" required/>
-                        <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato PDF y no tener un tamaño superior a 10MB</em>
-                    </div>
-                </div>
-            </div>
-            @endif
-            @endforeach
-            <!---->
-
         </div>
 
         <div class="form-group">
@@ -222,13 +195,7 @@
         });
 
         var unal_places = [
-            'Universidad Nacional de Colombia - Sede Amazonia',
             'Universidad Nacional de Colombia - Sede Bogotá',
-            'Universidad Nacional de Colombia - Sede Caribe',
-            'Universidad Nacional de Colombia - Sede Manizales',
-            'Universidad Nacional de Colombia - Sede Medellín',
-            'Universidad Nacional de Colombia - Sede Orinoquia',
-            'Universidad Nacional de Colombia - Sede Tumaco',
         ];
 
         var unal_bh = new Bloodhound({

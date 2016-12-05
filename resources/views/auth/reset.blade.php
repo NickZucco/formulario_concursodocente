@@ -42,7 +42,7 @@
 
                 <div class="form-group">
                     <button type="submit"  class="form-control">
-                        Resetear password
+                        Reiniciar contraseña
                     </button>
                 </div>
             </form>

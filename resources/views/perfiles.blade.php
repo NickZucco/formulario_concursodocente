@@ -32,7 +32,9 @@
     </div>
     <form method="post" action="{{ env('APP_URL') }}perfiles" class="form-horizontal" style="margin:20px 0">
         <div class="panel-body">
-            <p>A continuación, se mostrarán habilitados los planes de pregrado requeridos para cada perfil seleccionado. Tenga en cuenta que, dependiendo de los planes de pregrado seleccionados o no continuar con la selección de perfiles correspondiente</p>
+            <p>
+                A continuación, se monstrarán habilitados los títulos de pregrado requeridos para cadaa perfil seleccionado. Tenga en cuenta que, dependiendo de los títulos de pregrado seleccionados se habilitarán los perfiles del concurso a los cuales puede aplicar.
+            </p>
 
             <div class="row">
                 <div class="col-sm-12 col-md-12">

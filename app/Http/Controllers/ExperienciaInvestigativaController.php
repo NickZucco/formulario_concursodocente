@@ -33,6 +33,7 @@ class ExperienciaInvestigativaController extends Controller {
     public function insert() {
         $input = Input::all();
         $input['aspirantes_id'] = Auth::user()->id;
+        unset($input['en_curso']);
         
         //Efectuamos las operaciones sobre el archivo
         $ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id,"EI");

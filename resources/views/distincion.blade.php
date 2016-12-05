@@ -107,13 +107,7 @@
     (function ($) {
 
         var unal_places = [
-            'Universidad Nacional de Colombia - Sede Amazonia',
             'Universidad Nacional de Colombia - Sede Bogotá',
-            'Universidad Nacional de Colombia - Sede Caribe',
-            'Universidad Nacional de Colombia - Sede Manizales',
-            'Universidad Nacional de Colombia - Sede Medellín',
-            'Universidad Nacional de Colombia - Sede Orinoquia',
-            'Universidad Nacional de Colombia - Sede Tumaco',
         ];
 
         var unal_bh = new Bloodhound({
@@ -129,13 +123,13 @@
                     source: unal_bh
                 }
         );
+
         $("#institucion").focusout(function () {
             var i = 0;
             var unal_selected = false;
             while (unal_places.length > i && !unal_selected) {
                 if (unal_places[i] == $("#institucion").val()) {
                     unal_selected = true;
-                    console.log("unal_selected");
                 }
                 i++;
             }
