@@ -20,6 +20,8 @@ class CreateUsersTable extends Migration
             $table->integer('isadmin')->default('0');
             $table->rememberToken();
             $table->timestamps();
+            
+            $table->boolean('activated')->default(false);
         });
     }
 

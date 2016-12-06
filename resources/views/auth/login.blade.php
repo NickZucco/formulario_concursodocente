@@ -20,6 +20,17 @@
             </div>
             @endif
 
+            @if (Session::has('status'))
+            <div class="alert alert-success">
+                {{ Session::get('status') }}
+            </div>
+            @endif
+            @if (Session::has('warning'))
+            <div class="alert alert-warning">
+                {{ Session::get('warning') }}
+            </div>
+            @endif
+
             <form name="login" id="login" method="post" action="{{ env('APP_URL') }}auth/login" class="form-horizontal" style="margin:20px 0">     
                 {!! csrf_field() !!}
                 <div class="form-group"> 
@@ -35,14 +46,14 @@
                         <input class="form-control" type="password" name="password" id="password" placeholder="Clave de ingreso">    
                     </div>
                 </div>
-               
+
                 <div class="form-group">
                     <center><a href="{{ env('APP_URL') }}password/email">¿Olvidó su contraseña?</a></center>
                 </div>
                 <div class="form-group">
                     <center><a href="register"><b>No se ha registrado. Registrese aquí</b></a></center>
                 </div>
-                
+
                 <div class="form-group"> 
                     <center><input class="form-control" type="submit" name="envio" value="Ingresar"></center>
                 </div>

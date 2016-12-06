@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'untic_fibog@unal.edu.co', 'name' => 'Formulario - aspirantes de posgrado'],
+    'from' => ['address' => 'untic_fibog@unal.edu.co', 'name' => 'Formulario de inscripción - '.env("APP_NAME")],
 
     /*
     |--------------------------------------------------------------------------
