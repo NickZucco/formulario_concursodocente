@@ -27,10 +27,17 @@ class ActivationService {
 
         //$link = route('user.activate', $token);                               //Esta forma de armar el enlace de autenticación no sirve (?)
         $link= env("APP_URL")."user/activation/$token";
-        $message = sprintf('Por favor, de clic en el siguiente enlace para activar su cuenta <a href="%s">%s</a>', $link, $link);
 
-        $this->mailer->raw($message, function (Message $m) use ($user) {
-            $m->to($user->email)->subject('Activación de cuenta - '.env('APP_NAME'));
+        $title = 'Activación de cuenta - '.env("APP_NAME");
+        $content = sprintf('<p>Estimado aspirante:</p><p>Por favor, de clic en el siguiente enlace para activar su cuenta <a href="%s">Enlace de activación</a></p>', $link, $link);
+        
+        $this->mailer->send('emails.activation', ['html' => 'view','title' => $title, 'content' => $content], function ($message) use ($user)
+        {
+            $message->subject('Activación de cuenta - '.env("APP_NAME"));
+            $message->from(env("MAIL_USERNAME"),'Activación de cuenta - '.env("APP_NAME"));
+            $message->to($user->email);
+            
+
         });
     }
 
