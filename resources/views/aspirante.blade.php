@@ -35,9 +35,9 @@
                         @foreach($tipos_documento as $tipo_documento)
                         <option value="{{$tipo_documento->id}}"
                                 @if($tipo_documento->id == $candidate_info->tipo_documento_id)
-                                selected
+									selected
                                 @endif
-                                >{{$tipo_documento->sigla}}
+                                >{{$tipo_documento->nombre}}
                         </option>
                         @endforeach
                     </select>
@@ -86,9 +86,9 @@
             <div class="form-group">
                 <label for="estado_civil" class="col-md-2 control-label">Estado civil</label>
                 <div class="col-md-2">
-                    <select id="estado_civil" class="form-control" name="estado_civil" required>
+                    <select id="estado_civil" class="form-control" name="estado_civil_id" required>
                         @foreach($estados_civiles as $estado_civil)
-                        <option value="{{$estado_civil->nombre}}"
+                        <option value="{{$estado_civil->id}}"
                                 @if($candidate_info->estado_civil == $estado_civil->nombre)
                                 selected
                                 @endif

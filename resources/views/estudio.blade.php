@@ -46,7 +46,7 @@
 
                 <label for="en_curso" class="col-sm-12 col-md-2 control-label">¿En curso?</label>
                 <label class="radio-inline">
-                    <input type="radio" name="en_curso" data-id="fecha_finalizacion" value="1">Si
+                    <input type="radio" name="en_curso" data-id="fecha_finalizacion" value="1" required>Si
                 </label>
                 <label class="radio-inline">
                     <input type="radio" name="en_curso" data-id="fecha_finalizacion" value="0">No
@@ -58,7 +58,7 @@
                 <div class="col-sm-12 col-md-3">
                     <select id="paises_id" name="paises_id" class="form-control">
                         @foreach($paises as $pais)
-                        <option data-value="{{$pais->nombre}}" value="{{$pais->id}}">{{$pais->nombre}}</option>
+                        <option value="{{$pais->id}}">{{$pais->nombre}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -139,18 +139,18 @@
                 </td>
                 <td>
                     @if(!$estudio->ruta_adjunto==null)
-                    <a href="{{env('APP_URL').$estudio->ruta_adjunto}}" target="_blank">Documento de soporte</a><br>
+                    <a href="{{env('APP_URL').$estudio->ruta_adjunto}}">Documento de soporte</a><br>
                     @else
                     No requerido
                     @endif                 
                     @if($estudio->ruta_entramite_minedu)
-                    <a href="{{env('APP_URL').$estudio->ruta_entramite_minedu}}" target="_blank">Documento de manifiesto: En trámite ante MinEdu</a><br>
+                    <a href="{{env('APP_URL').$estudio->ruta_entramite_minedu}}">Documento de manifiesto: En trámite ante MinEdu</a><br>
                     @endif
                     @if($estudio->ruta_res_convalidacion)
-                    <a href="{{env('APP_URL').$estudio->ruta_res_convalidacion}}" target="_blank">Resolución de convalidación</a><br>
+                    <a href="{{env('APP_URL').$estudio->ruta_res_convalidacion}}">Resolución de convalidación</a><br>
                     @endif
                     @if($estudio->ruta_resumen_ejecutivo)
-                    <a href="{{env('APP_URL').$estudio->ruta_resumen_ejecutivo}}" target="_blank">Resumen ejecutivo</a><br>
+                    <a href="{{env('APP_URL').$estudio->ruta_resumen_ejecutivo}}">Resumen ejecutivo</a><br>
                     @endif
                 </td>
                 <td>
@@ -173,55 +173,11 @@
 </div>
 
 <script>
+	$( document ).ready(function() {
+		$("input[name='additional_attatchments']").attr("required", "required");
+	});
+	
     (function ($) {
-        var unal_selected = false;
-        var $countries_select = $("#paises_id");
-        var $colombia_option = $("#paises_id option[data-value='Colombia']");
-        var colombia_value = $("#paises_id option[data-value='Colombia']").val();
-        var $institution = $("#institucion");
-
-        function conditionsColombia(change_country) {
-            var i = 0;
-            while (unal_places.length > i && !unal_selected) {
-                if (unal_places[i] == $institution.val()) {
-                    unal_selected = true;
-                }
-                i++;
-            }
-
-            if (!unal_selected) {
-                $("#adjunto").attr("required", "required");
-            } else {
-                $("#adjunto").removeAttr("required");
-                if(change_country){
-                    $countries_select.val($colombia_option.val());
-                }
-            }
-        }
-        function convalidationsNonColombian(){
-            if($countries_select.val()==colombia_value){
-                convalidationCallback(false);
-            }else{
-                convalidationCallback(true);
-            }
-        }
-        function convalidationCallback(reset_attatchments){
-            var $additional_attatchments=$("input[name='additional_attatchments']");
-            if($additional_attatchments){
-                 var id = $additional_attatchments.val();
-                var name = $additional_attatchments.attr("name");
-                $("input[name='" + name + "']").each(function (i, e) {
-                    $("#" + $additional_attatchments.val()).fileinput("disable");
-                });
-                if(reset_attatchments){
-                    $("#" + id).fileinput("enable");    
-                }
-            }
-        }
-        $countries_select.on("change", function () {
-            conditionsColombia(false);
-            convalidationsNonColombian();
-        });
         $("input[name='en_curso']").on("change", function () {
             var $this = $(this);
             if ($this.val() == 0) {
@@ -232,11 +188,24 @@
                 $("#" + $(this).data("id") + " input").attr("disabled");
             }
         });
-
         $("input[name='additional_attatchments']").on("change", function () {
-            convalidationCallback($(this));
+			var pais = $("#paises_id").val();
+			console.log(pais);
+            var id = $(this).val();
+			console.log(id);
+            var name = $(this).attr("name");
+			console.log(name);
+            $("input[name='" + name + "']").each(function (i, e) {
+				console.log("input[name='" + name + "']");
+                $("#" + $(this).val()).fileinput("disable");
+				$("#" + $(this).val()).removeAttr("required");
+            });
+            $("#" + id).fileinput("enable");
+			if (pais != 57)  {
+				$("#" + id).attr("required", "required");
+			}
+			console.log("#" + id);
         });
-
         var unal_places = [
             'Universidad Nacional de Colombia - Sede Bogotá',
         ];
@@ -252,12 +221,38 @@
                     source: unal_bh
                 }
         );
+		
         $("#institucion").focusout(function () {
-            conditionsColombia(true);
+            var i = 0;
+            var unal_selected = false;
+            while (unal_places.length > i && !unal_selected) {
+                if (unal_places[i] == $("#institucion").val()) {
+                    unal_selected = true;
+                }
+                i++;
+            }
+            if (!unal_selected) {
+                $("#adjunto").attr("required", "required");
+            } else {
+                $("#adjunto").removeAttr("required");
+				$("#paises_id").val('57').change();
+            }
         });
+		
         $('#institucion').bind('typeahead:select', function (ev, suggestion) {
             unal_selected = true;
-            conditionsColombia(true);
+        });
+		
+		$('#paises_id').on("change", function () {
+            if ($(this).val() != 57) {
+				$("input[name='additional_attatchments']").attr("required", "required");
+			}
+			else {
+				$("input[name='additional_attatchments']").removeAttr("required");
+				$("input[name='additional_attatchments']").each(function (i, e) {
+					$("#" + $(this).val()).removeAttr("required");
+				});
+			}
         });
     })(jQuery);
 </script>

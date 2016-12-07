@@ -30,7 +30,7 @@ class EstudioController extends Controller {
         
         //dd($perfiles_seleccionados_info);
         
-        $paises = Pais::all();
+        $paises = Pais::orderBy('nombre')->get();
 
         $data = array(
             'aspirante_id' => $aspirante_id,
