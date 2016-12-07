@@ -57,7 +57,7 @@
                 </div>
 
                 <div for="agree" class="form-group">					
-                    <center><label align="center" for="name" class="control-label">{{ Form::checkbox('agree', 1, null) }}&nbsp;&nbsp;&nbsp;He leído y acepto los términos y condiciones de la <a href='#'>convocatoria</a>.</label></center>
+                    <center><label align="center" for="name" class="control-label">{{ Form::checkbox('agree', 1, null) }}&nbsp;&nbsp;&nbsp;He leído y acepto los términos y condiciones de la <a href='#' target="blank">convocatoria</a>.</label></center>
                 </div>    
 
                 <div class="form-group">

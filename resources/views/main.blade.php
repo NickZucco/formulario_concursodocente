@@ -29,18 +29,18 @@
                 <li><a href="{{ env('APP_URL') }}perfiles" data-path="perfiles"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;Perfiles</a></li>
                 
                 @if(App\Perfil::join('aspirantes_perfiles', 'perfiles_id', '=', 'id')->where('aspirantes_id', '=', Auth::user()->id)->first())
-                <li><a href="{{ env('APP_URL') }}estudios" data-path="estudios"><i class="fa fa-graduation-cap" aria-hidden="true"></i>&nbsp;Estudios universitarios</a></li>
-                <li><a href="{{ env('APP_URL') }}distinciones" data-path="distinciones"><i class="fa fa-trophy" aria-hidden="true"></i>&nbsp;Distinciones académicas</a></li>
-                <li><a href="{{ env('APP_URL') }}experiencia_laboral" data-path="experiencia_laboral"><i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;Experiencia laboral</a></li>
-                <li><a href="{{ env('APP_URL') }}experiencia_docente" data-path="experiencia_docente"><i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;Experiencia docente</a></li>
-                <li><a href="{{ env('APP_URL') }}experiencia_investigativa" data-path="experiencia_investigativa"><i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;Experiencia investigativa</a></li>
-                <li><a href="{{ env('APP_URL') }}produccion_intelectual" data-path="produccion_intelectual"><i class="fa fa-lightbulb-o" aria-hidden="true"></i>&nbsp;Producción intelectual</a></li>
-                <li><a href="{{ env('APP_URL') }}idiomas" data-path="idiomas"><i class="fa fa-language" aria-hidden="true"></i>&nbsp;Idiomas</a></li>
-                <li><a href="{{ env('APP_URL') }}perfiles/ensayos" data-path="perfiles/ensayos"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;Ensayos</a></li>
+					<li><a href="{{ env('APP_URL') }}estudios" data-path="estudios"><i class="fa fa-graduation-cap" aria-hidden="true"></i>&nbsp;Estudios universitarios</a></li>
+					<li><a href="{{ env('APP_URL') }}distinciones" data-path="distinciones"><i class="fa fa-trophy" aria-hidden="true"></i>&nbsp;Distinciones académicas</a></li>
+					<li><a href="{{ env('APP_URL') }}experiencia_laboral" data-path="experiencia_laboral"><i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;Experiencia laboral</a></li>
+					<li><a href="{{ env('APP_URL') }}experiencia_docente" data-path="experiencia_docente"><i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;Experiencia docente</a></li>
+					<li><a href="{{ env('APP_URL') }}experiencia_investigativa" data-path="experiencia_investigativa"><i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;Experiencia investigativa</a></li>
+					<li><a href="{{ env('APP_URL') }}produccion_intelectual" data-path="produccion_intelectual"><i class="fa fa-lightbulb-o" aria-hidden="true"></i>&nbsp;Producción intelectual</a></li>
+					<li><a href="{{ env('APP_URL') }}idiomas" data-path="idiomas"><i class="fa fa-language" aria-hidden="true"></i>&nbsp;Idiomas</a></li>
+					<li><a href="{{ env('APP_URL') }}perfiles/ensayos" data-path="perfiles/ensayos"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;Ensayos</a></li>
                 @else
-                <li><a href="#" disabled>
-                        <i class="hidden-xs hidden-sm fa fa-arrow-left" aria-hidden="true"></i>
-                        Debe seleccionar y guardar al menos un <i class="fa fa-user" style="color:#95d072" aria-hidden="true"></i> perfil al cual aspirar antes de poder diligenciar los demas campos.</a></li>
+					<li><a href="#" disabled>
+                    <i class="hidden-xs hidden-sm fa fa-arrow-left" aria-hidden="true"></i>
+                     Debe seleccionar y guardar al menos un <i class="fa fa-user" style="color:#95d072" aria-hidden="true"></i> perfil al cual aspirar antes de poder diligenciar los demas campos.</a></li>
                 @endif
                 
                 @else

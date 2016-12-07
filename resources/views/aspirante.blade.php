@@ -35,9 +35,9 @@
                         @foreach($tipos_documento as $tipo_documento)
                         <option value="{{$tipo_documento->id}}"
                                 @if($tipo_documento->id == $candidate_info->tipo_documento_id)
-                                selected
+									selected
                                 @endif
-                                >{{$tipo_documento->sigla}}
+                                >{{$tipo_documento->nombre}}
                         </option>
                         @endforeach
                     </select>
@@ -86,9 +86,9 @@
             <div class="form-group">
                 <label for="estado_civil" class="col-md-2 control-label">Estado civil</label>
                 <div class="col-md-2">
-                    <select id="estado_civil" class="form-control" name="estado_civil" required>
+                    <select id="estado_civil" class="form-control" name="estado_civil_id" required>
                         @foreach($estados_civiles as $estado_civil)
-                        <option value="{{$estado_civil->nombre}}"
+                        <option value="{{$estado_civil->id}}"
                                 @if($candidate_info->estado_civil == $estado_civil->nombre)
                                 selected
                                 @endif
@@ -133,7 +133,7 @@
                 </div>
                 <div class="col-md-6">
                     @if($candidate_info->ruta_adjunto_documento)
-                    Archivo cargado previamente: <a href="{{env('APP_URL').$candidate_info->ruta_adjunto_documento}}">Documento</a>
+                    Archivo cargado previamente: <a href="{{env('APP_URL').$candidate_info->ruta_adjunto_documento}}" target="_blank">Documento</a>
                     <br><em>Por favor, tenga en cuenta que al cargar un nuevo archivo, se actualizará el archivo previamente cargado</em>
                     @endif
                 </div>
@@ -146,7 +146,7 @@
                 </div>
                 <div class="col-md-6">
                     @if($candidate_info->ruta_adjunto_tarjetaprofesional)
-                    Archivo cargado previamente: <a href="{{env('APP_URL').$candidate_info->ruta_adjunto_tarjetaprofesional}}">Tarjeta profesional</a>
+                    Archivo cargado previamente: <a href="{{env('APP_URL').$candidate_info->ruta_adjunto_tarjetaprofesional}}" target="_blank">Tarjeta profesional</a>
                     <br><em>Por favor, tenga en cuenta que al cargar un nuevo archivo, se actualizará el archivo previamente cargado</em>
                     @endif
                 </div>

@@ -27,7 +27,7 @@ class AspiranteController extends Controller {
             $niveles = Nivel::all();
             $programas = Programa::all();
             $tipos_documento = TipoDocumento::all();
-            $paises = Pais::all();
+            $paises = Pais::orderBy('nombre')->get();
             $estados_civiles = EstadoCivil::all();
 
             if (!$candidate_info) {
