@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <center><a href="register"><b>¿No se ha registrado?. Registrese aquí</b></a></center>
+                    <center><a href="{{ env('APP_URL') }}auth/register"><b>¿No se ha registrado?. Registrese aquí</b></a></center>
                 </div>
                 <div class="form-group"> 
                     <center><input class="form-control"  type="submit" name="envio" value="Reiniciar contraseña"></center>

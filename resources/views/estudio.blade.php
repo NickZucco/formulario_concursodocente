@@ -58,7 +58,7 @@
                 <div class="col-sm-12 col-md-3">
                     <select id="paises_id" name="paises_id" class="form-control">
                         @foreach($paises as $pais)
-                        <option value="{{$pais->id}}">{{$pais->nombre}}</option>
+                        <option data-value="{{$pais->nombre}}" value="{{$pais->id}}">{{$pais->nombre}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -174,6 +174,54 @@
 
 <script>
     (function ($) {
+        var unal_selected = false;
+        var $countries_select = $("#paises_id");
+        var $colombia_option = $("#paises_id option[data-value='Colombia']");
+        var colombia_value = $("#paises_id option[data-value='Colombia']").val();
+        var $institution = $("#institucion");
+
+        function conditionsColombia(change_country) {
+            var i = 0;
+            while (unal_places.length > i && !unal_selected) {
+                if (unal_places[i] == $institution.val()) {
+                    unal_selected = true;
+                }
+                i++;
+            }
+
+            if (!unal_selected) {
+                $("#adjunto").attr("required", "required");
+            } else {
+                $("#adjunto").removeAttr("required");
+                if(change_country){
+                    $countries_select.val($colombia_option.val());
+                }
+            }
+        }
+        function convalidationsNonColombian(){
+            if($countries_select.val()==colombia_value){
+                convalidationCallback(false);
+            }else{
+                convalidationCallback(true);
+            }
+        }
+        function convalidationCallback(reset_attatchments){
+            var $additional_attatchments=$("input[name='additional_attatchments']");
+            if($additional_attatchments){
+                 var id = $additional_attatchments.val();
+                var name = $additional_attatchments.attr("name");
+                $("input[name='" + name + "']").each(function (i, e) {
+                    $("#" + $additional_attatchments.val()).fileinput("disable");
+                });
+                if(reset_attatchments){
+                    $("#" + id).fileinput("enable");    
+                }
+            }
+        }
+        $countries_select.on("change", function () {
+            conditionsColombia(false);
+            convalidationsNonColombian();
+        });
         $("input[name='en_curso']").on("change", function () {
             var $this = $(this);
             if ($this.val() == 0) {
@@ -186,12 +234,7 @@
         });
 
         $("input[name='additional_attatchments']").on("change", function () {
-            var id = $(this).val();
-            var name = $(this).attr("name");
-            $("input[name='" + name + "']").each(function (i, e) {
-                $("#" + $(this).val()).fileinput("disable");
-            });
-            $("#" + id).fileinput("enable");
+            convalidationCallback($(this));
         });
 
         var unal_places = [
@@ -212,23 +255,11 @@
                 }
         );
         $("#institucion").focusout(function () {
-            var i = 0;
-            var unal_selected = false;
-            while (unal_places.length > i && !unal_selected) {
-                if (unal_places[i] == $("#institucion").val()) {
-                    unal_selected = true;
-                }
-                i++;
-            }
-
-            if (!unal_selected) {
-                $("#adjunto").attr("required", "required");
-            } else {
-                $("#adjunto").removeAttr("required");
-            }
+            conditionsColombia(true);
         });
         $('#institucion').bind('typeahead:select', function (ev, suggestion) {
             unal_selected = true;
+            conditionsColombia(true);
         });
     })(jQuery);
 </script>

@@ -79,7 +79,7 @@
                 <td>{{$distincion->fecha_entrega}}</td>
                 <td>
                     @if($distincion->ruta_adjunto==null)
-                    <em>Sin archivo adjunto disponible</em>
+                    <em>No requerido</em>
                     @else
                     <a href="{{env('APP_URL').$distincion->ruta_adjunto}}">Documento adjunto</a>
                     @endif
@@ -138,6 +138,7 @@
                 $("#adjunto").attr("required", "required");
             } else {
                 $("#adjunto").removeAttr("required");
+                
             }
         });
         $('#institucion').bind('typeahead:select', function (ev, suggestion) {

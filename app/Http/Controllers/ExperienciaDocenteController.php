@@ -19,6 +19,13 @@ class ExperienciaDocenteController extends Controller {
         $tipos_vinculacion_docente = TipoVinculacionDocente::all();
         $paises = Pais::all();
         $niveles = Nivel::all();
+        
+        //Si no hay entrada de adjunto válida, se crea una entrada con el id de usuario, por lo tanto, cambiamos el enlace para no mostrar esta información
+        foreach ($experiencias_docente_info as $cur_key=>$cur_value) {
+            if (preg_match("/^[0-9]+$/", $cur_value["ruta_adjunto"])) {            //La expresión regular para los ids autonuméricos
+                $experiencias_docente_info[$cur_key]["ruta_adjunto"]=null;
+            }
+        }
 
         $data = array(
             'aspirante_id' => $aspirante_id,

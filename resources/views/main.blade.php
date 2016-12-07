@@ -2,10 +2,18 @@
 
 @section('content')
 
+ @if (Session::has('status'))
+<div class="alert alert-success">
+    {{ Session::get('status') }}
+</div>
+@endif
+
 <div class="row">
     <p>Bienvenido/a {{Auth::user()->name}}
     <br>
-    
+    <div style="display:inline-block;float:right">
+        El formulario se cerrará en&nbsp;<span id="countdown" style="float:right"> </span>
+    </div>
 </div>
 
 <nav class="navbar navbar-default" role="navigation">
@@ -52,16 +60,38 @@
     </div><!-- /.container-fluid -->
 </nav>
 
+<div class="alert alert-warning alert-dismissible" role="alert">
+  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <strong>Nota: </strong>Por favor, tenga en cuenta que toda la información que digite en el formulario, debe registrarse únicamente en español
+</div>
+
 <div class="col-sm-12 col-md-12" style="border-radius: 5px 5px 5px 5px; box-shadow: 3px 3px 10px #888888; padding: 3px; background-color:#E4F5FA">   
-    <div class="alert alert-default" role="alert">
-        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Por favor, tenga en cuenta que toda la información que digite en el formulario, debe registrarse únicamente en español
-    </div>
     @yield('form')
 </div>
 
 <script>
-
     (function ($) {
+        /**/
+        var today=new Date();
+        var limit_date = new Date('{{App\Configuracion::where('llave', '=', 'limit_date')->first()["valor"]}}');
+        var time_remaining = (limit_date.getTime()-today.getTime())/1000;              //En segundos
+        var $display = $('#countdown');
+        
+        function startTimer(display) {
+            var days,minutes, seconds;
+            setInterval(function () {
+                days=parseInt(time_remaining/(3600*24),10);
+                hours=parseInt((time_remaining-(days*3600*24))/3600,10);
+                minutes=parseInt((time_remaining-(days*3600*24)-(hours*3600))/60,10);
+                seconds=parseInt(time_remaining%60,10);
+
+                display.text(" "+days+" dias ,"+hours+" horas, "+minutes + " minutos y " + seconds+" segundos");
+
+                time_remaining-=1;
+                
+            }, 1000);
+        }
+        startTimer($display);
+        /**/
         $('.datepicker').each(function () {
             var str = $(this).val();
             if (!str || str === "0000-00-00" || 0 === str.length || /^\s*$/.test(str)) {
@@ -75,6 +105,7 @@
         var default_end = now;
         default_end.setHours(23);
         default_end.setMinutes(59);
+        var closing_form_date={{App\Configuracion::where('llave', '=', 'limit_date')->first()['valor']}}
 
         $('.datepicker').datetimepicker({
             defaultDate: now,
@@ -117,7 +148,9 @@
                 width: '100%'
             }
         });
-
+        
+        
+        
     })(jQuery);
 
 </script>

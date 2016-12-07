@@ -21,7 +21,7 @@ class EstudioController extends Controller {
                 ->leftJoin('aspirantes','aspirantes.id','=','aspirantes_id')
                 ->where('aspirantes.id','=',$aspirante_id)->get();
         
-         //Si no hay entrada de adjunto válida, se crea una entrada con el id de usuario, por lo tanto, cambiamos el enlace para no mostrar esta información
+        //Si no hay entrada de adjunto válida, se crea una entrada con el id de usuario, por lo tanto, cambiamos el enlace para no mostrar esta información
         foreach ($estudios_info as $cur_estudio_key=>$cur_estudio) {
             if (preg_match("/^[0-9]+$/", $cur_estudio["ruta_adjunto"])) {            //La expresión regular para los ids autonuméricos
                 $estudios_info[$cur_estudio_key]["ruta_adjunto"]=null;

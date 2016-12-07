@@ -21,7 +21,7 @@
             <div class="form-group">
                 <label for="nombre_institucion" class="col-sm-12 col-md-2 control-label">Nombre de la institución/empresa</label>
                 <div class="col-sm-12 col-md-5">
-                    <input type="text" class="form-control" id="nombre_institucion" name="nombre_institucion" placeholder="Nombre de la institución/empresa">
+                    <input type="text" class="form-control" id="nombre_institucion" name="nombre_institucion" data-provide="typeahead" placeholder="Nombre de la institución/empresa">
                 </div>
 
                 <label for="tipos_vinculacion_laboral_id" class="col-sm-12 col-md-2 control-label">Tipo de vinculación laboral</label>
@@ -53,7 +53,7 @@
                     <input type="text" class="form-control" id="funcion_principal" name="funcion_principal" placeholder="Funcion principal desempeñada">
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label for="adjunto" class="col-sm-12 col-md-2 control-label">Documento de soporte: </label>
                 <div class="col-sm-12 col-md-10">
@@ -61,7 +61,7 @@
                     <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato PDF y no tener un tamaño superior a 10MB</em>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <div class="col-md-4 col-md-offset-4">
                     <button type="submit" class="btn btn-success form-control">
@@ -126,6 +126,46 @@
     </div>
 
 </div>
+<script>
+    (function ($) {
+        /**/
+        var unal_places = [
+            'Universidad Nacional de Colombia - Sede Bogotá',
+        ];
 
+        var unal_bh = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.whitespace,
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            local: unal_places
+        });
 
+        $('#nombre_institucion').typeahead(
+                null,
+                {
+                    name: 'unal_names',
+                    source: unal_bh
+                }
+        );
+        $("#nombre_institucion").focusout(function () {
+            var i = 0;
+            var unal_selected = false;
+            while (unal_places.length > i && !unal_selected) {
+                if (unal_places[i] == $("#nombre_institucion").val()) {
+                    unal_selected = true;
+                }
+                i++;
+            }
+
+            if (!unal_selected) {
+                $("#adjunto").attr("required", "required");
+            } else {
+                $("#adjunto").removeAttr("required");
+            }
+        });
+        $('#nombre_institucion').bind('typeahead:select', function (ev, suggestion) {
+            unal_selected = true;
+        });
+        /**/
+    });
+</script>
 @stop
