@@ -72,8 +72,7 @@
             </form>			
 
             <script>
-                /**///
-                /*
+                
                  $("#registro").submit(function(event){
                  var isValid = true;
                  var agreeBox = document.getElementsByName('agree');
@@ -85,7 +84,7 @@
                  $("#registro").submit()
                  }
                  });
-                 */
+                 
             </script>
 
         </div>
