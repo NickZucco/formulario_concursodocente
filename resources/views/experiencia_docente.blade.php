@@ -135,7 +135,7 @@
                     </table>
                 </td>
                 <td>
-                    <a href="{{env('APP_URL').$experiencia_docente->ruta_adjunto}}">Documento adjunto</a>
+                    <a href="{{env('APP_URL').$experiencia_docente->ruta_adjunto}}" target="_blank">Documento adjunto</a>
                 </td>
                 <td>
                     <form method="post" action="{{ env('APP_URL') }}experiencia_docente/delete" style="margin:20px 0">     
@@ -209,12 +209,16 @@
             for (var key in rowHash) {
                 if ($.inArray(key, columnSet) == -1) {
                     columnSet.push(key);
-                    headerTr$.append($('<th/>').html(key));
+                    headerTr$.append($('<th/>').html(capitalizeFirstLetter(key)));
                 }
             }
         }
         $selector.append(headerTr$);
         return columnSet;
+    }
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
     (function ($) {

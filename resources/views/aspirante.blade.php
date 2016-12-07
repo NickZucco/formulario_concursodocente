@@ -133,7 +133,7 @@
                 </div>
                 <div class="col-md-6">
                     @if($candidate_info->ruta_adjunto_documento)
-                    Archivo cargado previamente: <a href="{{env('APP_URL').$candidate_info->ruta_adjunto_documento}}">Documento</a>
+                    Archivo cargado previamente: <a href="{{env('APP_URL').$candidate_info->ruta_adjunto_documento}}" target="_blank">Documento</a>
                     <br><em>Por favor, tenga en cuenta que al cargar un nuevo archivo, se actualizará el archivo previamente cargado</em>
                     @endif
                 </div>
@@ -146,7 +146,7 @@
                 </div>
                 <div class="col-md-6">
                     @if($candidate_info->ruta_adjunto_tarjetaprofesional)
-                    Archivo cargado previamente: <a href="{{env('APP_URL').$candidate_info->ruta_adjunto_tarjetaprofesional}}">Tarjeta profesional</a>
+                    Archivo cargado previamente: <a href="{{env('APP_URL').$candidate_info->ruta_adjunto_tarjetaprofesional}}" target="_blank">Tarjeta profesional</a>
                     <br><em>Por favor, tenga en cuenta que al cargar un nuevo archivo, se actualizará el archivo previamente cargado</em>
                     @endif
                 </div>

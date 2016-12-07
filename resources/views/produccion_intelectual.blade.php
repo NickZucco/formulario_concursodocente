@@ -371,7 +371,7 @@
                     {{$produccion_intelectual->nombre}} {{$produccion_intelectual->autor}}
                 </td>
                 <td>
-                    <a href="{{env('APP_URL').$produccion_intelectual->ruta_adjunto}}">Documento adjunto</a>
+                    <a href="{{env('APP_URL').$produccion_intelectual->ruta_adjunto}}" target="_blank">Documento adjunto</a>
                 </td>
                 <td>
                     <form method="post" action="{{ env('APP_URL') }}produccion_intelectual/delete" style="margin:20px 0">     

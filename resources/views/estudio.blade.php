@@ -139,18 +139,18 @@
                 </td>
                 <td>
                     @if(!$estudio->ruta_adjunto==null)
-                    <a href="{{env('APP_URL').$estudio->ruta_adjunto}}">Documento de soporte</a><br>
+                    <a href="{{env('APP_URL').$estudio->ruta_adjunto}}" target="_blank">Documento de soporte</a><br>
                     @else
                     No requerido
                     @endif                 
                     @if($estudio->ruta_entramite_minedu)
-                    <a href="{{env('APP_URL').$estudio->ruta_entramite_minedu}}">Documento de manifiesto: En trámite ante MinEdu</a><br>
+                    <a href="{{env('APP_URL').$estudio->ruta_entramite_minedu}}" target="_blank">Documento de manifiesto: En trámite ante MinEdu</a><br>
                     @endif
                     @if($estudio->ruta_res_convalidacion)
-                    <a href="{{env('APP_URL').$estudio->ruta_res_convalidacion}}">Resolución de convalidación</a><br>
+                    <a href="{{env('APP_URL').$estudio->ruta_res_convalidacion}}" target="_blank">Resolución de convalidación</a><br>
                     @endif
                     @if($estudio->ruta_resumen_ejecutivo)
-                    <a href="{{env('APP_URL').$estudio->ruta_resumen_ejecutivo}}">Resumen ejecutivo</a><br>
+                    <a href="{{env('APP_URL').$estudio->ruta_resumen_ejecutivo}}" target="_blank">Resumen ejecutivo</a><br>
                     @endif
                 </td>
                 <td>
@@ -240,13 +240,11 @@
         var unal_places = [
             'Universidad Nacional de Colombia - Sede Bogotá',
         ];
-
         var unal_bh = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.whitespace,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             local: unal_places
         });
-
         $('#institucion').typeahead(
                 null,
                 {

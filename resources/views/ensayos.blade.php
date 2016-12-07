@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-sm-12 col-md-4">
                         @if($perfil_seleccionado->ruta_ensayo)
-                        Archivo cargado previamente: <a href="{{env('APP_URL').$perfil_seleccionado->ruta_ensayo}}">Ensayo</a>
+                        Archivo cargado previamente: <a href="{{env('APP_URL').$perfil_seleccionado->ruta_ensayo}}" target="_blank">Ensayo</a>
                         <br><em>Por favor, tenga en cuenta que al cargar un nuevo archivo, se actualizará el archivo previamente cargado</em>
                         @endif
                     </div>

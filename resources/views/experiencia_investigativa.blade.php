@@ -122,7 +122,7 @@
                     {{$experiencia_investigativa->fecha_fin}}
                 </td>
                 <td>
-                    <a href="{{env('APP_URL').$experiencia_investigativa->ruta_adjunto}}">Documento adjunto</a>
+                    <a href="{{env('APP_URL').$experiencia_investigativa->ruta_adjunto}}" target="_blank">Documento adjunto</a>
                 </td>
                 <td>
                     <form method="post" action="{{ env('APP_URL') }}experiencia_investigativa/delete" style="margin:20px 0">     
@@ -145,6 +145,49 @@
 </div>
 <script>
     (function ($) {
+        /**/
+        var unal_selected = false;
+        function conditionsColombia(change_country) {
+            var i = 0;
+            while (unal_places.length > i && !unal_selected) {
+                if (unal_places[i] == $institution.val()) {
+                    unal_selected = true;
+                }
+                i++;
+            }
+
+            if (!unal_selected) {
+                $("#adjunto").attr("required", "required");
+            } else {
+                $("#adjunto").removeAttr("required");
+                if(change_country){
+                    $countries_select.val($colombia_option.val());
+                }
+            }
+        }
+        var unal_places = [
+            'Universidad Nacional de Colombia - Sede Bogotá',
+        ];
+        var unal_bh = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.whitespace,
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            local: unal_places
+        });
+        $('#institucion').typeahead(
+                null,
+                {
+                    name: 'unal_names',
+                    source: unal_bh
+                }
+        );
+        $("#institucion").focusout(function () {
+            conditionsColombia(true);
+        });
+        $('#institucion').bind('typeahead:select', function (ev, suggestion) {
+            unal_selected = true;
+            conditionsColombia(true);
+        });
+        /**/
         $("input[name='en_curso']").on("change", function () {
             var $this = $(this);
             if ($this.val() == 0) {

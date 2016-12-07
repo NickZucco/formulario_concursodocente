@@ -80,7 +80,7 @@
                     {{$idioma_certificado->nombre_certificado}}
                 </td>
                 <td>
-                    <a href="{{env('APP_URL').$idioma_certificado->ruta_adjunto}}">Documento adjunto</a>
+                    <a href="{{env('APP_URL').$idioma_certificado->ruta_adjunto}}" target="_blank">Documento adjunto</a>
                 </td>
                 <td>
                     <form method="post" action="{{ env('APP_URL') }}idiomas/delete" style="margin:20px 0">     

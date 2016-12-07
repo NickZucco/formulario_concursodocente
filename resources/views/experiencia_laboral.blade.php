@@ -107,7 +107,7 @@
                     {{$experiencia_laboral->nombre_cargo}}
                 </td>
                 <td>
-                    <a href="{{env('APP_URL').$experiencia_laboral->ruta_adjunto}}">Documento adjunto</a>
+                    <a href="{{env('APP_URL').$experiencia_laboral->ruta_adjunto}}" target="_blank">Documento adjunto</a>
                 </td>
                 <td>
                     <form method="post" action="{{ env('APP_URL') }}experiencia_laboral/delete" style="margin:20px 0">     

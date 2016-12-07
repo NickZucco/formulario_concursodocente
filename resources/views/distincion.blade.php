@@ -81,7 +81,7 @@
                     @if($distincion->ruta_adjunto==null)
                     <em>No requerido</em>
                     @else
-                    <a href="{{env('APP_URL').$distincion->ruta_adjunto}}">Documento adjunto</a>
+                    <a href="{{env('APP_URL').$distincion->ruta_adjunto}}" target="_blank">Documento adjunto</a>
                     @endif
 
                 </td>

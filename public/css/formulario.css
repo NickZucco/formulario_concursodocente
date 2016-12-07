@@ -96,6 +96,11 @@ table.toJSONTable  tbody tr:last-child td {
 .table-user-information > tbody > tr:first-child,.table-user-information > tbody > tr > td {
     border-top:0;
 }
+
+.form-horizontal .form-group{
+    margin-right:0;
+    margin-left:0;
+}
 @media (min-width: 768px){
     .form-horizontal .control-label{
         text-align: left;
