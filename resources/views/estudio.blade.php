@@ -46,7 +46,7 @@
 
                 <label for="en_curso" class="col-sm-12 col-md-2 control-label">¿En curso?</label>
                 <label class="radio-inline">
-                    <input type="radio" name="en_curso" data-id="fecha_finalizacion" value="1">Si
+                    <input type="radio" name="en_curso" data-id="fecha_finalizacion" value="1" required>Si
                 </label>
                 <label class="radio-inline">
                     <input type="radio" name="en_curso" data-id="fecha_finalizacion" value="0">No
@@ -173,6 +173,10 @@
 </div>
 
 <script>
+	$( document ).ready(function() {
+		$("input[name='additional_attatchments']").attr("required", "required");
+	});
+	
     (function ($) {
         $("input[name='en_curso']").on("change", function () {
             var $this = $(this);
@@ -186,12 +190,22 @@
         });
 
         $("input[name='additional_attatchments']").on("change", function () {
+			var pais = $("#paises_id").val();
+			console.log(pais);
             var id = $(this).val();
+			console.log(id);
             var name = $(this).attr("name");
+			console.log(name);
             $("input[name='" + name + "']").each(function (i, e) {
+				console.log("input[name='" + name + "']");
                 $("#" + $(this).val()).fileinput("disable");
+				$("#" + $(this).val()).removeAttr("required");
             });
             $("#" + id).fileinput("enable");
+			if (pais != 57)  {
+				$("#" + id).attr("required", "required");
+			}
+			console.log("#" + id);
         });
 
         var unal_places = [
@@ -211,6 +225,7 @@
                     source: unal_bh
                 }
         );
+		
         $("#institucion").focusout(function () {
             var i = 0;
             var unal_selected = false;
@@ -225,10 +240,24 @@
                 $("#adjunto").attr("required", "required");
             } else {
                 $("#adjunto").removeAttr("required");
+				$("#paises_id").val('57').change();
             }
         });
+		
         $('#institucion').bind('typeahead:select', function (ev, suggestion) {
             unal_selected = true;
+        });
+		
+		$('#paises_id').on("change", function () {
+            if ($(this).val() != 57) {
+				$("input[name='additional_attatchments']").attr("required", "required");
+			}
+			else {
+				$("input[name='additional_attatchments']").removeAttr("required");
+				$("input[name='additional_attatchments']").each(function (i, e) {
+					$("#" + $(this).val()).removeAttr("required");
+				});
+			}
         });
     })(jQuery);
 </script>
