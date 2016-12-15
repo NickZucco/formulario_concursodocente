@@ -138,7 +138,6 @@
         $("input[name='nativo']").on("change", function () {			
             if ($(this).val() == 0) {				
                 $("#nombre_certificado, #puntaje, #adjunto").show();
-                //$("#nombre_certificado, #puntaje, #adjunto").removeAttr("disabled");
 				$("#nombre_certificado_input, #puntaje_input, #adjunto_input").attr("required", "required");
             } else {  
                 $("#nombre_certificado, #puntaje, #adjunto").hide();

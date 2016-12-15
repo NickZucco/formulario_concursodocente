@@ -34,6 +34,9 @@
                 <div class="form-group">
                     <center><a href="{{ env('APP_URL') }}auth/register"><b>¿No se ha registrado?. Registrese aquí</b></a></center>
                 </div>
+				<div class="form-group"> 
+                    <p align="center"><b>&nbsp;Si tiene usuario y contraseña, por favor ingrese <a href="{{ env('APP_URL') }}auth/login">aquí</a>.</b></p>
+                </div>
                 <div class="form-group"> 
                     <center><input class="form-control"  type="submit" name="envio" value="Reiniciar contraseña"></center>
                 </div>
