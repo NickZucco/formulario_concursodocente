@@ -21,8 +21,8 @@ class ProduccionIntelectualController extends Controller {
         $aspirante_id = Auth::user()->id;
 
         $producciones_intelectual = ProduccionIntelectual::where('aspirantes_id', '=', $aspirante_id)->get();
-       
-        $paises = Pais::all()->keyBy('id');
+        
+        $paises = Pais::orderBy('nombre')->get();
         $idiomas = Idioma::all()->keyBy('id');
         $tipos_produccion_intelectual = TipoProduccionIntelectual::all()->keyBy('id');
 

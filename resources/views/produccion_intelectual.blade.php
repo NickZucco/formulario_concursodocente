@@ -51,13 +51,19 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="nombre" class="col-sm-12 col-md-2 control-label">Título de la publicación</label>
+                            <label for="nombre" class="col-sm-12 col-md-2 control-label">Título de la revista</label>
                             <div class="col-sm-12 col-md-9">
                                 <input type="text" class="form-control" id="nombre" name="nombre" >
                             </div>
                         </div>
+						<div class="form-group">
+                            <label for="nombre" class="col-sm-12 col-md-2 control-label">Nombre del artículo</label>
+                            <div class="col-sm-12 col-md-9">
+                                <input type="text" class="form-control" id="nombre" name="nombre">
+                            </div>
+                        </div>
                         <div class="form-group">
-                            <label for="publicacion_autor" class="col-sm-12 col-md-2 control-label">Autor(es) como aparece en la publicación</label>
+                            <label for="publicacion_autor" class="col-sm-12 col-md-2 control-label">Autor(es) como aparece en el artículo</label>
                             <div class="col-sm-12 col-md-9">
                                 <input type="text" class="form-control" id="publicacion_autor" name="publicacion_autor">
                             </div>
@@ -67,13 +73,7 @@
                             <div class="col-sm-12 col-md-9">
                                 <input type="text" class="form-control" id="clasificacion_revista" name="clasificacion_revista">
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="nombre" class="col-sm-12 col-md-2 control-label">Nombre</label>
-                            <div class="col-sm-12 col-md-9">
-                                <input type="text" class="form-control" id="nombre" name="nombre">
-                            </div>
-                        </div>
+                        </div>                        
                         <div class="form-group">
                             <label for="volumen" class="col-sm-12 col-md-2 control-label">Volumen</label>
                             <div class="col-sm-12 col-md-9">
@@ -112,7 +112,7 @@
                     <!--Libro-->
                     <div id="2" class="publication_form">
                         <div class="form-group">
-                            <label for="nombre" class="col-sm-12 col-md-2 control-label">Título de la publicación</label>
+                            <label for="nombre" class="col-sm-12 col-md-2 control-label">Título del libro</label>
                             <div class="col-md-9">
                                 <input type="text" class="form-control" id="nombre" name="nombre">
                             </div>
@@ -136,7 +136,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="publicacion_autor" class="col-sm-12 col-md-2 control-label">Autor(es) como aparece en la publicación</label>
+                            <label for="publicacion_autor" class="col-sm-12 col-md-2 control-label">Autor(es) como aparece en el libro</label>
                             <div class="col-sm-12 col-md-9">
                                 <input type="text" class="form-control" id="publicacion_autor" name="publicacion_autor">
                             </div>
@@ -171,7 +171,7 @@
                             <div class="col-md-10 col-sm-12">
                                 <input type="text" class="form-control" id="nombre_libro" name="nombre_libro">
                             </div>
-                        </div>
+                        </div>						
                         <div class="form-group">
                             <label for="año" class="col-sm-12 col-md-2 control-label">Año</label>
                             <div class="col-md-10 col-sm-10">
@@ -269,57 +269,6 @@
                             </div>
                         </div>
                     </div>
-                    <!--Ponencia-->
-                    <div id="5" class="publication_form">
-                        <div class="form-group">
-                            <label for="nombre" class="col-sm-12 col-md-2 control-label">Nombre</label>
-                            <div class="col-sm-12 col-md-9">
-                                <input type="text" class="form-control" id="nombre" name="nombre">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="nombre_evento" class="col-sm-12 col-md-2 control-label">Evento</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" id="evento" name="evento"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="tipo" class="control-label col-sm-12 col-md-2">Caracter</label>
-                            <div class="col-sm-3">
-                                <select id="tipo" name="tipo" class="form-control">
-                                    <option value="INTERNACIONAL">Internacional</option>
-                                    <option value="NACIONAL">Nacional</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="nombre_editorial" class="col-sm-12 col-md-2 control-label">Año</label>
-                            <div class="col-sm-12 col-md-9">
-                                <input type="number" class="form-control" id="año" name="año">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="paises_id" class="col-sm-12 col-md-2 control-label">País</label>
-                            <div class="col-sm-12 col-md-7">
-                                <select id="paises_id" name="paises_id" class="form-control">
-                                    @foreach($paises as $pais)
-                                    <option value="{{$pais->id}}">{{$pais->nombre}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="idiomas_id" class="col-sm-12 col-md-2 control-label">Idioma </label>
-                            <div class="col-sm-12 col-md-5">
-                                <select id="idiomas_id" name="idiomas_id" class="form-control">
-                                    @foreach($idiomas as $idioma)
-                                    <option value="{{$idioma->id}}">{{$idioma->nombre}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <div id="additional_fields">
                     <div class="row">
@@ -368,7 +317,10 @@
                     {{$tipos_produccion_intelectual[$produccion_intelectual->tipos_produccion_intelectual_id]->nombre}}
                 </td>
                 <td>
-                    {{$produccion_intelectual->nombre}} {{$produccion_intelectual->autor}}
+                    {{$produccion_intelectual->nombre}} 
+					@if ($produccion_intelectual->tipos_produccion_intelectual_id == 1 || $produccion_intelectual->tipos_produccion_intelectual_id == 2) 
+						- {{$produccion_intelectual->publicacion_autor}}
+					@endif
                 </td>
                 <td>
                     <a href="{{env('APP_URL').$produccion_intelectual->ruta_adjunto}}" target="_blank">Documento adjunto</a>
@@ -409,7 +361,6 @@
             $("#" + id).find("input,select,textarea").removeAttr("disabled");
             $("#" + id).find("input,select,textarea").attr("required","required");
             $("#" + id).find("input,select,textarea").removeAttr("readonly");
-
             $("#tipo_produccion_lbl").text($("#tipos_publicacion option:selected").text());
             $("#msg_form").hide();
             $("#additional_fields").show();

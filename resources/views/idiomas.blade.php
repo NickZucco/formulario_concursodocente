@@ -24,28 +24,44 @@
                     @endforeach
                 </select>
             </div>
-        </div>
+			
+			<label for="nativo" class="col-sm-12 col-md-2 control-label">¿Es un idioma nativo?</label>
+                <label class="radio-inline">
+                    <input type="radio" name="nativo" value="1" required>Si
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="nativo" value="0">No
+                </label>
+        </div>		
+		
         <div class="form-group">
-            <label for="nombre_certificado" class="col-sm-12 col-md-2 control-label">Tipo de certificado</label>
-            <div class="col-sm-12 col-md-9">
-                <input type="text" class="form-control" id="nombre_certificado" name="nombre_certificado" placeholder="">
-            </div>
+			<div id="nombre_certificado">
+				<label for="nombre_certificado" class="col-sm-12 col-md-2 control-label">Tipo de certificado</label>
+				<div class="col-sm-12 col-md-9">
+					<input type="text" id="nombre_certificado_input" class="form-control" name="nombre_certificado" placeholder="">
+				</div>
+			</div>            
         </div>
+		
         <div class="form-group">
-            <label for="" class="col-sm-12 col-md-2 control-label">
-                Puntaje 
-            </label>
-            <div class="col-sm-12 col-md-9">
-                <input type="text" class="form-control" id="nombre_certificado" name="puntaje" placeholder="">
-            </div>
+			<div id="puntaje">
+				<label for="" class="col-sm-12 col-md-2 control-label">Puntaje</label>
+				<div class="col-sm-12 col-md-9">
+					<input type="text" id="puntaje_input" class="form-control" name="puntaje" placeholder="">
+				</div>
+			</div>            
         </div>
+		
         <div class="form-group">
-            <label for="adjunto" class="col-sm-12 col-md-2 control-label">Documento de soporte: </label>
-            <div class="col-sm-12 col-md-5">
-                <input id="adjunto" type="file" class="form-control" name="adjunto" required />
-                <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato PDF y no tener un tamaño superior a 10MB</em>
-            </div>
+			<div id="adjunto">
+				<label for="adjunto" class="col-sm-12 col-md-2 control-label">Documento de soporte:</label>
+				<div class="col-sm-12 col-md-5">
+					<input type="file" id="adjunto_input" class="form-control" name="adjunto">
+					<br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato PDF y no tener un tamaño superior a 10MB</em>
+				</div>
+			</div>            
         </div>
+		
         <div class="form-group">
             <div class="col-md-4 col-md-offset-4">
                 <button type="submit" class="btn btn-success form-control">
@@ -66,6 +82,7 @@
             <thead>
                 <tr>
                     <th>Idioma</th>
+					<th>Nativo</th>
                     <th>Tipo de certificación</th>
                     <th>Documento de soporte</th>
                     <th>Opciones</th>
@@ -76,11 +93,26 @@
                 <td>
                     {{$idiomas[$idioma_certificado->idiomas_id]->nombre}}
                 </td>
-                <td>
-                    {{$idioma_certificado->nombre_certificado}}
+				<td>
+					@if($idioma_certificado->nativo == 1)
+						Si
+					@else
+						No
+					@endif
                 </td>
                 <td>
-                    <a href="{{env('APP_URL').$idioma_certificado->ruta_adjunto}}" target="_blank">Documento adjunto</a>
+					@if($idioma_certificado->nativo == 1)
+						No requerido
+					@else
+						{{$idioma_certificado->nombre_certificado}}
+					@endif                    
+                </td>
+                <td>
+					@if($idioma_certificado->nativo == 1)
+						No requerido
+					@else
+						<a href="{{env('APP_URL').$idioma_certificado->ruta_adjunto}}" target="_blank">Documento adjunto</a>
+					@endif                    
                 </td>
                 <td>
                     <form method="post" action="{{ env('APP_URL') }}idiomas/delete" style="margin:20px 0">     
@@ -100,4 +132,19 @@
         </table>
     </div>
 </div>
+
+<script>
+    (function ($) {
+        $("input[name='nativo']").on("change", function () {			
+            if ($(this).val() == 0) {				
+                $("#nombre_certificado, #puntaje, #adjunto").show();
+                //$("#nombre_certificado, #puntaje, #adjunto").removeAttr("disabled");
+				$("#nombre_certificado_input, #puntaje_input, #adjunto_input").attr("required", "required");
+            } else {  
+                $("#nombre_certificado, #puntaje, #adjunto").hide();
+				$("#nombre_certificado_input, #puntaje_input, #adjunto_input").removeAttr("required");
+            }
+        });
+    })(jQuery);
+</script>
 @stop
