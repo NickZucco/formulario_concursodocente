@@ -34,13 +34,13 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="desde" class="col-sm-12 col-md-2 control-label">Fecha de inicio de vinculación</label>
+                <label for="fecha_inicio" class="col-sm-12 col-md-2 control-label">Fecha de inicio de vinculación</label>
                 <div class="col-sm-12 col-md-4">
-                    <input type="text" class="datepicker form-control" id="desde" name="desde" placeholder="####-##-##" required>
+                    <input type="text" class="datepicker form-control" id="fecha_inicio" name="fecha_inicio" placeholder="####-##-##" required>
                 </div>
-                <label for="hasta" class="col-sm-12 col-md-2 control-label">Fecha de fin de vinculación</label>
+                <label for="fecha_finalizacion" class="col-sm-12 col-md-2 control-label">Fecha de fin de vinculación</label>
                 <div class="col-sm-12 col-md-4">
-                    <input type="text" class="datepicker form-control" id="hasta" name="hasta" placeholder="####-##-##" required>
+                    <input type="text" class="datepicker form-control" id="fecha_finalizacion" name="fecha_finalizacion" placeholder="####-##-##" required>
                 </div>
             </div>
             <div class="form-group">
@@ -58,6 +58,7 @@
                 <label for="adjunto" class="col-sm-12 col-md-2 control-label">Documento de soporte: </label>
                 <div class="col-sm-12 col-md-10">
                     <input id="adjunto" type="file" class="form-control" name="adjunto" required />
+					<em>No obligatorio para experiencia laboral en la Universidad Nacional de Colombia - Sede Bogotá</em>
                     <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato PDF y no tener un tamaño superior a 10MB</em>
                 </div>
             </div>
@@ -85,8 +86,8 @@
             <thead>
                 <tr>
                     <th>Nombre de la institución/empresa</th>
-                    <th>Desde</th>
-                    <th>Hasta</th>
+                    <th>Fecha de inicio de vinculación</th>
+                    <th>Fecha de fin de vinculación</th>
                     <th>Nombre del cargo</th>
                     <th>Documento adjunto</th>
                     <th>Opciones</th>
@@ -98,10 +99,10 @@
                     {{$experiencia_laboral->nombre_institucion}}
                 </td>
                 <td>
-                    {{$experiencia_laboral->desde}}
+                    {{$experiencia_laboral->fecha_inicio}}
                 </td>
                 <td>
-                    {{$experiencia_laboral->hasta}}
+                    {{$experiencia_laboral->fecha_finalizacion}}
                 </td>
                 <td>
                     {{$experiencia_laboral->nombre_cargo}}
@@ -156,7 +157,6 @@
         );
 		
         $('#nombre_institucion').focusout(function () {
-			console.log("Si estoy entrando");
             var i = 0;
             var unal_selected = false;
             while (unal_places.length > i && !unal_selected) {
@@ -167,10 +167,8 @@
             }
 
             if (!unal_selected) {
-				console.log("La institución no es UN");
                 $("#adjunto").attr("required", "required");
             } else {
-				console.log("La institución es UN");
                 $("#adjunto").removeAttr("required");
             }
         });

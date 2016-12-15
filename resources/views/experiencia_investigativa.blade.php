@@ -19,19 +19,19 @@
             <div class="form-group">
                 <label for="nombre_proyecto" class="col-sm-12 col-md-3 control-label">Nombre del proyecto</label>
                 <div class="col-sm-12 col-md-9">
-                    <input type="text" class="form-control" id="nombre_proyecto" name="nombre_proyecto" placeholder="Nombre del proyecto">
+                    <input type="text" class="form-control" id="nombre_proyecto" name="nombre_proyecto" placeholder="Nombre del proyecto" required>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="institucion" class="col-sm-12 col-md-3 control-label">Institución</label>
-                <div class="col-sm-12 col-md-9">
-                    <input type="text" class="form-control" id="institucion" name="institucion" placeholder="Nombre de la institución">
+			<div class="form-group">
+                <label for="institucion" class="col-sm-12 col-md-3 control-label">Nombre de la institución</label>
+                <div class="col-sm-12 col-md-9">					
+                    <input type="text" class="form-control typeahead" id="institucion" name="institucion" placeholder="Nombre de la institución" data-provide="typeahead"  autocomplete="off" value="" required>
                 </div>
             </div>
             <div class="form-group">
                 <label for="area_proyecto" class="col-sm-12 col-md-3 control-label">Área del proyecto</label>
                 <div class="col-sm-12 col-md-9">
-                    <input type="text" class="form-control" id="area_proyecto" name="area_proyecto" placeholder="Área del proyecto">
+                    <input type="text" class="form-control" id="area_proyecto" name="area_proyecto" placeholder="Área del proyecto" required>
                 </div>
             </div>
             <div class="form-group">
@@ -44,19 +44,23 @@
             <div class="form-group">
                 <label for="fecha_inicio" class="col-sm-12 col-md-3 control-label">Fecha de inicio de la vinculación</label>
                 <div class="col-sm-12 col-md-2">
-                    <input type="text" class="start datepicker form-control" id="fecha_inicio" name="fecha_inicio" placeholder="####-##-##">
+                    <input type="text" class="start datepicker form-control" id="fecha_inicio" name="fecha_inicio" placeholder="####-##-##" required>
                 </div>
-                <label for="fecha_fin" class="col-sm-12 col-md-3 control-label">Fecha de finalización de la vinculación</label>
-                <div class="col-sm-12 col-md-2" id="fecha_fin">
-                    <input type="text" class="end datepicker form-control"  name="fecha_fin" placeholder="####-##-##">
-                </div>
-                <label for="en_curso" class="col-sm-12 col-md-1 control-label">¿En curso?</label>
-                <div class="col-md-1">
+				<div class="col-md-4">
+                    <div id="fecha_finalizacion">
+                        <label for="fecha_finalizacion" class="col-sm-12 col-md-6 control-label">Fecha de finalización de vinculación</label>
+                        <div class="col-sm-12 col-md-6">
+                            <input type="text"  class="datepicker end maxToday form-control" name="fecha_finalizacion" placeholder="####-##-##">
+                        </div>
+                    </div>
+                </div>              
+                <label for="en_curso" class="col-sm-12 col-md-1 control-label">¿Vinculación vigente?</label>
+                <div class="col-md-2">
                     <label class="radio-inline">
-                        <input type="radio" name="en_curso" data-id="fecha_fin" value="1">Si
+                        <input type="radio" name="en_curso" data-id="fecha_finalizacion" value="1" required>Si
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="en_curso" data-id="fecha_fin" value="0">No
+                        <input type="radio" name="en_curso" data-id="fecha_finalizacion" value="0">No
                     </label>
                 </div>
             </div>
@@ -75,6 +79,7 @@
                 <label for="adjunto" class="col-sm-12 col-md-3 control-label">Documento de soporte: </label>
                 <div class="col-sm-12 col-md-9">
                     <input id="adjunto" type="file" class="form-control" name="adjunto" required />
+					<em>No obligatorio para experiencia investigativa en la Universidad Nacional de Colombia - Sede Bogotá</em>
                     <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato PDF y no tener un tamaño superior a 10MB</em>
                 </div>
             </div>
@@ -101,8 +106,8 @@
                 <tr>
                     <th>Nombre del proyecto</th>
                     <th>Área del proyecto</th>
-                    <th>Inicio de vinculacion</th>
-                    <th>Fin de vinculacion</th>
+                    <th>Fecha de inicio de vinculación</th>
+                    <th>Fecha de fin de vinculación</th>
                     <th>Documento adjunto</th>
                     <th>Opciones</th>
                 </tr>
@@ -119,10 +124,18 @@
                     {{$experiencia_investigativa->fecha_inicio}}
                 </td>
                 <td>
-                    {{$experiencia_investigativa->fecha_fin}}
+					@if(!$experiencia_investigativa->fecha_finalizacion==null)
+						{{$experiencia_investigativa->fecha_finalizacion}}
+                    @else
+						Vinculación vigente
+                    @endif               
                 </td>
                 <td>
-                    <a href="{{env('APP_URL').$experiencia_investigativa->ruta_adjunto}}" target="_blank">Documento adjunto</a>
+					@if(!$experiencia_investigativa->ruta_adjunto==null)
+						<a href="{{env('APP_URL').$experiencia_investigativa->ruta_adjunto}}" target="_blank">Documento adjunto</a>
+                    @else
+						No requerido
+                    @endif                    
                 </td>
                 <td>
                     <form method="post" action="{{ env('APP_URL') }}experiencia_investigativa/delete" style="margin:20px 0">     
@@ -145,34 +158,16 @@
 </div>
 <script>
     (function ($) {
-        /**/
-        var unal_selected = false;
-        function conditionsColombia(change_country) {
-            var i = 0;
-            while (unal_places.length > i && !unal_selected) {
-                if (unal_places[i] == $institution.val()) {
-                    unal_selected = true;
-                }
-                i++;
-            }
-
-            if (!unal_selected) {
-                $("#adjunto").attr("required", "required");
-            } else {
-                $("#adjunto").removeAttr("required");
-                if(change_country){
-                    $countries_select.val($colombia_option.val());
-                }
-            }
-        }
         var unal_places = [
             'Universidad Nacional de Colombia - Sede Bogotá',
         ];
+		
         var unal_bh = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.whitespace,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             local: unal_places
         });
+		
         $('#institucion').typeahead(
                 null,
                 {
@@ -180,22 +175,40 @@
                     source: unal_bh
                 }
         );
-        $("#institucion").focusout(function () {
-            conditionsColombia(true);
-        });
-        $('#institucion').bind('typeahead:select', function (ev, suggestion) {
+		
+		$('#institucion').bind('typeahead:select', function (ev, suggestion) {
             unal_selected = true;
-            conditionsColombia(true);
         });
-        /**/
+		
+		$("#institucion").focusout(function () {
+            var i = 0;
+            var unal_selected = false;
+            while (unal_places.length > i && !unal_selected) {
+                if (unal_places[i] == $("#institucion").val()) {
+                    unal_selected = true;
+                }
+                i++;
+            }
+            if (!unal_selected) {
+                $("#adjunto").attr("required", "required");
+            } else {
+                $("#adjunto").removeAttr("required");
+				$("#paises_id").val('57').change();
+            }
+        });      
+        
         $("input[name='en_curso']").on("change", function () {
-            var $this = $(this);
-            if ($this.val() == 0) {
+            var $this = $(this);			
+            if ($this.val() == 0) {				
                 $("#" + $(this).data("id")).show();
                 $("#" + $(this).data("id") + " input").removeAttr("disabled");
-            } else {
+				$("#" + $(this).data("id") + " input").attr("required", "required");
+				console.log("#" + $(this).data("id"));
+            } else {				
                 $("#" + $(this).data("id")).hide();
-                $("#" + $(this).data("id") + " input").attr("disabled");
+                $("#" + $(this).data("id") + " input").attr("disabled");				
+				$("#" + $(this).data("id") + " input").removeAttr("required");
+				console.log("#" + $(this).data("id"));
             }
         });
     })(jQuery);

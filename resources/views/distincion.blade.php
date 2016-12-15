@@ -37,11 +37,10 @@
             <div class="form-group">
                 <div class="col-sm-12 col-md-2 ">
                     <label for="adjunto" class="control-label">Documento de soporte: </label>
-                    <br>
-                    <em>No obligatorio para distinciones de la Unversidad Nacional de Colombia</em>
                 </div>
                 <div class="col-sm-12 col-md-9">
                     <input id="adjunto" type="file" class="form-control" name="adjunto" required />
+					<em>No obligatorio para distinciones otorgadas por la Universidad Nacional de Colombia - Sede Bogotá</em>
                     <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato PDF y no tener un tamaño superior a 10MB</em>
                 </div>
             </div>

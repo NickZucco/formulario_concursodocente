@@ -19,7 +19,7 @@ class ExperienciaInvestigativaController extends Controller {
         $aspirante_id = Auth::user()->id;
 
         $experiencia_investigativa = ExperienciaInvestigativa::where('aspirantes_id', '=', $aspirante_id)->get();
-        $paises = Pais::all();
+        $paises = Pais::orderBy('nombre')->get();
 
         $data = array(
             'aspirante_id' => $aspirante_id,
@@ -33,19 +33,24 @@ class ExperienciaInvestigativaController extends Controller {
     public function insert() {
         $input = Input::all();
         $input['aspirantes_id'] = Auth::user()->id;
-        unset($input['en_curso']);
-        
-        //Efectuamos las operaciones sobre el archivo
-        $ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id,"EI");
-        if(is_int($ruta_adjunto)){
-            return $this->show_info("Ocurrió un error agregando el archivo adjunto. Error: ".$ruta_adjunto);
-        }
-        $input['ruta_adjunto']=$ruta_adjunto;
-        unset($input['adjunto']);
-        //
 
-        $experiencia_docente = ExperienciaInvestigativa::create($input);
-        if ($experiencia_docente->save()) {
+		//Verificamos si el programa está en curso para no tener en cuenta la fecha de finalización
+		if ($input['en_curso']==1) {
+			unset($input['fecha_finalizacion']);
+		}
+        
+        //Guardamos el archivo de soporte adjunto si existe
+		if (isset($input['adjunto'])) {
+			$ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id,"EI");
+			if(is_int($ruta_adjunto)){
+				return $this->show_info("Ocurrió un error agregando el archivo adjunto. Error: ".$ruta_adjunto);
+			}
+			$input['ruta_adjunto']=$ruta_adjunto;
+			unset($input['adjunto']);
+		}
+
+        $experiencia_investigativa = ExperienciaInvestigativa::create($input);
+        if ($experiencia_investigativa->save()) {
             return $this->show_info("Se ingresó exitosamente la información de experiencia investigativa.");
         }
     }

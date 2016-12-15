@@ -28,8 +28,6 @@ class EstudioController extends Controller {
             }
         }
         
-        //dd($perfiles_seleccionados_info);
-        
         $paises = Pais::orderBy('nombre')->get();
 
         $data = array(
@@ -45,8 +43,14 @@ class EstudioController extends Controller {
     public function insert() {
         $input = Input::all();
         $msg = null;
+		
         //Quitamos el radiobutton (al tener nombre se envia con el formulario ¬¬)
         unset($input['additional_attatchments']);
+		
+		//Verificamos si el programa está en curso para no tener en cuenta la fecha de finalización
+		if ($input['en_curso']==1) {
+			unset($input['fecha_finalizacion']);
+		}
 		
         //Efectuamos las operaciones sobre los archivos adjuntos
 		//Guardamos el adjunto de soporte si existe

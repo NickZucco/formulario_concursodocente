@@ -102,7 +102,7 @@
                 </div>
                 <label for="ciudad_aplicante" class="col-md-2 control-label">Ciudad desde la cual aplica</label>
                 <div class="col-md-2">
-                    <input type="text" class="form-control" id="ciudad_aplicante" name="ciudad_aplicante" placeholder="" value="{{$candidate_info->ciudad_aplicante}}">
+                    <input type="text" class="form-control" id="ciudad_aplicante" name="ciudad_aplicante" placeholder="" value="{{$candidate_info->ciudad_aplicante}}" required>
                 </div>
             </div>
             <div class="form-group">
@@ -124,12 +124,8 @@
             <div class="form-group">
                 <label for="adjunto" class="col-sm-12 col-md-2 control-label">Documento de identidad (obligatorio): </label>
                 <div class="col-sm-12 col-md-4">
-                    <input id="adjunto" type="file" class="form-control" name="adjunto_documento"
-                           @if(!$candidate_info->ruta_adjunto_documento)
-                           required 
-                           @endif
-                           />
-                           <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato PDF y no tener un tamaño superior a 10MB</em>
+                    <input id="adjunto" type="file" class="form-control" name="adjunto_documento" required>
+                    <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato PDF y no tener un tamaño superior a 10MB</em>
                 </div>
                 <div class="col-md-6">
                     @if($candidate_info->ruta_adjunto_documento)

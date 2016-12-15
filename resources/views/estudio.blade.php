@@ -39,7 +39,7 @@
                     <div id="fecha_finalizacion">
                         <label for="fecha_finalizacion" class="col-sm-12 col-md-6 control-label">Fecha de finalización de vinculación</label>
                         <div class="col-sm-12 col-md-6">
-                            <input type="text"  class="datepicker end maxToday form-control" name="fecha_finalizacion" placeholder="####-##-##" required>
+                            <input type="text"  class="datepicker end maxToday form-control" name="fecha_finalizacion" placeholder="####-##-##">
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                 </div>
                 <div class="col-sm-12 col-md-9">
                     <input id="adjunto" type="file" class="form-control" name="adjunto" required/>
-                    <em>No obligatorio para estudios en la Unversidad Nacional de Colombia - Sede Bogotá</em>
+                    <em>No obligatorio para estudios en la Universidad Nacional de Colombia - Sede Bogotá</em>
                     <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato PDF y no tener un tamaño superior a 10MB</em>
                 </div>
             </div>
@@ -135,7 +135,11 @@
                     {{$estudio->fecha_inicio}}
                 </td>
                 <td>
-                    {{$estudio->fecha_finalizacion}}
+					@if(!$estudio->fecha_finalizacion==null)
+						{{$estudio->fecha_finalizacion}}
+                    @else
+						En curso
+                    @endif
                 </td>
                 <td>
                     @if(!$estudio->ruta_adjunto==null)
@@ -183,9 +187,11 @@
             if ($this.val() == 0) {
                 $("#" + $(this).data("id")).show();
                 $("#" + $(this).data("id") + " input").removeAttr("disabled");
+				$("#" + $(this).data("id") + " input").attr("required", "required");
             } else {
                 $("#" + $(this).data("id")).hide();
                 $("#" + $(this).data("id") + " input").attr("disabled");
+				$("#" + $(this).data("id") + " input").removeAttr("required");
             }
         });
 		

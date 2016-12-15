@@ -32,13 +32,13 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="desde" class="col-sm-12 col-md-2 control-label">Desde</label>
+                <label for="fecha_inicio" class="col-sm-12 col-md-2 control-label">Fecha de inicio de vinculación</label>
                 <div class="col-sm-12 col-md-4">
-                    <input type="text" class="datepicker start form-control" id="desde" name="desde" placeholder="####-##-##" required>
+                    <input type="text" class="datepicker start form-control" id="fecha_inicio" name="fecha_inicio" placeholder="####-##-##" required>
                 </div>
-                <label for="hasta" class="col-sm-12 col-md-2 control-label">Hasta</label>
+                <label for="fecha_finalizacion" class="col-sm-12 col-md-2 control-label">Fecha de finalización de vinculación</label>
                 <div class="col-sm-12 col-md-4">
-                    <input type="text" class="datepicker end form-control" id="hasta" name="hasta" placeholder="####-##-##" required>
+                    <input type="text" class="datepicker end form-control" id="fecha_finalizacion" name="fecha_finalizacion" placeholder="####-##-##" required>
                 </div>
             </div>
 
@@ -66,10 +66,10 @@
                         <tbody>
                             <tr class="tr" data-index="0">
                                 <td>
-                                    <input class="form-control" type="text" name="info_asignaturas[nombre][]" value="">
+                                    <input class="form-control" type="text" name="info_asignaturas[nombre][]" value="" required>
                                 </td>
                                 <td>
-                                    <input class="form-control" type="number" name="info_asignaturas[intensidad][]" value="">
+                                    <input class="form-control" type="number" name="info_asignaturas[intensidad][]" value="" required>
                                 </td>
                                 <td>
                                     <button class="addBtnRemove btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
@@ -86,7 +86,8 @@
                 </div>
                 <div class="col-sm-12 col-md-10">
                     <input id="adjunto" type="file" class="form-control" name="adjunto" required />
-                    <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato PDF y no tener un tamaño superior a 10MB. No obligatorio para experiencia docente en la Unversidad Nacional de Colombia - Sede Bogotá</em>
+					<em>No obligatorio para experiencia docente en la Universidad Nacional de Colombia - Sede Bogotá</em>
+                    <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato PDF y no tener un tamaño superior a 10MB.</em>
                 </div>
             </div>
 
@@ -111,8 +112,8 @@
             <thead>
                 <tr>
                     <th>Nombre de la institución/empresa</th>
-                    <th>Desde</th>
-                    <th>Hasta</th>
+                    <th>Fecha de inicio de vinculación</th>
+                    <th>Fecha de fin de vinculación</th>
                     <th>Información de asignaturas impartidas</th>
                     <th>Documento de soporte adjunto</th>
                     <th>Opciones</th>
@@ -124,10 +125,10 @@
                     {{$experiencia_docente->nombre_institucion}}
                 </td>
                 <td>
-                    {{$experiencia_docente->desde}}
+                    {{$experiencia_docente->fecha_inicio}}
                 </td>
                 <td>
-                    {{$experiencia_docente->hasta}}
+                    {{$experiencia_docente->fecha_finalizacion}}
                 </td>
                 <td>
                     <table class="toJSONTable" data-json="{{$experiencia_docente->info_asignaturas}}">
