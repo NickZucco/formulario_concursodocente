@@ -20,13 +20,13 @@
             <div class="form-group">
                 <label for="titulo" class="col-sm-12 col-md-2 control-label">Título académico obtenido</label>
                 <div class="col-sm-12 col-md-9">
-                    <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Nombre del título académico obtenido" value="" required>
+                    <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Nombre del título académico obtenido" required>
                 </div>
             </div>
             <div class="form-group">
                 <label for="institucion" class="col-sm-12 col-md-2 control-label">Nombre de la institución</label>
                 <div class="col-sm-12 col-md-9">
-                    <input type="text" class="form-control" id="institucion" name="institucion" placeholder="Nombre de la institución" data-provide="typeahead"  autocomplete="off" value="" required>
+                    <input type="text" class="form-control typeahead" id="institucion" name="institucion" placeholder="Nombre de la institución" data-provide="typeahead"  autocomplete="off" value="" required>
                 </div>
             </div>
 
@@ -139,18 +139,18 @@
                 </td>
                 <td>
                     @if(!$estudio->ruta_adjunto==null)
-                    <a href="{{env('APP_URL').$estudio->ruta_adjunto}}">Documento de soporte</a><br>
+						<a href="{{env('APP_URL').$estudio->ruta_adjunto}}">Documento de soporte</a><br>
                     @else
-                    No requerido
+						No requerido
                     @endif                 
                     @if($estudio->ruta_entramite_minedu)
-                    <a href="{{env('APP_URL').$estudio->ruta_entramite_minedu}}">Documento de manifiesto: En trámite ante MinEdu</a><br>
+						<a href="{{env('APP_URL').$estudio->ruta_entramite_minedu}}">Documento de manifiesto: En trámite ante MinEdu</a><br>
                     @endif
                     @if($estudio->ruta_res_convalidacion)
-                    <a href="{{env('APP_URL').$estudio->ruta_res_convalidacion}}">Resolución de convalidación</a><br>
+						<a href="{{env('APP_URL').$estudio->ruta_res_convalidacion}}">Resolución de convalidación</a><br>
                     @endif
                     @if($estudio->ruta_resumen_ejecutivo)
-                    <a href="{{env('APP_URL').$estudio->ruta_resumen_ejecutivo}}">Resumen ejecutivo</a><br>
+						<a href="{{env('APP_URL').$estudio->ruta_resumen_ejecutivo}}">Resumen ejecutivo</a><br>
                     @endif
                 </td>
                 <td>
@@ -188,6 +188,7 @@
                 $("#" + $(this).data("id") + " input").attr("disabled");
             }
         });
+		
         $("input[name='additional_attatchments']").on("change", function () {
 			var pais = $("#paises_id").val();
 			console.log(pais);
@@ -206,14 +207,17 @@
 			}
 			console.log("#" + id);
         });
+		
         var unal_places = [
             'Universidad Nacional de Colombia - Sede Bogotá',
         ];
+		
         var unal_bh = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.whitespace,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             local: unal_places
         });
+		
         $('#institucion').typeahead(
                 null,
                 {
@@ -249,6 +253,7 @@
 			}
 			else {
 				$("input[name='additional_attatchments']").removeAttr("required");
+				$("input[name='additional_attatchments']").prop('checked', false);
 				$("input[name='additional_attatchments']").each(function (i, e) {
 					$("#" + $(this).val()).removeAttr("required");
 				});

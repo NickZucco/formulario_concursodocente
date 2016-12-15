@@ -34,14 +34,15 @@ class ExperienciaLaboralController extends Controller {
         $input = Input::all();
         $input['aspirantes_id'] = Auth::user()->id;
 
-        //Efectuamos las operaciones sobre el archivo
-        $ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id,"EL");
-        if(is_int($ruta_adjunto)){
-            return $this->show_info("Ocurrió un error agregando el archivo adjunto. Error: ".$ruta_adjunto);
-        }
-        $input['ruta_adjunto']=$ruta_adjunto;
-        unset($input['adjunto']);
-        //
+        //Guardamos el archivo de soporte de experiencia laboral si existe
+		if (isset($input['adjunto'])){
+			$ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id,"EL");
+			if(is_int($ruta_adjunto)){
+				return $this->show_info("Ocurrió un error agregando el archivo adjunto. Error: ".$ruta_adjunto);
+			}
+			$input['ruta_adjunto']=$ruta_adjunto;
+			unset($input['adjunto']);
+		}
         
         $experiencia_laboral = ExperienciaLaboral::create($input);
         if ($experiencia_laboral->save()) {

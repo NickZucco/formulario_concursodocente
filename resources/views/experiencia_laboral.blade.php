@@ -21,14 +21,14 @@
             <div class="form-group">
                 <label for="nombre_institucion" class="col-sm-12 col-md-2 control-label">Nombre de la institución/empresa</label>
                 <div class="col-sm-12 col-md-5">
-                    <input type="text" class="form-control" id="nombre_institucion" name="nombre_institucion" data-provide="typeahead" placeholder="Nombre de la institución/empresa">
+                    <input type="text" class="form-control typeahead" id="nombre_institucion" name="nombre_institucion" placeholder="Nombre de la institución/empresa" data-provide="typeahead" autocomplete="off" required>
                 </div>
 
                 <label for="tipos_vinculacion_laboral_id" class="col-sm-12 col-md-2 control-label">Tipo de vinculación laboral</label>
                 <div class="col-sm-12 col-md-3">
-                    <select id="tipos_vinculacion_laboral_id" name="tipos_vinculacion_laboral_id" class="form-control">
+                    <select id="tipos_vinculacion_laboral_id" name="tipos_vinculacion_laboral_id" class="form-control" required>
                         @foreach($tipos_vinculacion_laboral as $tvl)
-                        <option value="{{$tvl->id}}">{{$tvl->nombre}}</option>
+							<option value="{{$tvl->id}}">{{$tvl->nombre}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -36,21 +36,21 @@
             <div class="form-group">
                 <label for="desde" class="col-sm-12 col-md-2 control-label">Fecha de inicio de vinculación</label>
                 <div class="col-sm-12 col-md-4">
-                    <input type="text" class="datepicker form-control" id="desde" name="desde" placeholder="####-##-##">
+                    <input type="text" class="datepicker form-control" id="desde" name="desde" placeholder="####-##-##" required>
                 </div>
                 <label for="hasta" class="col-sm-12 col-md-2 control-label">Fecha de fin de vinculación</label>
                 <div class="col-sm-12 col-md-4">
-                    <input type="text" class="datepicker form-control" id="hasta" name="hasta" placeholder="####-##-##">
+                    <input type="text" class="datepicker form-control" id="hasta" name="hasta" placeholder="####-##-##" required>
                 </div>
             </div>
             <div class="form-group">
                 <label for="nombre_cargo" class="col-sm-12 col-md-2 control-label">Nombre del cargo</label>
                 <div class="col-sm-12 col-md-4">
-                    <input type="text" class="form-control" id="nombre_cargo" name="nombre_cargo" placeholder="Nombre del cargo desempeñado">
+                    <input type="text" class="form-control" id="nombre_cargo" name="nombre_cargo" placeholder="Nombre del cargo desempeñado" required>
                 </div>
                 <label for="funcion_principal" class="col-sm-12 col-md-2 control-label">Función principal</label>
                 <div class="col-sm-12 col-md-4">
-                    <input type="text" class="form-control" id="funcion_principal" name="funcion_principal" placeholder="Funcion principal desempeñada">
+                    <input type="text" class="form-control" id="funcion_principal" name="funcion_principal" placeholder="Funcion principal desempeñada" required>
                 </div>
             </div>
 
@@ -107,7 +107,12 @@
                     {{$experiencia_laboral->nombre_cargo}}
                 </td>
                 <td>
-                    <a href="{{env('APP_URL').$experiencia_laboral->ruta_adjunto}}" target="_blank">Documento adjunto</a>
+                    @if($experiencia_laboral->ruta_adjunto==null)
+						<em>No requerido</em>
+                    @else
+						<a href="{{env('APP_URL').$experiencia_laboral->ruta_adjunto}}" target="_blank">Documento adjunto</a>
+                    @endif
+
                 </td>
                 <td>
                     <form method="post" action="{{ env('APP_URL') }}experiencia_laboral/delete" style="margin:20px 0">     
@@ -128,17 +133,20 @@
 </div>
 <script>
     (function ($) {
-        /**/
-        var unal_places = [
+		var unal_places = [
             'Universidad Nacional de Colombia - Sede Bogotá',
         ];
+		console.log(unal_places);
 
         var unal_bh = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.whitespace,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             local: unal_places
         });
-
+		console.log(unal_bh);
+		var test = document.getElementById('nombre_institucion');
+		console.log(test);
+		
         $('#nombre_institucion').typeahead(
                 null,
                 {
@@ -146,26 +154,31 @@
                     source: unal_bh
                 }
         );
-        $("#nombre_institucion").focusout(function () {
+		
+        $('#nombre_institucion').focusout(function () {
+			console.log("Si estoy entrando");
             var i = 0;
             var unal_selected = false;
             while (unal_places.length > i && !unal_selected) {
-                if (unal_places[i] == $("#nombre_institucion").val()) {
+                if (unal_places[i] == $('#nombre_institucion').val()) {
                     unal_selected = true;
                 }
                 i++;
             }
 
             if (!unal_selected) {
+				console.log("La institución no es UN");
                 $("#adjunto").attr("required", "required");
             } else {
+				console.log("La institución es UN");
                 $("#adjunto").removeAttr("required");
             }
         });
+		
         $('#nombre_institucion').bind('typeahead:select', function (ev, suggestion) {
             unal_selected = true;
         });
-        /**/
-    });
+        
+    })(jQuery);
 </script>
 @stop

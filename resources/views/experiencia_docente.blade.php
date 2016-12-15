@@ -134,8 +134,13 @@
 
                     </table>
                 </td>
-                <td>
-                    <a href="{{env('APP_URL').$experiencia_docente->ruta_adjunto}}" target="_blank">Documento adjunto</a>
+				<td>
+                    @if($experiencia_docente->ruta_adjunto==null)
+						<em>No requerido</em>
+                    @else
+						<a href="{{env('APP_URL').$experiencia_docente->ruta_adjunto}}" target="_blank">Documento adjunto</a>
+                    @endif
+
                 </td>
                 <td>
                     <form method="post" action="{{ env('APP_URL') }}experiencia_docente/delete" style="margin:20px 0">     

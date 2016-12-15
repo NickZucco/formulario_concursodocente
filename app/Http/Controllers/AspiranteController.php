@@ -56,15 +56,16 @@ class AspiranteController extends Controller {
     public function insert() {
         $input = Input::all();
 
-        //Efectuamos las operaciones sobre el archivo
-        //documento de identidad
+        //Efectuamos las operaciones sobre los archivos adjuntos
+        //Guardamos el soporte del documento de identidad (es obligatorio)
         $ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id, "A_D", "adjunto_documento", true);
         if (is_int($ruta_adjunto)) {
             return $this->show_info("Ocurrió un error agregando el archivo adjunto de documento. Error: " . $ruta_adjunto);
         }
         $input['ruta_adjunto_documento'] = $ruta_adjunto;
         unset($input['adjunto_documento']);
-        //tarjeta profesional
+		
+        //Guardamos el documento de soporte de latarjeta profesional si existe
         if (isset($input['adjunto_tarjetaprofesional'])) {
             $ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id, "A_TP", "adjunto_tarjetaprofesional", false);
             if (is_int($ruta_adjunto)) {
@@ -73,7 +74,6 @@ class AspiranteController extends Controller {
             $input['ruta_adjunto_tarjetaprofesional'] = $ruta_adjunto;
             unset($input['adjunto_tarjetaprofesional']);
         }
-        //
 
         $id = Auth::user()->id;
         $input['id'] = $id;

@@ -42,16 +42,17 @@ class ExperienciaDocenteController extends Controller {
         $input = Input::all();
         $input['aspirantes_id'] = Auth::user()->id;
 
-        //Efectuamos las operaciones sobre el archivo
-        $ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id, "ED");
-        if (is_int($ruta_adjunto)) {
-            return $this->show_info("Ocurrió un error agregando el archivo adjunto. Error: " . $ruta_adjunto);
+        //Guardamos el archivo de soporte de experiencia docente si existe
+		if (isset($input['adjunto'])) {			
+            $ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id, "ED");
+			if (is_int($ruta_adjunto)) {
+				return $this->show_info("Ocurrió un error agregando el archivo adjunto. Error: " . $ruta_adjunto);
+			}
+			$input['ruta_adjunto'] = $ruta_adjunto;
+			unset($input['adjunto']);
         }
-        $input['ruta_adjunto'] = $ruta_adjunto;
-        unset($input['adjunto']);
-        //
-        //adaptamos el campo info_asignaturas (es un array, lo volvemos JSON y lo guardamos en la BD)
-
+		
+        //Adaptamos el campo info_asignaturas (es un array, lo volvemos JSON y lo guardamos en la BD)
         $input['info_asignaturas'] = json_encode(self::transpose($input['info_asignaturas']));
         $experiencia_docente = ExperienciaDocente::create($input);
         if ($experiencia_docente->save()) {

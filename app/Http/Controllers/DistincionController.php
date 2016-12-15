@@ -36,16 +36,18 @@ class DistincionController extends Controller {
     public function insert() {
         $input = Input::all();
         $input['aspirantes_id'] = Auth::user()->id;
-
-        //Efectuamos las operaciones sobre el archivo
-        $ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id, "DI_");
-        if (is_int($ruta_adjunto)) {
-            return $this->show_info("Ocurrió un error agregando el archivo adjunto. Error: " . $ruta_adjunto);
-        }
-        $input['ruta_adjunto'] = $ruta_adjunto;
-        unset($input['adjunto']);
-        //
-
+		
+        //Efectuamos las operaciones sobre el archivo adjunto si existe
+		if (isset($input['adjunto'])) {
+			$ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id, "DI_");
+			dd($ruta_adjunto);
+			if (is_int($ruta_adjunto)) {
+				return $this->show_info("Ocurrió un error agregando el archivo adjunto. Error: " . $ruta_adjunto);
+			}
+			$input['ruta_adjunto'] = $ruta_adjunto;
+			unset($input['adjunto']);
+		}
+        
         $distincion = Distincion::create($input);
         if ($distincion->save()) {
             return $this->show_info("Se ingresó la información de la distinción académica");

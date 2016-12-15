@@ -47,8 +47,19 @@ class EstudioController extends Controller {
         $msg = null;
         //Quitamos el radiobutton (al tener nombre se envia con el formulario ¬¬)
         unset($input['additional_attatchments']);
-        //Efectuamos las operaciones sobre el archivo
-        //adjunto_entramite_minedu
+		
+        //Efectuamos las operaciones sobre los archivos adjuntos
+		//Guardamos el adjunto de soporte si existe
+		if (isset($input['adjunto'])) {
+			$ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id,"ES");
+			if(is_int($ruta_adjunto)){
+				return $this->show_info("Ocurrió un error agregando el archivo adjunto. Error: ".$ruta_adjunto);
+			}
+			$input['ruta_adjunto']=$ruta_adjunto;
+			unset($input['adjunto']);
+		}
+		
+        //Guardamos el soporte de tramite ante el Min Edu si existe
         if (isset($input['adjunto_entramite_minedu'])) {
             $ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id, "A_MINEDU", "adjunto_entramite_minedu", true);
             if (is_int($ruta_adjunto)) {
@@ -57,7 +68,8 @@ class EstudioController extends Controller {
             $input['ruta_entramite_minedu'] = $ruta_adjunto;
             unset($input['adjunto_entramite_minedu']);
         }
-        //adjunto_res_convalidacion
+		
+        //Guardamos la resolución de convalidación del MinEdu para el título internacional si existe
         if (isset($input['adjunto_res_convalidacion'])) {
             $ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id, "A_RESCONV", "adjunto_res_convalidacion", false);
             if (is_int($ruta_adjunto)) {
@@ -66,26 +78,7 @@ class EstudioController extends Controller {
             $input['ruta_res_convalidacion'] = $ruta_adjunto;
             unset($input['adjunto_res_convalidacion']);
         }
-        //adjunto_resumen_ejecutivo
-        if (isset($input['adjunto_resumen_ejecutivo'])) {
-            $ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id, "A_RESEJEC", "adjunto_resumen_ejecutivo", true);
-            if (is_int($ruta_adjunto)) {
-                return $this->show_info("Ocurrió un error agregando el archivo adjunto de documento: Resumen ejecutivo de tesis. Error: " . $ruta_adjunto);
-            }
-            $input['ruta_resumen_ejecutivo'] = $ruta_adjunto;
-            unset($input['adjunto_resumen_ejecutivo']);
-        }
-        //adjunto de estudios
-        $ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id,"ES");
-        if(is_int($ruta_adjunto)){
-            return $this->show_info("Ocurrió un error agregando el archivo adjunto. Error: ".$ruta_adjunto);
-        }
-        $input['ruta_adjunto']=$ruta_adjunto;
-        unset($input['adjunto']);
-        //
-        
-        
-        
+
         //Guardamos los datos
         $input['aspirantes_id'] = Auth::user()->id;
         $estudio = Estudio::create($input);
