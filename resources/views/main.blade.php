@@ -69,6 +69,8 @@
 </div>
 
 <script>
+    
+    
     (function ($) {
         /**/
         var today=new Date();
@@ -143,14 +145,40 @@
             showUpload: false,
             maxFileSize: 10240,
             allowedFileExtensions: ["pdf"],
-            
             initialPreviewConfig: {
                 width: '100%'
             }
         });
         
-        
-        
+        /**/
+        $("input[required],select[required],textaarea[required]").css("border-left","4px solid red");
+        var list = document.querySelectorAll('input,select,textarea');
+               var config = { attributes: true, childList: true, characterData: true }
+               console.log(list);
+                
+                var observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        $target=$(mutation.target);
+                        console.log($target.attr("required"));
+                        if(mutation.attributeName=='required'){
+                            if($target.attr("required")=='required'){
+                                $(mutation.target).parent().css("border-left","4px solid red");
+                            }else{
+                                $(mutation.target).parent().css("border-left","");
+                            }   
+                        }
+                    });
+                });
+                
+                for(var cur_key in list){
+                    if(list[cur_key] instanceof Node){
+                        observer.observe(list[cur_key], config);
+                    }else{
+                        console.log("No se escucha a "+list[cur_key]);
+                    }
+                }
+        /**/
+       
     })(jQuery);
 
 </script>

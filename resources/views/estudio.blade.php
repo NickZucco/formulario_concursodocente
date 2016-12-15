@@ -18,7 +18,7 @@
 
         <div class="panel-body">
             <div class="form-group">
-                <label for="titulo" class="col-sm-12 col-md-2 control-label">Título académico obtenido</label>
+                <label for="titulo" id="titulo" class="col-sm-12 col-md-2 control-label">Título académico obtenido</label>
                 <div class="col-sm-12 col-md-9">
                     <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Nombre del título académico obtenido" required>
                 </div>
@@ -177,10 +177,6 @@
 </div>
 
 <script>
-	$( document ).ready(function() {
-		$("input[name='additional_attatchments']").attr("required", "required");
-	});
-	
     (function ($) {
         $("input[name='en_curso']").on("change", function () {
             var $this = $(this);
@@ -196,22 +192,19 @@
         });
 		
         $("input[name='additional_attatchments']").on("change", function () {
-			var pais = $("#paises_id").val();
-			console.log(pais);
+            var pais = $("#paises_id").val();
             var id = $(this).val();
-			console.log(id);
             var name = $(this).attr("name");
-			console.log(name);
+            
             $("input[name='" + name + "']").each(function (i, e) {
-				console.log("input[name='" + name + "']");
+             
                 $("#" + $(this).val()).fileinput("disable");
-				$("#" + $(this).val()).removeAttr("required");
+                $("#" + $(this).val()).removeAttr("required");
             });
             $("#" + id).fileinput("enable");
-			if (pais != 57)  {
-				$("#" + id).attr("required", "required");
-			}
-			console.log("#" + id);
+            if (pais != 57) {
+                $("#" + id).attr("required", "required");
+            }
         });
 		
         var unal_places = [
@@ -225,13 +218,12 @@
         });
 		
         $('#institucion').typeahead(
-                null,
-                {
+                null, {
                     name: 'unal_names',
                     source: unal_bh
                 }
         );
-		
+
         $("#institucion").focusout(function () {
             var i = 0;
             var unal_selected = false;
@@ -245,25 +237,28 @@
                 $("#adjunto").attr("required", "required");
             } else {
                 $("#adjunto").removeAttr("required");
-				$("#paises_id").val('57').change();
+                $("#paises_id").val('57').change();
             }
         });
-		
+
         $('#institucion').bind('typeahead:select', function (ev, suggestion) {
             unal_selected = true;
         });
-		
-		$('#paises_id').on("change", function () {
-            if ($(this).val() != 57) {
-				$("input[name='additional_attatchments']").attr("required", "required");
-			}
-			else {
-				$("input[name='additional_attatchments']").removeAttr("required");
-				$("input[name='additional_attatchments']").prop('checked', false);
-				$("input[name='additional_attatchments']").each(function (i, e) {
-					$("#" + $(this).val()).removeAttr("required");
-				});
-			}
+
+        $('#paises_id').on("change", function () {
+            var $selected=$(this).find("option:selected");
+            
+            if ($.trim($selected.text().toLowerCase()) != 'colombia') {
+                //console.log($.trim($selected.text().toLowerCase())+"!="+'colombia');
+                $("input[name='additional_attatchments']").attr("required", "required");
+            } else {
+                //console.log("colombia");
+                $("input[name='additional_attatchments']").removeAttr("required");
+                $("input[name='additional_attatchments']").each(function (i, e) {
+                    $("#" + $(this).val()).removeAttr("required");
+                });
+            }
+
         });
     })(jQuery);
 </script>
