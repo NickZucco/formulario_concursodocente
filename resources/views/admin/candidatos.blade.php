@@ -8,6 +8,7 @@
     <div class="form-group">
         <div class="col-md-8">
             <select id="profile_list" multiple="multiple" class="form-control">
+				<option value="0">Todos los perfiles</option>
                 @foreach($perfiles as $perfil)
                 <option value="{{$perfil->id}}">{{$perfil->identificador}}</option>
                 @endforeach
@@ -78,29 +79,34 @@
         function updateCandidates(index, checked) {
 			$("#not_selected_profile").hide();
             $("#candidates .candidate_row").hide();
-
-            if (!checked) {
-                var itr = selected_profile_ids.indexOf(index);
-                if (index > -1) {
-                    selected_profile_ids.splice(itr, 1);
-                }
-            }
+						
+			if (!checked) {
+				var itr = selected_profile_ids.indexOf(index);
+				if (index > -1) {
+					selected_profile_ids.splice(itr, 1);
+				}
+			}
 			else {
-                selected_profile_ids.push(index);
-            }
-            
-            if(selected_profile_ids.length<=0){
-                $("#not_selected_profile").show();
-            }
-			else {         
-				$.each(selected_profile_ids, function (index, item) {
-					$.each(aspirantes_perfiles, function (spids_index, spids_item) {
-						if (spids_item.perfiles_id == item) {
-							$("#candidates .candidate_row[data-id='" + spids_item.aspirantes_id + "']").show();
-						}
+				selected_profile_ids.push(index);
+			}
+			
+			if(selected_profile_ids.length<=0){
+				$("#not_selected_profile").show();
+			}
+			else {
+				if ($.inArray('0', selected_profile_ids) != -1) {
+					$("#candidates .candidate_row").show();
+				}
+				else {
+					$.each(selected_profile_ids, function (index, item) {
+						$.each(aspirantes_perfiles, function (spids_index, spids_item) {
+							if (spids_item.perfiles_id == item) {
+								$("#candidates .candidate_row[data-id='" + spids_item.aspirantes_id + "']").show();
+							}
+						});
 					});
-				});
-            }
+				}
+			}          
         }
 		
         $('#profile_list').multiselect({			
