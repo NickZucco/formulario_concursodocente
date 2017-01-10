@@ -177,6 +177,10 @@
 </div>
 
 <script>
+	$( document ).ready(function() {
+ 		$("input[name='additional_attatchments']").attr("required", "required");
+ 	});
+
     (function ($) {
         $("input[name='en_curso']").on("change", function () {
             var $this = $(this);
@@ -254,6 +258,7 @@
             } else {
                 //console.log("colombia");
                 $("input[name='additional_attatchments']").removeAttr("required");
+				$("input[name='additional_attatchments']").prop('checked', false);
                 $("input[name='additional_attatchments']").each(function (i, e) {
                     $("#" + $(this).val()).removeAttr("required");
                 });

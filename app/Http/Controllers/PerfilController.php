@@ -30,7 +30,7 @@ class PerfilController extends Controller {
             "perfiles_programas_pregrado_info" => $perfiles_programas_pregrado_info,
             'msg' => $msg
         );
-
+		//dd($data);
         return view('perfiles', $data);
     }
 

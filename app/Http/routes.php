@@ -93,7 +93,6 @@ Route::get('admin/login', 'Admin\AdminController@getLogin');
 Route::get('admin/logout', 'Admin\AdminController@getLogout');
 Route::post('admin/login', 'Admin\AdminController@postLogin');
 
-Route::get('admin/logout', 'Admin\AdminController@getLogout');
 Route::get('admin/candidatos', 'Admin\AdminController@showCandidates');
 //Detalle de candidatos
 Route::get('admin/candidato/{id}', 'Admin\AdminController@showCandidateDetails');

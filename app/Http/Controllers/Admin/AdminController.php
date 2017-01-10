@@ -10,6 +10,8 @@ use App\Http\Requests;
 
 use App\User as User;
 use App\Aspirante as Aspirante;
+use App\Perfil as Perfil;
+use App\AspirantePerfil as AspirantePerfil;
 use App\TipoDocumento as TipoDocumento;
 use App\Programa as Programa;
 
@@ -65,14 +67,17 @@ class AdminController extends Controller {
     }
 
     public function showCandidates(){
-        $aspirantes=Aspirante::where('id','<>',0)->get()->keyBy('id');
-        
-        $tipos_documento=TipoDocumento::all()->keyBy('id');
+        $aspirantes = Aspirante::where('id','<>',0)->get()->keyBy('id');
+        $perfiles = Perfil::all();
+		$aspirantes_perfiles = AspirantePerfil::all()->toJson();
+        $tipos_documento = TipoDocumento::all()->keyBy('id');
         
         $msg=null;
         $data = array(
             'msg' => $msg,
             'aspirantes'=>$aspirantes,
+			'perfiles'=>$perfiles,
+			'aspirantes_perfiles'=>$aspirantes_perfiles,
             'tipos_documento'=>$tipos_documento,
         );
         return view('admin/candidatos',$data);

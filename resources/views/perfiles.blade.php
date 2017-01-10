@@ -16,7 +16,7 @@
 
         <div class="form-group">
             <label for="nombre_plan" class="col-md-2 control-label">Títulos de pregrado obtenidos</label>
-            <div id="undergraduated_accepted_plans" class="col-md-8">
+            <div class="col-md-8">
                 <select id="plan_list" multiple="multiple" class="form-control">
                     @foreach($programas_pregrado_info as $programa_pregrado)
                     <option value="{{$programa_pregrado->id}}">{{$programa_pregrado->nombre}}</option>
@@ -116,7 +116,7 @@
 
 <script type="text/javascript">
     (function ($) {
-        var selectable_profiles_ids = {!!$perfiles_programas_pregrado_info!!};
+        var selectable_profiles_ids = {!!$perfiles_programas_pregrado_info!!};		
         var selected_plan_ids = [];
         var selected_profile_ids = [];
 
@@ -128,8 +128,8 @@
             $(".profile:checked").removeAttr("checked");
 
             var checkEngineer = false;
-            if (!isAppend) {
-                var itr = selected_plan_ids.indexOf(index);
+            if (!isAppend) {				
+                var itr = selected_plan_ids.indexOf(index);				
                 if (index > -1) {
                     selected_plan_ids.splice(itr, 1);
                 }
@@ -143,34 +143,33 @@
             
             if(selected_plan_ids.length<=0){
                 $("#not_selected_plan").show();
-            }else{
-                
-            $.each(selected_plan_ids, function (index, item) {
-                if (checkEngineer) {
-                    
-                }
-                $.each(selectable_profiles_ids, function (spids_index, spids_item) {
-                    if (spids_item.programas_pregrado_id == item) {
-                        $("#profiles .profile_row[data-id='" + spids_item.perfiles_id + "']").show();
-                    }
-                });
-            });
+            }
+			else {                
+				$.each(selected_plan_ids, function (index, item) {
+					$.each(selectable_profiles_ids, function (spids_index, spids_item) {						
+						if (spids_item.programas_pregrado_id == item) {
+							$("#profiles .profile_row[data-id='" + spids_item.perfiles_id + "']").show();
+						}
+					});
+				});
             }
             
         }
+		
         $('#plan_list').multiselect({
             nSelectedText: 'seleccionados',
             nonSelectedText: 'No hay elementos seleccionados',
-            numberDisplayed: 10,
+            numberDisplayed: 5,
             onChange: function (option, checked, select) {
                 /*
                 if (!updateSelectableProfiles($(option).val(), checked)) {
                     option.removeAttr("selected");
                 }
                 */
-               updateSelectableProfiles($(option).val(), checked);
+				updateSelectableProfiles($(option).val(), checked);
             }
         });
+		
         $(".profile").on("change", function (e) {
             selected_profile_ids = [];
 
