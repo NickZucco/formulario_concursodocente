@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 
 use App\Idioma as Idioma;
 use App\IdiomaCertificado as IdiomaCertificado;
@@ -28,17 +29,19 @@ class IdiomaCertificadoController extends Controller
 
     public function insert() {
         $input = Input::all();
-        $input['aspirantes_id'] = Auth::user()->id;
+        $id = Auth::user()->id;
         
-        //Efectuamos las operaciones sobre el archivo
-        $ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id,"ID");
-        if(is_int($ruta_adjunto)){
-            return $this->show_info("Ocurrió un error agregando el archivo adjunto. Error: ".$ruta_adjunto);
-        }
-        $input['ruta_adjunto']=$ruta_adjunto;
-        unset($input['adjunto']);
-        //
+        //Guardamos el archivo de soporte de experiencia laboral si existe
+		if (isset($input['adjunto'])){
+			$file = Input::file('adjunto');
+			$titulo = str_replace(' ', '_', $input['nombre_certificado']) . '_' . str_replace(' ', '_', $input['puntaje']);
+			$file->move(public_path() . '\file\\' . $id . '\idiomas\\' , $titulo . '.pdf');
+			
+			$input['ruta_adjunto'] = 'file\\' . $id . '\idiomas\\' . $titulo . '.pdf';
+			unset($input['adjunto']);			
+		}
 
+		$input['aspirantes_id'] = $id;
         $idiomas_certificado = IdiomaCertificado::create($input);
         if ($idiomas_certificado->save()) {
             return $this->show_info("Se ingresó la información de idioma.");
@@ -48,6 +51,10 @@ class IdiomaCertificadoController extends Controller
     public function delete(){
         $input = Input::all();
         $idiomas_certificado=IdiomaCertificado::find($input["id"]);
+		
+		if ($idiomas_certificado->ruta_adjunto) {			
+			Storage::delete($idiomas_certificado->ruta_adjunto);
+		}
         if($idiomas_certificado->delete()){
             return $this->show_info("Se borró la información de idioma.");
         }

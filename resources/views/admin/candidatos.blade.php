@@ -55,14 +55,22 @@
                     {{$aspirante->updated_at}}
                 </td>
 				<td>
-                    <button type="submit" class="btn btn-danger btn-sm">
-                        <i class="fa fa-clone" aria-hidden="true"></i>
-                    </button>
+					<form method="post" action="{{ env('APP_URL') }}admin/candidatos/reporte" style="margin:20px 0">     
+                        {!! csrf_field() !!}
+                        <input type="hidden" name="id" value="{{$aspirante->id}}"/>
+                        <button type="submit" data-id="{{$aspirante->id}}" class="btn btn-danger btn-sm">
+							<i class="fa fa-clone" aria-hidden="true"></i>
+						</button>
+                    </form>
                 </td>
                 <td>
-                    <button type="submit"  class="btn btn-danger btn-sm">
-                        <i class="fa fa-folder-open" aria-hidden="true"></i>
-                    </button>
+					<form method="post" action="{{ env('APP_URL') }}admin/candidatos/adjuntos" style="margin:20px 0">     
+                        {!! csrf_field() !!}
+                        <input type="hidden" name="id" value="{{$aspirante->id}}"/>
+                        <button type="submit" data-id="{{$aspirante->id}}" class="btn btn-danger btn-sm">
+							<i class="fa fa-folder-open" aria-hidden="true"></i>
+						</button>
+                    </form> 
                 </td>
             </tr>
             @endforeach

@@ -10,7 +10,8 @@
         "guzzlehttp/guzzle": "~5.3|~6.0",
         "laravelcollective/html": "5.2.*",
         "greggilbert/recaptcha": "dev-master",
-        "copam/phpjasper": "^1.0"
+        "copam/phpjasper": "^1.0",
+		"chumper/zipper": "0.6.x"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 use Auth;
 use App\Pais as Pais;
 use App\Distincion as Distincion;
 
 class DistincionController extends Controller {
-
-    var $ATTATCHMENT_FOLDER = '/file/distinciones/';
 
     public function show_info($msg = null) {
         $user_email = Auth::user()->email;
@@ -35,19 +34,19 @@ class DistincionController extends Controller {
 
     public function insert() {
         $input = Input::all();
-        $input['aspirantes_id'] = Auth::user()->id;
-		
+		$id = Auth::user()->id;
+        
         //Efectuamos las operaciones sobre el archivo adjunto si existe
 		if (isset($input['adjunto'])) {
-			$ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id, "DI_");
-			dd($ruta_adjunto);
-			if (is_int($ruta_adjunto)) {
-				return $this->show_info("Ocurrió un error agregando el archivo adjunto. Error: " . $ruta_adjunto);
-			}
-			$input['ruta_adjunto'] = $ruta_adjunto;
+			$file = Input::file('adjunto');
+			$nombre = str_replace(' ', '_', $input['nombre']) . '_' . $input['fecha_entrega'];
+			$file->move(public_path() . '\file\\' . $id . '\distinciones_academicas\\' , $nombre . '.pdf');
+			
+			$input['ruta_adjunto'] = 'file\\' . $id . '\distinciones_academicas\\' . $nombre . '.pdf';
 			unset($input['adjunto']);
 		}
         
+		$input['aspirantes_id'] = $id;
         $distincion = Distincion::create($input);
         if ($distincion->save()) {
             return $this->show_info("Se ingresó la información de la distinción académica");
@@ -57,6 +56,10 @@ class DistincionController extends Controller {
     public function delete() {
         $input = Input::all();
         $distincion = Distincion::find($input["id"]);
+		
+		if ($distincion->ruta_adjunto) {			
+			Storage::delete($distincion->ruta_adjunto);
+		}
         if ($distincion->delete()) {
             return $this->show_info("Se borró la información de la distincion académica.");
         }

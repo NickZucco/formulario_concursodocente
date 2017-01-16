@@ -53,7 +53,7 @@
                         <div class="form-group">
                             <label for="nombre" class="col-sm-12 col-md-2 control-label">Título de la revista</label>
                             <div class="col-sm-12 col-md-9">
-                                <input type="text" class="form-control" id="nombre" name="nombre" >
+                                <input type="text" class="form-control" id="publicacion_titulo" name="publicacion_titulo" >
                             </div>
                         </div>
 						<div class="form-group">

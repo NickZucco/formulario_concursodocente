@@ -94,7 +94,5 @@ Route::get('admin/logout', 'Admin\AdminController@getLogout');
 Route::post('admin/login', 'Admin\AdminController@postLogin');
 
 Route::get('admin/candidatos', 'Admin\AdminController@showCandidates');
-//Detalle de candidatos
-Route::get('admin/candidato/{id}', 'Admin\AdminController@showCandidateDetails');
-//Reportes
-Route::get('admin/candidato/{id}/reporte/', 'Admin\ReporteController@reportePrueba');
+Route::post('admin/candidatos/adjuntos', 'Admin\AdminController@getAttachments');
+Route::post('admin/candidatos/reporte', 'Admin\AdminController@getReport');

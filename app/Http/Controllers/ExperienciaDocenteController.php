@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 use Auth;
 use App\Pais as Pais;
 use App\ExperienciaDocente as ExperienciaDocente;
@@ -40,20 +41,21 @@ class ExperienciaDocenteController extends Controller {
 
     public function insert() {
         $input = Input::all();
-        $input['aspirantes_id'] = Auth::user()->id;
+        $id = Auth::user()->id;
 
         //Guardamos el archivo de soporte de experiencia docente si existe
-		if (isset($input['adjunto'])) {			
-            $ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id, "ED");
-			if (is_int($ruta_adjunto)) {
-				return $this->show_info("Ocurrió un error agregando el archivo adjunto. Error: " . $ruta_adjunto);
-			}
-			$input['ruta_adjunto'] = $ruta_adjunto;
-			unset($input['adjunto']);
+		if (isset($input['adjunto'])) {
+			$file = Input::file('adjunto');
+			$titulo = str_replace(' ', '_', $input['nombre_institucion']) . '_' . $input['fecha_inicio'];
+			$file->move(public_path() . '\file\\' . $id . '\experiencia_docente\\' , $titulo . '.pdf');
+			
+			$input['ruta_adjunto'] = 'file\\' . $id . '\experiencia_docente\\' . $titulo . '.pdf';
+			unset($input['adjunto']);            
         }
 		
         //Adaptamos el campo info_asignaturas (es un array, lo volvemos JSON y lo guardamos en la BD)
         $input['info_asignaturas'] = json_encode(self::transpose($input['info_asignaturas']));
+		$input['aspirantes_id'] = $id;
         $experiencia_docente = ExperienciaDocente::create($input);
         if ($experiencia_docente->save()) {
             return $this->show_info("Se ingresó exitosamente la información de experiencia docente.");
@@ -63,6 +65,10 @@ class ExperienciaDocenteController extends Controller {
     public function delete() {
         $input = Input::all();
         $vinculacion = ExperienciaDocente::find($input["id"]);
+		
+		if ($vinculacion->ruta_adjunto) {			
+			Storage::delete($vinculacion->ruta_adjunto);
+		}
         if ($vinculacion && $vinculacion->delete()) {
             return $this->show_info("Se borró la información de la experiencia docente.");
         } else {

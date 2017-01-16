@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use App\Http\Requests;
 
 use App\User as User;
@@ -14,6 +16,7 @@ use App\Perfil as Perfil;
 use App\AspirantePerfil as AspirantePerfil;
 use App\TipoDocumento as TipoDocumento;
 use App\Programa as Programa;
+use Zipper;
 
 use JasperPHP\JasperPHP;
 
@@ -82,44 +85,21 @@ class AdminController extends Controller {
         );
         return view('admin/candidatos',$data);
     }
-    
-    public function showCandidateDetails($id){
-        $msg=null;
-        $redirect_to="admin/detalles_candidatos";
-        $aspirante=Aspirante::leftJoin(
-                'vinculaciones','aspirantes.id','=','vinculaciones.aspirantes_id')
-                ->leftJoin('estudios','aspirantes.id','=','estudios.aspirantes_id')
-                ->leftJoin('distinciones_academica','aspirantes.id','=','distinciones_academica.aspirantes_id')
-                ->leftJoin('experiencias_laboral','aspirantes.id','=','experiencias_laboral.aspirantes_id')
-                ->leftJoin('experiencias_docente','aspirantes.id','=','experiencias_docente.aspirantes_id')
-                ->leftJoin('experiencias_investigativa','aspirantes.id','=','experiencias_investigativa.aspirantes_id')
-                ->leftJoin('areas_interes','aspirantes.id','=','areas_interes.aspirantes_id')
-                ->select(
-                        'aspirantes.nombre as aspirante_nombre',
-                        'aspirantes.*'
-                        )
-                ->where('aspirantes.id','=',$id)
-                ->first();
-        
-        
-        $tipos_documento=TipoDocumento::all()->keyBy('id');
-        $programas=Programa::all()->keyBy('id');
-        
-        //dd($aspirante);
-        
-        if(!$aspirante){
-            $msg="No se encontró información del candidato especificado";
-            $redirect_to='admin/candidato';
-        }
-        $data = array(
-            'msg' => $msg,
-            'aspirante'=>$aspirante,
-            'programas'=>$programas,
-            'tipos_documento'=>$tipos_documento
-        );
-        
-        return view($redirect_to,$data);
-    }
+	
+	public function getAttachments(){
+		$input = Input::all();
+		$id = $input['id'];
+		$aspirante_info = Aspirante::find($id);
+		$pathtofile = public_path() . '\file\\' . $id . '\\' . $aspirante_info->nombre . ' ' . $aspirante_info->apellido . '_adjuntos.zip';
+		if (File::exists($pathtofile)){
+			return response()->download($pathtofile);
+		}
+		else{
+			$files = public_path() . '\file\\' . $id;		
+			Zipper::make($pathtofile)->add($files)->close();
+			return response()->download($pathtofile);
+		}
+	}
 
     private static function ldapSearch($username, $password) {
         $ldap_coneccion = ldap_connect("ldaprbog.unal.edu.co", 389) or die(ldap_error());

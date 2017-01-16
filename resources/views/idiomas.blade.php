@@ -36,7 +36,7 @@
 		
         <div class="form-group">
 			<div id="nombre_certificado">
-				<label for="nombre_certificado" class="col-sm-12 col-md-2 control-label">Tipo de certificado</label>
+				<label for="nombre_certificado" class="col-sm-12 col-md-2 control-label">Nombre del certificado</label>
 				<div class="col-sm-12 col-md-9">
 					<input type="text" id="nombre_certificado_input" class="form-control" name="nombre_certificado" placeholder="">
 				</div>

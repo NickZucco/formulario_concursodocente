@@ -165,6 +165,9 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+		
+		//Zipper
+		'Chumper\Zipper\ZipperServiceProvider',
 
     ],
 
@@ -217,6 +220,8 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         
         'Recaptcha' => Greggilbert\Recaptcha\Facades\Recaptcha::class,
+		
+		'Zipper' => 'Chumper\Zipper\Zipper',
     ],
 
 ];

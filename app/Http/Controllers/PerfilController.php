@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 use Auth;
 use App\Perfil as Perfil;
 use App\ProgramaPregrado as ProgramaPregrado;
@@ -82,9 +83,7 @@ class PerfilController extends Controller {
         $id = Auth::user()->id;
         $perfiles_seleccionados = Perfil::join('aspirantes_perfiles', 'perfiles_id', '=', 'id')
                         ->where('aspirantes_id', '=', $id)->get();
-
-        //dd($perfiles_seleccionados);
-
+		
         $data = array(
             "perfiles_seleccionados" => $perfiles_seleccionados,
             "msg" => $msg
@@ -95,27 +94,19 @@ class PerfilController extends Controller {
 
     public function insertEssays() {
         $input = Input::all();
-        $aspirantes_id = Auth::user()->id;
-
-        $msg = "";
-
-        //No lo necesitamos mas acá
-        unset($input["_token"]);
+        $id = Auth::user()->id;
+		
+		$perfiles_seleccionados = AspirantePerfil::all()->where('aspirantes_id', $id);
+        
         //Para cada archivo, actualizamos la entrada correspondiente
-        foreach ($input as $key => $cur_value) {
-            //En el nombre esta la id de perfil (TODO: Buscar una forma mas segura de tomar este dato)
-            $perfiles_id = explode("_", $key);
-            $perfiles_id = $perfiles_id[1];
-
-            //Actualizamos el campo ruta_ensayo con el archivo subido
-            $ruta_adjunto = $this->moveAttatchmentFile(Auth::user()->id, "ENSAYO_$perfiles_id" . "_$aspirantes_id", $key, true);
-            if (!is_int($ruta_adjunto)) {
-                AspirantePerfil::where("aspirantes_id",$aspirantes_id)->where("perfiles_id",$perfiles_id)->update(array('ruta_ensayo' => $ruta_adjunto));
-            } else {
-                return $this->show_essays("Ocurrió un error agregando el archivo adjunto de documento: Resumen ejecutivo de tesis. Error: " . $ruta_adjunto);
-            }
-            $input['ruta_resumen_ejecutivo'] = $ruta_adjunto;
-            unset($input['adjunto_resumen_ejecutivo']);
+        foreach ($perfiles_seleccionados as $perfil) {
+			$file = Input::file('adjunto_' . $perfil->perfiles_id);
+			$perfil_info = Perfil::find($perfil->perfiles_id);
+			
+			$titulo = 'ensayo_perfil_' . $perfil_info->identificador;
+			$file->move(public_path() . '\file\\' . $id . '\ensayos\\' , $titulo . '.pdf');
+			$ruta_adjunto = 'file\\' . $id . '\ensayos\\' . $titulo . '.pdf';
+			AspirantePerfil::where("aspirantes_id",$perfil->aspirantes_id)->where("perfiles_id",$perfil->perfiles_id)->update(array('ruta_ensayo' => $ruta_adjunto));
         }
         return $this->show_essays("Se adjuntaron correctamente los archivos cargados");
     }
