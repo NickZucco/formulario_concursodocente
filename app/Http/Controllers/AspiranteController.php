@@ -57,6 +57,12 @@ class AspiranteController extends Controller {
     public function insert() {
         $input = Input::all();
 		$id = Auth::user()->id;
+		
+		//Validar si la cédula ingresada ya se encuentra en la base de datos_personales
+		$aspirante_cedula = Aspirante::all()->where('documento', $input['documento']);
+		if($aspirante_cedula){
+			return redirect()->back()->with('message', 'El número de documento ingresado ya se encuentra en la base de datos');
+		}
         
         $input['id'] = $id;
         $record = Aspirante::find($id);

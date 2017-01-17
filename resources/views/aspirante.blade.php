@@ -2,12 +2,17 @@
 
 @section('form')
 
+<div class="alert alert-warning alert-dismissible" role="alert">
+  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <strong>Nota: </strong>Por favor, tenga en cuenta que toda la información que digite en el formulario, debe registrarse únicamente en español
+</div>
+
 <div class="panel panel-default">
-     @if($msg)
-    <div class="alert alert-success" role="alert">
-        {{$msg}}
-    </div>
-    @endif
+	@if(session()->has('message'))
+		<div class="alert alert-danger" role="alert">
+			{{ session()->get('message') }}
+		</div>
+	@endif
+    
     <div class="panel-heading">
         <strong>Datos personales</strong>
     </div>
@@ -44,7 +49,7 @@
                 </div>
                 <label for="documento" class="col-md-2 col-sm-12 control-label">Número de documento</label>
                 <div class="col-md-2">
-                    <input type="text" class="form-control" id="nombre" name="documento" placeholder="##########" value="{{$candidate_info->documento}}" required/>
+                    <input type="text" class="form-control" id="documento" name="documento" placeholder="##########" value="{{$candidate_info->documento}}" required/>
                 </div>
                 <label for="ciudad_expedicion_documento" class="col-md-2 col-sm-12 control-label">Ciudad de expedición</label>
                 <div class="col-md-2">

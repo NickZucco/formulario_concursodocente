@@ -2,6 +2,10 @@
 
 @section('form')
 
+<div class="alert alert-warning alert-dismissible" role="alert">
+  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <strong>Nota: </strong>Por favor, tenga en cuenta que toda la información que digite en el formulario, debe registrarse únicamente en español
+</div>
+
 <div class="panel panel-default">
     @if($msg)
     <div class="alert alert-success" role="alert">
@@ -25,7 +29,7 @@
                 </select>
             </div>
 			
-			<label for="nativo" class="col-sm-12 col-md-2 control-label">¿Es un idioma nativo?</label>
+			<label for="nativo" class="col-sm-12 col-md-2 control-label">¿Es su idioma nativo?</label>
                 <label class="radio-inline">
                     <input type="radio" name="nativo" value="1" required>Si
                 </label>
@@ -138,10 +142,10 @@
         $("input[name='nativo']").on("change", function () {			
             if ($(this).val() == 0) {				
                 $("#nombre_certificado, #puntaje, #adjunto").show();
-				$("#nombre_certificado_input, #puntaje_input, #adjunto_input").attr("required", "required");
+				$("#nombre_certificado_input, #adjunto_input").attr("required", "required");
             } else {  
                 $("#nombre_certificado, #puntaje, #adjunto").hide();
-				$("#nombre_certificado_input, #puntaje_input, #adjunto_input").removeAttr("required");
+				$("#nombre_certificado_input, #adjunto_input").removeAttr("required");
             }
         });
     })(jQuery);

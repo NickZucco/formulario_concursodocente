@@ -69,7 +69,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                             <label for="clasificacion_revista" class="col-sm-12 col-md-2 control-label">Clasificación de la revista</label>
+                             <label for="clasificacion_revista" class="col-sm-12 col-md-2 control-label">Clasificación de la revista (según Colciencias)</label>
                             <div class="col-sm-12 col-md-9">
                                 <input type="text" class="form-control" id="clasificacion_revista" name="clasificacion_revista">
                             </div>
@@ -95,7 +95,7 @@
                         <div class="form-group">
                             <label for="issn" class="col-sm-12 col-md-2 control-label">ISSN</label>
                             <div class="col-sm-9">
-                                <input type="number" class="form-control" id="issn" name="issn">
+                                <input type="text" class="form-control" id="issn" name="issn">
                             </div>
                         </div>
                         <div class="form-group">

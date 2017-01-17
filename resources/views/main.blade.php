@@ -60,10 +60,6 @@
     </div><!-- /.container-fluid -->
 </nav>
 
-<div class="alert alert-warning alert-dismissible" role="alert">
-  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <strong>Nota: </strong>Por favor, tenga en cuenta que toda la información que digite en el formulario, debe registrarse únicamente en español
-</div>
-
 <div class="col-sm-12 col-md-12" style="border-radius: 5px 5px 5px 5px; box-shadow: 3px 3px 10px #888888; padding: 3px; background-color:#E4F5FA">   
     @yield('form')
 </div>

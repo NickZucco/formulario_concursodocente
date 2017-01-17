@@ -2,6 +2,10 @@
 
 @section('form')
 
+<div class="alert alert-warning alert-dismissible" role="alert">
+  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <strong>Nota: </strong>Por favor, tenga en cuenta que toda la información que digite en el formulario, debe registrarse únicamente en español
+</div>
+
 @if($msg)
 <div class="alert alert-success" role="alert">
     {{$msg}}
@@ -33,7 +37,7 @@
     <form method="post" action="{{ env('APP_URL') }}perfiles" class="form-horizontal" style="margin:20px 0">
         <div class="panel-body">
             <p>
-                A continuación, se monstrarán habilitados los títulos de pregrado requeridos para cadaa perfil seleccionado. Tenga en cuenta que, dependiendo de los títulos de pregrado seleccionados se habilitarán los perfiles del concurso a los cuales puede aplicar.
+                A continuación, se monstrarán habilitados los títulos de pregrado requeridos para cada perfil seleccionado. Tenga en cuenta que, dependiendo de los títulos de pregrado seleccionados se habilitarán los perfiles del concurso a los cuales puede aplicar.
             </p>
 
             <div class="row">
