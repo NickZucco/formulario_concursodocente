@@ -215,6 +215,16 @@
 				console.log("#" + $(this).data("id"));
             }
         });
+		
+		$("input[type='file']").fileinput({
+            language: 'es',
+            showUpload: false,
+            maxFileSize: 10240,
+            allowedFileExtensions: ["pdf"],
+            initialPreviewConfig: {
+                width: '100%'
+            }
+        });
     })(jQuery);
 </script>
 

@@ -148,6 +148,16 @@
 				$("#nombre_certificado_input, #adjunto_input").removeAttr("required");
             }
         });
+		
+		$("input[type='file']").fileinput({
+            language: 'es',
+            showUpload: false,
+            maxFileSize: 10240,
+            allowedFileExtensions: ["pdf"],
+            initialPreviewConfig: {
+                width: '100%'
+            }
+        });
     })(jQuery);
 </script>
 @stop

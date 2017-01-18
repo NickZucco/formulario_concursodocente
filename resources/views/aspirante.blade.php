@@ -60,7 +60,7 @@
             <div class="form-group">
                 <label for="fecha_nacimiento" class="col-md-2 control-label">Fecha de nacimiento</label>
                 <div class="col-md-2">
-                    <input type="text" class=" datepicker maxToday form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="####-##-##" value="{{$candidate_info->fecha_nacimiento}}" required/>
+                    <input type="text" class=" datepicker2 maxToday form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="####-##-##" value="{{$candidate_info->fecha_nacimiento}}" required/>
                 </div>
                 <label for="pais_nacimiento" class="col-md-2 control-label">País de nacimiento</label>
                 <div class="col-md-2">
@@ -166,6 +166,24 @@
     </form>
     
 </div>
+
+<script>
+    
+    (function ($) {
+
+		$("input[type='file']").fileinput({
+            language: 'es',
+            showUpload: false,
+            maxFileSize: 10240,
+            allowedFileExtensions: ["pdf"],
+            initialPreviewConfig: {
+                width: '100%'
+            }
+        });
+		
+		})(jQuery);
+		
+</script>
 
 @endsection
 

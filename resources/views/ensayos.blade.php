@@ -26,7 +26,7 @@
                     <label for="adjunto_{{$perfil_seleccionado->id}}" class="col-sm-12 col-md-3 control-label">Componente escrito para el perfil {{$perfil_seleccionado->identificador}} - {{$perfil_seleccionado->departamento}}: </label>
                     <div class="col-sm-12 col-md-5">
                         <input id="adjunto_{{$perfil_seleccionado->id}}" type="file" class="form-control" name="adjunto_{{$perfil_seleccionado->id}}" required/>
-                        <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato PDF y no tener un tamaño superior a 10MB</em>
+                        <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato Word (.docx) y no tener un tamaño superior a 1MB</em>
                     </div>
                     <div class="col-sm-12 col-md-4">
                         @if($perfil_seleccionado->ruta_ensayo)
@@ -50,4 +50,23 @@
     </form>
     @endif
 </div>
+
+<script>
+    
+    (function ($) {
+
+		$("input[type='file']").fileinput({
+            language: 'es',
+            showUpload: false,
+            maxFileSize: 1024,
+            allowedFileExtensions: ["docx"],
+            initialPreviewConfig: {
+                width: '100%'
+            }
+        });
+		
+		})(jQuery);
+		
+</script>
+
 @stop

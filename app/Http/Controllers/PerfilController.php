@@ -104,8 +104,8 @@ class PerfilController extends Controller {
 			$perfil_info = Perfil::find($perfil->perfiles_id);
 			
 			$titulo = 'ensayo_perfil_' . $perfil_info->identificador;
-			$file->move(public_path() . '\file\\' . $id . '\ensayos\\' , $titulo . '.pdf');
-			$ruta_adjunto = 'file\\' . $id . '\ensayos\\' . $titulo . '.pdf';
+			$file->move(public_path() . '\file\\' . $id . '\ensayos\\' , $titulo . '.docx');
+			$ruta_adjunto = 'file\\' . $id . '\ensayos\\' . $titulo . '.docx';
 			AspirantePerfil::where("aspirantes_id",$perfil->aspirantes_id)->where("perfiles_id",$perfil->perfiles_id)->update(array('ruta_ensayo' => $ruta_adjunto));
         }
         return $this->show_essays("Se adjuntaron correctamente los archivos cargados");

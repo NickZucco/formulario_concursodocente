@@ -35,13 +35,13 @@
             <div class="form-group">
                 <label for="fecha_inicio" class="col-sm-12 col-md-2 control-label">Fecha de inicio de vinculación</label>
                 <div class="col-sm-12 col-md-2">
-                    <input type="text" class="datepicker start maxToday form-control" id="fecha_inicio" name="fecha_inicio" placeholder="####-##-##" required>
+                    <input type="text" class="datepicker2 start maxToday form-control" id="fecha_inicio" name="fecha_inicio" placeholder="####-##-##" required>
                 </div>
                 <div class="col-md-4">
                     <div id="fecha_finalizacion">
                         <label for="fecha_finalizacion" class="col-sm-12 col-md-6 control-label">Fecha de finalización de vinculación</label>
                         <div class="col-sm-12 col-md-6">
-                            <input type="text"  class="datepicker end maxToday form-control" name="fecha_finalizacion" placeholder="####-##-##">
+                            <input type="text"  class="datepicker2 end maxToday form-control" name="fecha_finalizacion" placeholder="####-##-##">
                         </div>
                     </div>
                 </div>
@@ -266,6 +266,16 @@
                 });
             }
 
+        });
+		
+		$("input[type='file']").fileinput({
+            language: 'es',
+            showUpload: false,
+            maxFileSize: 10240,
+            allowedFileExtensions: ["pdf"],
+            initialPreviewConfig: {
+                width: '100%'
+            }
         });
     })(jQuery);
 </script>

@@ -365,6 +365,23 @@
             $("#msg_form").hide();
             $("#additional_fields").show();
         });
+		
+		$("#año").change(function(){
+			if(parseInt(this.value) < 2006){
+				this.value = '';
+				alert('Sólo se admiten producciones intelectuales desde el año 2006 hasta la fecha.')
+			} 
+        });
+		
+		$("input[type='file']").fileinput({
+            language: 'es',
+            showUpload: false,
+            maxFileSize: 10240,
+            allowedFileExtensions: ["pdf"],
+            initialPreviewConfig: {
+                width: '100%'
+            }
+        });
     })(jQuery);
 </script>
 

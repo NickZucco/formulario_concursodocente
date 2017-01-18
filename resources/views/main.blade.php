@@ -104,11 +104,18 @@
         default_end.setHours(23);
         default_end.setMinutes(59);
         var closing_form_date={{App\Configuracion::where('llave', '=', 'limit_date')->first()['valor']}}
-
+		
+		$('.datepicker2').datetimepicker({
+            defaultDate: now,
+            format: 'YYYY-MM-DD',
+            locale: 'es',
+            maxDate: now
+        });
         $('.datepicker').datetimepicker({
             defaultDate: now,
             format: 'YYYY-MM-DD',
             locale: 'es',
+			minDate: '2006-01-01',
             maxDate: now
         });
         $('.start').datetimepicker({
@@ -134,16 +141,6 @@
         });
         $(".end").on("dp.change", function (e) {
             $('.start').data("DateTimePicker").maxDate(e.date);
-        });
-
-        $("input[type='file']").fileinput({
-            language: 'es',
-            showUpload: false,
-            maxFileSize: 10240,
-            allowedFileExtensions: ["pdf"],
-            initialPreviewConfig: {
-                width: '100%'
-            }
         });
         
         /**/

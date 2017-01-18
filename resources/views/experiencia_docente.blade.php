@@ -281,6 +281,18 @@
         $(".toJSONTable").each(function (i, e) {
             buildHtmlTable($(this));
         });
-    })(jQuery);
+
+		$("input[type='file']").fileinput({
+            language: 'es',
+            showUpload: false,
+            maxFileSize: 10240,
+            allowedFileExtensions: ["pdf"],
+            initialPreviewConfig: {
+                width: '100%'
+            }
+        });
+		
+	})(jQuery);
+		
 </script>
 @stop
