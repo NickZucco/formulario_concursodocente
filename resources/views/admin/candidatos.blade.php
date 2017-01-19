@@ -4,15 +4,22 @@
 <div class="panel-heading">
     Seleccione uno o varios perfiles para ver los candidatos inscritos.   
 </div>
+
 <div class="panel-body">
     <div class="form-group">
-        <div class="col-md-8">
+        <div class="col-md-3">
             <select id="profile_list" multiple="multiple" class="form-control">
 				<option value="0">Todos los perfiles</option>
                 @foreach($perfiles as $perfil)
                 <option value="{{$perfil->id}}">{{$perfil->identificador}}</option>
                 @endforeach
             </select>
+        </div>
+		<div class="col-md-3">
+            {!! link_to_route('admin.candidatos.excel', 
+				'Exportar a Excel', null, 
+				['class' => 'btn btn-info']) 
+			!!}
         </div>
     </div>
 </div>

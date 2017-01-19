@@ -60,7 +60,7 @@ class AspiranteController extends Controller {
 		
 		//Validar si la cédula ingresada ya se encuentra en la base de datos_personales
 		$aspirante_cedula = Aspirante::all()->where('documento', $input['documento']);
-		if($aspirante_cedula){
+		if(!empty($aspirante_cedula->toArray())){
 			return redirect()->back()->with('message', 'El número de documento ingresado ya se encuentra en la base de datos');
 		}
         

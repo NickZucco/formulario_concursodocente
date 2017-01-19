@@ -17,6 +17,7 @@ use App\AspirantePerfil as AspirantePerfil;
 use App\TipoDocumento as TipoDocumento;
 use App\Programa as Programa;
 use Zipper;
+use Excel;
 
 use JasperPHP\JasperPHP;
 
@@ -99,6 +100,77 @@ class AdminController extends Controller {
 			Zipper::make($pathtofile)->add($files)->close();
 			return response()->download($pathtofile);
 		}
+	}
+	
+	public function excel(){
+		// Ejecutar la consulta para obtener los datos de los aspirantes.
+		// Se deben realizar los siguientes joins:
+		// -- con la tabla tipos_documento para obtener el nombre del documento (Cédula de ciudadanía, etc)
+		// -- con la tabla países con un alias p1 para el país de nacimiento
+		// -- con la tabla países con un alias p2 para el país de residencia
+		// -- con la tabla estados_civil para conocer el nombre del estado civil (Soltero, Casado, etc)
+		$aspirantes = Aspirante::join('tipos_documento', 'aspirantes.tipo_documento_id', '=', 'tipos_documento.id')
+			->join('paises as p1', 'aspirantes.pais_nacimiento', '=', 'p1.id')
+			->join('paises as p2', 'aspirantes.pais_residencia', '=', 'p2.id')
+			->join('estados_civil', 'aspirantes.estado_civil_id', '=', 'estados_civil.id')
+			->select(
+				'aspirantes.id as id',
+				'aspirantes.documento as documento',
+				'tipos_documento.nombre as tipo_documento',
+				'aspirantes.ciudad_expedicion_documento as ciudad_documento',
+				'aspirantes.nombre as nombre',
+				'aspirantes.apellido as apellido',
+				'aspirantes.fecha_nacimiento as fecha_nacimiento',
+				'p1.nombre as pais_nacimiento',
+				'p2.nombre as pais_residencia',
+				'aspirantes.direccion_residencia as direccion',
+				'aspirantes.correo as correo',
+				'aspirantes.created_at as fecha_registro',
+				'aspirantes.updated_at as fecha_actualizacion',
+				'estados_civil.nombre as estado_civil',
+				'aspirantes.ciudad_aplicante as ciudad_aplicante',
+				'aspirantes.telefono_fijo as telefono_fijo',
+				'aspirantes.telefono_movil as celular'
+			)->get();
+		
+		// Inicializar el array que será pasado al Excel generator
+		$aspirantesArray = [];
+		
+		// Agregar los encabezados de la tabla
+		$aspirantesArray[] = ['Documento', 'Tipo de documento', 'Ciudad de expedición', 'Nombres', 'Apellidos',
+			'Fecha de nacimiento', 'País de nacimiento', 'Pais de residencia', 'Dirección', 'Correo',
+			'Fecha de registro', 'Última fecha de actualización', 'Estado Civil', 'Ciudad en donde aplica', 
+			'Teléfono fijo', 'Celular', 'Perfil 1', 'Perfil 2', 'Perfil 3'];
+		
+		// Convert each member of the returned collection into an array,
+		// and append it to the payments array.
+		foreach ($aspirantes as $aspirante) {
+			$id = $aspirante['id'];
+			unset($aspirante['id']);
+			$perfiles_seleccionados = Perfil::join('aspirantes_perfiles', 'perfiles_id', '=', 'id')
+                        ->where('aspirantes_id', '=', $id)->get();
+			$aspiranteArray = $aspirante->toArray();
+			foreach ($perfiles_seleccionados as $perfil) {
+				array_push($aspiranteArray, $perfil['identificador']);
+			}
+			$aspirantesArray[] = $aspiranteArray;
+		}
+		//dd($aspirantesArray);
+		
+		// Generate and return the spreadsheet
+		Excel::create('aspirantes', function($excel) use ($aspirantesArray) {
+
+			// Set the spreadsheet title, creator, and description
+			$excel->setTitle('Candidator Concurso Docente 2017');
+			$excel->setCreator('Universidad Nacional de Colombia')->setCompany('Universidad Nacional de Colombia');
+			$excel->setDescription('Archivo con información de todos los aspirantes');
+
+			// Build the spreadsheet, passing in the payments array
+			$excel->sheet('sheet1', function($sheet) use ($aspirantesArray) {
+				$sheet->fromArray($aspirantesArray, null, 'A1', false, false);
+			});
+
+		})->download('xlsx');
 	}
 
     private static function ldapSearch($username, $password) {

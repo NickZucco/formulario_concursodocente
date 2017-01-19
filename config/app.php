@@ -168,6 +168,7 @@ return [
 		
 		//Zipper
 		'Chumper\Zipper\ZipperServiceProvider',
+		'Maatwebsite\Excel\ExcelServiceProvider',
 
     ],
 
@@ -222,6 +223,7 @@ return [
         'Recaptcha' => Greggilbert\Recaptcha\Facades\Recaptcha::class,
 		
 		'Zipper' => 'Chumper\Zipper\Zipper',
+		'Excel' => 'Maatwebsite\Excel\Facades\Excel',
     ],
 
 ];

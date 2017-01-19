@@ -96,3 +96,4 @@ Route::post('admin/login', 'Admin\AdminController@postLogin');
 Route::get('admin/candidatos', 'Admin\AdminController@showCandidates');
 Route::post('admin/candidatos/adjuntos', 'Admin\AdminController@getAttachments');
 Route::post('admin/candidatos/reporte', 'Admin\AdminController@getReport');
+Route::get('admin/candidatos/excel', ['as' => 'admin.candidatos.excel', 'uses' => 'Admin\AdminController@excel']);
