@@ -155,17 +155,16 @@ class AdminController extends Controller {
 			}
 			$aspirantesArray[] = $aspiranteArray;
 		}
-		//dd($aspirantesArray);
 		
-		// Generate and return the spreadsheet
-		Excel::create('aspirantes', function($excel) use ($aspirantesArray) {
+		// Generar y descargar la hoja de cálculo
+		Excel::create('Candidatos Concurso Docente 2017', function($excel) use ($aspirantesArray) {
 
-			// Set the spreadsheet title, creator, and description
-			$excel->setTitle('Candidator Concurso Docente 2017');
+			// Titulo, creador y descripción
+			$excel->setTitle('Candidatos Concurso Docente 2017');
 			$excel->setCreator('Universidad Nacional de Colombia')->setCompany('Universidad Nacional de Colombia');
 			$excel->setDescription('Archivo con información de todos los aspirantes');
 
-			// Build the spreadsheet, passing in the payments array
+			// Construir la hoja de cálculo pasando el arreglo como parámetro
 			$excel->sheet('sheet1', function($sheet) use ($aspirantesArray) {
 				$sheet->fromArray($aspirantesArray, null, 'A1', false, false);
 			});
