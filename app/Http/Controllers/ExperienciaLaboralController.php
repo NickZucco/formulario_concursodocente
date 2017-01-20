@@ -37,9 +37,9 @@ class ExperienciaLaboralController extends Controller {
 		if (isset($input['adjunto'])){
 			$file = Input::file('adjunto');
 			$titulo = str_replace(' ', '_', $input['nombre_institucion']) . '_' . $input['fecha_inicio'];
-			$file->move(public_path() . '\file\\' . $id . '\experiencia_laboral\\' , $titulo . '.pdf');
+			$file->move(public_path() . '/file/' . $id . '/experiencia_laboral/' , $titulo . '.pdf');
 			
-			$input['ruta_adjunto'] = 'file\\' . $id . '\experiencia_laboral\\' . $titulo . '.pdf';
+			$input['ruta_adjunto'] = 'file/' . $id . '/experiencia_laboral/' . $titulo . '.pdf';
 			unset($input['adjunto']);			
 		}
         

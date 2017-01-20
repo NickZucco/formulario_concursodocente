@@ -42,9 +42,9 @@ class ExperienciaInvestigativaController extends Controller {
 		if (isset($input['adjunto'])) {
 			$file = Input::file('adjunto');
 			$titulo = str_replace(' ', '_', $input['nombre_proyecto']);
-			$file->move(public_path() . '\file\\' . $id . '\experiencia_investigativa\\' , $titulo . '.pdf');
+			$file->move(public_path() . '/file/' . $id . '/experiencia_investigativa/' , $titulo . '.pdf');
 			
-			$input['ruta_adjunto'] = 'file\\' . $id . '\experiencia_investigativa\\' . $titulo . '.pdf';
+			$input['ruta_adjunto'] = 'file/' . $id . '/experiencia_investigativa/' . $titulo . '.pdf';
 			unset($input['adjunto']);		
 		}
 		

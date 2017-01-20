@@ -57,9 +57,9 @@ class EstudioController extends Controller {
 		if (isset($input['adjunto'])) {
 			$file = Input::file('adjunto');
 			$titulo = str_replace(' ', '_', $input['titulo']) . '_' . str_replace(' ', '_', $input['institucion']);
-			$file->move(public_path() . '\file\\' . $id . '\estudios\\' , $titulo . '_soporte.pdf');
+			$file->move(public_path() . '/file/' . $id . '/estudios/' , $titulo . '_soporte.pdf');
 			
-			$input['ruta_adjunto'] = 'file\\' . $id . '\estudios\\' . $titulo . '_soporte.pdf';
+			$input['ruta_adjunto'] = 'file/' . $id . '/estudios/' . $titulo . '_soporte.pdf';
 			unset($input['adjunto']);
 		}
 		
@@ -67,9 +67,9 @@ class EstudioController extends Controller {
         if (isset($input['adjunto_entramite_minedu'])) {
 			$file = Input::file('adjunto_entramite_minedu');
 			$titulo = str_replace(' ', '_', $input['titulo']);
-			$file->move(public_path() . '\file\\' . $id . '\estudios\\' , $titulo . '_entramite.pdf');
+			$file->move(public_path() . '/file/' . $id . '/estudios/' , $titulo . '_entramite.pdf');
 			
-			$input['ruta_entramite_minedu'] = 'file\\' . $id . '\estudios\\' . $titulo . '_entramite.pdf';
+			$input['ruta_entramite_minedu'] = 'file/' . $id . '/estudios/' . $titulo . '_entramite.pdf';
 			unset($input['adjunto_entramite_minedu']);
         }
 		
@@ -77,9 +77,10 @@ class EstudioController extends Controller {
         if (isset($input['adjunto_res_convalidacion'])) {
 			$file = Input::file('adjunto_res_convalidacion');
 			$titulo = str_replace(' ', '_', $input['titulo']);
-			$file->move(public_path() . '\file\\' . $id . '\estudios\\' , $titulo . '_convalidacion.pdf');
+			$file->move(public_path() . '/file/' . $id . '/estudios/' , $titulo . 
+			'_convalidacion.pdf');
 			
-			$input['ruta_res_convalidacion'] = 'file\\' . $id . '\estudios\\' . $titulo . '_convalidacion.pdf';
+			$input['ruta_res_convalidacion'] = 'file/' . $id . '/estudios/' . $titulo . '_convalidacion.pdf';
 			unset($input['adjunto_res_convalidacion']);
         }
 

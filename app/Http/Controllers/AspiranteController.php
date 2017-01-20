@@ -77,9 +77,9 @@ class AspiranteController extends Controller {
 			Storage::delete($record->ruta_adjunto_documento);
 			
 			$file = Input::file('adjunto_documento');
-			$file->move(public_path() . '\file\\' . $id . '\datos_personales\\' , 'documento_identidad.pdf');
+			$file->move(public_path() . '/file/' . $id . '/datos_personales/' , 'documento_identidad.pdf');
 			
-			$input['ruta_adjunto_documento'] = 'file\\' . $id . '\datos_personales\\' . 'documento_identidad.pdf';
+			$input['ruta_adjunto_documento'] = 'file/' . $id . '/datos_personales/' . 'documento_identidad.pdf';
 			unset($input['adjunto_documento']);
 			
 			//Borramos y guardamos nuevamente el soporte de la tarjeta profesional
@@ -88,9 +88,9 @@ class AspiranteController extends Controller {
 					Storage::delete($record->ruta_adjunto_tarjetaprofesional);
 				}
 				$file = Input::file('adjunto_tarjetaprofesional');
-				$file->move(public_path() . '\file\\' . $id . '\datos_personales\\' , 'tarjeta_profesional.pdf');
+				$file->move(public_path() . '/file/' . $id . '/datos_personales/' , 'tarjeta_profesional.pdf');
 				
-				$input['ruta_adjunto_tarjetaprofesional'] = 'file\\' . $id . '\datos_personales\\' . 'tarjeta_profesional.pdf';
+				$input['ruta_adjunto_tarjetaprofesional'] = 'file/' . $id . '/datos_personales/' . 'tarjeta_profesional.pdf';
 				unset($input['adjunto_tarjetaprofesional']);
 			}
 			
@@ -102,17 +102,17 @@ class AspiranteController extends Controller {
 			//Efectuamos las operaciones sobre los archivos adjuntos
 			//Guardamos el soporte del documento de identidad (es obligatorio)
 			$file = Input::file('adjunto_documento');
-			$file->move(public_path() . '\file\\' . $id . '\datos_personales\\' , 'documento_identidad.pdf');
+			$file->move(public_path() . '/file/' . $id . '/datos_personales/' , 'documento_identidad.pdf');
 			
-			$input['ruta_adjunto_documento'] = 'file\\' . $id . '\datos_personales\\' . 'documento_identidad.pdf';
+			$input['ruta_adjunto_documento'] = 'file/' . $id . '/datos_personales/' . 'documento_identidad.pdf';
 			unset($input['adjunto_documento']);
 			
 			//Guardamos el documento de soporte de la tarjeta profesional si existe
 			if (isset($input['adjunto_tarjetaprofesional'])) {
 				$file = Input::file('adjunto_tarjetaprofesional');
-				$file->move(public_path() . '\file\\' . $id . '\datos_personales\\' , 'tarjeta_profesional.pdf');
+				$file->move(public_path() . '/file/' . $id . '/datos_personales/' , 'tarjeta_profesional.pdf');
 				
-				$input['ruta_adjunto_tarjetaprofesional'] = 'file\\' . $id . '\datos_personales\\' . 'tarjeta_profesional.pdf';
+				$input['ruta_adjunto_tarjetaprofesional'] = 'file/' . $id . '/datos_personales/' . 'tarjeta_profesional.pdf';
 				unset($input['adjunto_tarjetaprofesional']);
 			}
             Aspirante::create($input);

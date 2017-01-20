@@ -40,9 +40,9 @@ class DistincionController extends Controller {
 		if (isset($input['adjunto'])) {
 			$file = Input::file('adjunto');
 			$nombre = str_replace(' ', '_', $input['nombre']) . '_' . $input['fecha_entrega'];
-			$file->move(public_path() . '\file\\' . $id . '\distinciones_academicas\\' , $nombre . '.pdf');
+			$file->move(public_path() . '/file/' . $id . '/distinciones_academicas/' , $nombre . '.pdf');
 			
-			$input['ruta_adjunto'] = 'file\\' . $id . '\distinciones_academicas\\' . $nombre . '.pdf';
+			$input['ruta_adjunto'] = 'file/' . $id . '/distinciones_academicas/' . $nombre . '.pdf';
 			unset($input['adjunto']);
 		}
         

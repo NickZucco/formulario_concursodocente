@@ -56,8 +56,8 @@ class ProduccionIntelectualController extends Controller {
 				$titulo = 'Patente_' . str_replace(' ', '_', $input['nombre']);
 				break;
 		}
-		$file->move(public_path() . '\file\\' . $id . '\produccion_intelectual\\' , $titulo . '.pdf');	
-		$input['ruta_adjunto'] = 'file\\' . $id . '\produccion_intelectual\\' . $titulo . '.pdf';
+		$file->move(public_path() . '/file/' . $id . '/produccion_intelectual/' , $titulo . '.pdf');	
+		$input['ruta_adjunto'] = 'file/' . $id . '/produccion_intelectual/' . $titulo . '.pdf';
 		unset($input['adjunto']);
 		
 		$input['aspirantes_id'] = $id;

@@ -35,9 +35,9 @@ class IdiomaCertificadoController extends Controller
 		if (isset($input['adjunto'])){
 			$file = Input::file('adjunto');
 			$titulo = str_replace(' ', '_', $input['nombre_certificado']) . '_' . str_replace(' ', '_', $input['puntaje']);
-			$file->move(public_path() . '\file\\' . $id . '\idiomas\\' , $titulo . '.pdf');
+			$file->move(public_path() . '/file/' . $id . '/idiomas/' , $titulo . '.pdf');
 			
-			$input['ruta_adjunto'] = 'file\\' . $id . '\idiomas\\' . $titulo . '.pdf';
+			$input['ruta_adjunto'] = 'file/' . $id . '/idiomas/' . $titulo . '.pdf';
 			unset($input['adjunto']);			
 		}
 
