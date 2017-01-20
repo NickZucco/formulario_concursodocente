@@ -59,7 +59,7 @@
             language: 'es',
             showUpload: false,
             maxFileSize: 1024,
-            allowedFileExtensions: ["docx"],
+            allowedFileExtensions: ["doc", "docx"],
             initialPreviewConfig: {
                 width: '100%'
             }

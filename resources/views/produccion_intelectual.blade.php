@@ -2,6 +2,13 @@
 
 @section('form')
 
+<div class="alert alert-warning alert-dismissible" role="alert">
+  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <strong>Nota: </strong>En relación con la experiencia y 
+	la valoración de productividad académica, se tendrán en cuenta los cinco (5) años recientes en el caso de los 
+	perfiles de dedicación exclusiva y tiempo completo. En los perfiles de dedicación cátedra, se tendrán en cuenta 
+	los diez (10) años recientes.
+</div>
+
 @if($msg)
 <div class="alert alert-success" role="alert">
     {{$msg}}
@@ -83,7 +90,7 @@
                         <div class="form-group">
                             <label for="paginas" class="col-sm-12 col-md-2 control-label">Número de páginas</label>
                             <div class="col-sm-12 col-md-9">
-                                <input type="number" class="form-control" id="paginas" name="paginas">
+                                <input type="text" class="form-control" id="paginas" name="paginas">
                             </div>
                         </div>
                         <div class="form-group">
@@ -126,7 +133,7 @@
                         <div class="form-group">
                             <label for="paginas" class="col-sm-12 col-md-2 control-label">Número de páginas</label>
                             <div class="col-sm-12 col-md-9">
-                                <input type="number" class="form-control" id="paginas" name="paginas">
+                                <input type="text" class="form-control" id="paginas" name="paginas">
                             </div>
                         </div>
                         <div class="form-group">
@@ -144,7 +151,7 @@
                         <div class="form-group">
                             <label for="isbn" class="col-sm-12 col-md-2 control-label">ISBN</label>
                             <div class="col-md-5 col-sm-12">
-                                <input type="number" class="form-control" id="isbn" name="isbn">
+                                <input type="text" class="form-control" id="isbn" name="isbn">
                             </div>
                         </div>
                         <div class="form-group">
@@ -181,7 +188,7 @@
                         <div class="form-group">
                             <label for="paginas" class="col-sm-12 col-md-2 control-label">Número de páginas</label>
                             <div class="col-sm-12 col-md-9">
-                                <input type="number" class="form-control" id="paginas" name="paginas">
+                                <input type="text" class="form-control" id="paginas" name="paginas">
                             </div>
                         </div>
                         <div class="form-group">
@@ -193,7 +200,7 @@
                         <div class="form-group">
                             <label for="isbn" class="col-sm-12 col-md-2 control-label">ISBN</label>
                             <div class="col-md-10 col-sm-12">
-                                <input type="number" class="form-control" id="isbn" name="isbn">
+                                <input type="text" class="form-control" id="isbn" name="isbn">
                             </div>
                         </div>
                         <div class="form-group">
@@ -233,7 +240,7 @@
                         <div class="form-group">
                             <label for="numero_patente" class="col-sm-12 col-md-2 control-label">Número de patente</label>
                             <div class="col-sm-12 col-md-9">
-                                <input type="number" class="form-control" id="numero_patente" name="numero_patente">
+                                <input type="text" class="form-control" id="numero_patente" name="numero_patente">
                             </div>
                         </div>
                         <div class="form-group">
@@ -367,9 +374,12 @@
         });
 		
 		$("#año").change(function(){
-			if(parseInt(this.value) < 2006){
+			if(parseInt(this.value) < 2006 || parseInt(this.value) > 2017){
 				this.value = '';
-				alert('Sólo se admiten producciones intelectuales desde el año 2006 hasta la fecha.')
+				alert('En relación con la experiencia y la valoración de productividad académica, ' +
+				'se tendrán en cuenta los cinco (5) años recientes en el caso de los perfiles de dedicación ' +
+				'exclusiva y tiempo completo. En los perfiles de dedicación cátedra, se tendrán en cuenta ' +
+				'los diez (10) años recientes.')
 			} 
         });
 		

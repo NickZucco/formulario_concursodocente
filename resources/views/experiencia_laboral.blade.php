@@ -5,6 +5,12 @@
 <div class="alert alert-warning alert-dismissible" role="alert">
   <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <strong>Nota: </strong>Por favor, tenga en cuenta que toda la información que digite en el formulario, debe registrarse únicamente en español
 </div>
+<div class="alert alert-warning alert-dismissible" role="alert">
+  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <strong>Nota: </strong>En relación con la experiencia y 
+	la valoración de productividad académica, se tendrán en cuenta los cinco (5) años recientes en el caso de los 
+	perfiles de dedicación exclusiva y tiempo completo. En los perfiles de dedicación cátedra, se tendrán en cuenta 
+	los diez (10) años recientes.
+</div>
 
 <div class="panel panel-default">
     @if($msg)
