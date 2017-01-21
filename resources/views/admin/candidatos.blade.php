@@ -16,10 +16,12 @@
             </select>
         </div>
 		<div class="col-md-3">
-            {!! link_to_route('admin.candidatos.excel', 
-				'Exportar a Excel', null, 
-				['class' => 'btn btn-info']) 
-			!!}
+			<form method="get" action="{{ env('APP_URL') }}admin/candidatos/excel">     
+                {!! csrf_field() !!}
+                <button type="submit" class="btn btn-info">
+					Exportar a Excel
+				</button>
+            </form>
         </div>
     </div>
 </div>
@@ -62,7 +64,7 @@
                     {{$aspirante->updated_at}}
                 </td>
 				<td>
-					<form method="post" action="{{ env('APP_URL') }}admin/candidatos/reporte" style="margin:20px 0">     
+					<form method="get" action="{{ env('APP_URL') }}admin/candidatos/reporte" style="margin:20px 0">     
                         {!! csrf_field() !!}
                         <input type="hidden" name="id" value="{{$aspirante->id}}"/>
                         <button type="submit" data-id="{{$aspirante->id}}" class="btn btn-danger btn-sm">
@@ -71,7 +73,7 @@
                     </form>
                 </td>
                 <td>
-					<form method="post" action="{{ env('APP_URL') }}admin/candidatos/adjuntos" style="margin:20px 0">     
+					<form method="get" action="{{ env('APP_URL') }}admin/candidatos/adjuntos" style="margin:20px 0">     
                         {!! csrf_field() !!}
                         <input type="hidden" name="id" value="{{$aspirante->id}}"/>
                         <button type="submit" data-id="{{$aspirante->id}}" class="btn btn-danger btn-sm">

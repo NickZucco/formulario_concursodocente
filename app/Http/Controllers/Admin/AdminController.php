@@ -91,12 +91,12 @@ class AdminController extends Controller {
 		$input = Input::all();
 		$id = $input['id'];
 		$aspirante_info = Aspirante::find($id);
-		$pathtofile = public_path() . '\file\\' . $id . '\\' . $aspirante_info->nombre . ' ' . $aspirante_info->apellido . '_adjuntos.zip';
+		$pathtofile = public_path() . '/file/' . $id . '/' . $aspirante_info->nombre . ' ' . $aspirante_info->apellido . '_adjuntos.zip';
 		if (File::exists($pathtofile)){
 			return response()->download($pathtofile);
 		}
 		else{
-			$files = public_path() . '\file\\' . $id;		
+			$files = public_path() . '/file/' . $id;		
 			Zipper::make($pathtofile)->add($files)->close();
 			return response()->download($pathtofile);
 		}
@@ -142,8 +142,9 @@ class AdminController extends Controller {
 			'Fecha de registro', 'Última fecha de actualización', 'Estado Civil', 'Ciudad en donde aplica', 
 			'Teléfono fijo', 'Celular', 'Perfil 1', 'Perfil 2', 'Perfil 3'];
 		
-		// Convert each member of the returned collection into an array,
-		// and append it to the payments array.
+		// Convertir cada miembro de la colección retornada a array,
+		// agregar los perfiles seleccionados
+		// y anexarlo al array de aspirantes.
 		foreach ($aspirantes as $aspirante) {
 			$id = $aspirante['id'];
 			unset($aspirante['id']);

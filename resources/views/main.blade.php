@@ -103,7 +103,6 @@
         var default_end = now;
         default_end.setHours(23);
         default_end.setMinutes(59);
-        var closing_form_date={{App\Configuracion::where('llave', '=', 'limit_date')->first()['valor']}}
 		
 		$('.datepicker2').datetimepicker({
             defaultDate: now,

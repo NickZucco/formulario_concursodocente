@@ -286,7 +286,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4 col-md-offset-4">
+                        <div class="col-md-5 col-md-offset-4">
                             <button id="submitBtn" type="submit" class="btn btn-success form-control">
                                 <i class="fa fa-list-ul" aria-hidden="true"></i>
                                 <i class="fa fa-lightbulb-o" aria-hidden="true"></i>
