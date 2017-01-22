@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Auth;
+use DB;
 use App\Perfil as Perfil;
 use App\ProgramaPregrado as ProgramaPregrado;
 use App\PerfilProgramaPregrado as PerfilProgramaPregrado;
@@ -96,7 +97,7 @@ class PerfilController extends Controller {
         $input = Input::all();
         $id = Auth::user()->id;
 		
-		$perfiles_seleccionados = AspirantePerfil::all()->where('aspirantes_id', $id);
+		$perfiles_seleccionados = DB::table('aspirantes_perfiles')->where('aspirantes_id', $id)->get();
         
         //Para cada archivo, actualizamos la entrada correspondiente
         foreach ($perfiles_seleccionados as $perfil) {
