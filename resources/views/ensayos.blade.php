@@ -25,7 +25,7 @@
                 <div class="form-group">
                     <label for="adjunto_{{$perfil_seleccionado->id}}" class="col-sm-12 col-md-3 control-label">Componente escrito para el perfil {{$perfil_seleccionado->identificador}} - {{$perfil_seleccionado->departamento}}: </label>
                     <div class="col-sm-12 col-md-5">
-                        <input id="adjunto_{{$perfil_seleccionado->id}}" type="file" class="form-control" name="adjunto_{{$perfil_seleccionado->id}}" required/>
+                        <input id="adjunto_{{$perfil_seleccionado->id}}" type="file" class="form-control" name="adjunto_{{$perfil_seleccionado->id}}"/>
                         <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato Word (.doc o .docx) y no tener un tamaño superior a 1MB</em>
                     </div>
                     <div class="col-sm-12 col-md-4">
