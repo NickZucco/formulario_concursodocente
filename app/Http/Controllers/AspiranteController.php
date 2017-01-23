@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Auth;
+use DB;
 use App\Aspirante as Aspirante;
 use App\Tiponivel as Tiponivel;
 use App\Nivel as Nivel;
@@ -19,8 +20,26 @@ class AspiranteController extends Controller {
         $data = array();
 
         try {
+			$aspirante_id = Auth::user()->id;
+			//Contamos la cantidad de registros de cada tipo de formulario para visualizarlos en las pestañas
+			//de la plantilla (main.blade.php)
+			$count = array();
+			$count['estudio'] = DB::table('estudios')->where('aspirantes_id', $aspirante_id)->count();
+			$count['distincion'] = DB::table('distinciones_academica')->where('aspirantes_id', $aspirante_id)->count();
+			$count['laboral'] = DB::table('experiencias_laboral')->where('aspirantes_id', $aspirante_id)->count();
+			$count['docente'] = DB::table('experiencias_docente')->where('aspirantes_id', $aspirante_id)->count();
+			$count['investigativa'] = DB::table('experiencias_investigativa')->where('aspirantes_id', $aspirante_id)->count();
+			$count['produccion'] = DB::table('produccion_intelectual')->where('aspirantes_id', $aspirante_id)->count();
+			$count['idioma'] = DB::table('idiomas_certificado')->where('aspirantes_id', $aspirante_id)->count();
+			$count['perfiles'] = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->count();
+			$count['ensayos'] = 0;
+			
+			$ensayos = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->get();
+			foreach($ensayos as $ensayo) {
+				if (!$ensayo->ruta_ensayo==null) $count['ensayos'] += 1;
+			}
+			
             $user_email = Auth::user()->email;
-            $aspirante_id = Auth::user()->id;
 
             $candidate_info = Aspirante::where('correo', '=', $user_email)->first();
 
@@ -48,7 +67,8 @@ class AspiranteController extends Controller {
                 'tipos_documento' => $tipos_documento,
                 'paises' => $paises,
                 'estados_civiles' => $estados_civiles,
-                'msg' => $msg
+                'msg' => $msg,
+				'count' => $count
             );
             return view('aspirante', $data);
         }
@@ -96,7 +116,7 @@ class AspiranteController extends Controller {
 			
             $record->fill($input);
             $record->save();
-            return $this->show_info("Se actualizó la información personal");
+            return redirect('perfiles');
         }
 		else {
 			//Efectuamos las operaciones sobre los archivos adjuntos
@@ -116,7 +136,7 @@ class AspiranteController extends Controller {
 				unset($input['adjunto_tarjetaprofesional']);
 			}
             Aspirante::create($input);
-            return $this->show_info("Se agregò exitosamente la información personal");
+            return redirect('perfiles');
         }
     }
 

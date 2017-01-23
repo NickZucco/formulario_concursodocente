@@ -37,14 +37,14 @@
                 <li><a href="{{ env('APP_URL') }}perfiles" data-path="perfiles"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;Perfiles</a></li>
                 
                 @if(App\Perfil::join('aspirantes_perfiles', 'perfiles_id', '=', 'id')->where('aspirantes_id', '=', Auth::user()->id)->first())
-					<li><a href="{{ env('APP_URL') }}estudios" data-path="estudios"><i class="fa fa-graduation-cap" aria-hidden="true"></i>&nbsp;Estudios universitarios</a></li>
-					<li><a href="{{ env('APP_URL') }}distinciones" data-path="distinciones"><i class="fa fa-trophy" aria-hidden="true"></i>&nbsp;Distinciones académicas</a></li>
-					<li><a href="{{ env('APP_URL') }}experiencia_laboral" data-path="experiencia_laboral"><i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;Experiencia laboral</a></li>
-					<li><a href="{{ env('APP_URL') }}experiencia_docente" data-path="experiencia_docente"><i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;Experiencia docente</a></li>
-					<li><a href="{{ env('APP_URL') }}experiencia_investigativa" data-path="experiencia_investigativa"><i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;Experiencia investigativa</a></li>
-					<li><a href="{{ env('APP_URL') }}produccion_intelectual" data-path="produccion_intelectual"><i class="fa fa-lightbulb-o" aria-hidden="true"></i>&nbsp;Producción intelectual</a></li>
-					<li><a href="{{ env('APP_URL') }}idiomas" data-path="idiomas"><i class="fa fa-language" aria-hidden="true"></i>&nbsp;Idiomas</a></li>
-					<li><a href="{{ env('APP_URL') }}perfiles/ensayos" data-path="perfiles/ensayos"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;Ensayos</a></li>
+					<li id="estudios_p"><a href="{{ env('APP_URL') }}estudios" data-path="estudios"><i class="fa fa-graduation-cap" aria-hidden="true"></i>&nbsp;Estudios universitarios [{{$count['estudio']}}]</a></li>
+					<li id="distincion_p"><a href="{{ env('APP_URL') }}distinciones" data-path="distinciones"><i class="fa fa-trophy" aria-hidden="true"></i>&nbsp;Distinciones académicas [{{$count['distincion']}}]</a></li>
+					<li id="laboral_p"><a href="{{ env('APP_URL') }}experiencia_laboral" data-path="experiencia_laboral"><i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;Experiencia laboral [{{$count['laboral']}}]</a></li>
+					<li id="docente_p"><a href="{{ env('APP_URL') }}experiencia_docente" data-path="experiencia_docente"><i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;Experiencia docente [{{$count['docente']}}]</a></li>
+					<li id="investigativa_p"><a href="{{ env('APP_URL') }}experiencia_investigativa" data-path="experiencia_investigativa"><i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;Experiencia investigativa [{{$count['investigativa']}}]</a></li>
+					<li id="produccion_p"><a href="{{ env('APP_URL') }}produccion_intelectual" data-path="produccion_intelectual"><i class="fa fa-lightbulb-o" aria-hidden="true"></i>&nbsp;Producción intelectual [{{$count['produccion']}}]</a></li>
+					<li id="idioma_p"><a href="{{ env('APP_URL') }}idiomas" data-path="idiomas"><i class="fa fa-language" aria-hidden="true"></i>&nbsp;Idiomas [{{$count['idioma']}}]</a></li>
+					<li id="ensayo_p"><a href="{{ env('APP_URL') }}perfiles/ensayos" data-path="perfiles/ensayos"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;Ensayos</a></li>
                 @else
 					<li><a href="#" disabled>
                     <i class="hidden-xs hidden-sm fa fa-arrow-left" aria-hidden="true"></i>
@@ -66,7 +66,54 @@
 
 <script>
     
-    
+	$(document).ready(function(){
+      var count = {!!$count['estudio']!!};
+	  if (count > 0) {
+		  $('#estudios_p').css('background-color', '#A1F58B');
+	  }
+	  else $('#estudios_p').css('background-color', '#FFAAAA');
+	  count = {!!$count['distincion']!!};
+	  if (count > 0) {
+		  $('#distincion_p').css('background-color', '#A1F58B');
+	  }
+	  else $('#distincion_p').css('background-color', '#FFAAAA');
+	  count = {!!$count['laboral']!!};
+	  if (count > 0) {
+		  $('#laboral_p').css('background-color', '#A1F58B');
+	  }
+	  else $('#laboral_p').css('background-color', '#FFAAAA');
+	  count = {!!$count['docente']!!};
+	  if (count > 0) {
+		  $('#docente_p').css('background-color', '#A1F58B');
+	  }
+	  else $('#docente_p').css('background-color', '#FFAAAA');
+	  count = {!!$count['investigativa']!!};
+	  if (count > 0) {
+		  $('#investigativa_p').css('background-color', '#A1F58B');
+	  }
+	  else $('#investigativa_p').css('background-color', '#FFAAAA');
+	  count = {!!$count['produccion']!!};
+	  if (count > 0) {
+		  $('#produccion_p').css('background-color', '#A1F58B');
+	  }
+	  else $('#produccion_p').css('background-color', '#FFAAAA');
+	  count = {!!$count['idioma']!!};
+	  if (count > 0) {
+		  $('#idioma_p').css('background-color', '#A1F58B');
+	  }
+	  else $('#idioma_p').css('background-color', '#FFAAAA');
+	  count = {!!$count['perfiles']!!};
+	  var ensayos = {!!$count['ensayos']!!};
+	  if (ensayos == 0) {
+		  $('#ensayo_p').css('background-color', '#FFAAAA');
+	  }
+	  else if (ensayos > 0 && ensayos < count) {
+		  $('#ensayo_p').css('background-color', '#FFFD8F');
+	  }
+	  else $('#ensayo_p').css('background-color', '#A1F58B');
+	  
+    });
+	
     (function ($) {
         /**/
         var today=new Date();
@@ -146,12 +193,12 @@
         $("input[required],select[required],textaarea[required]").css("border-left","4px solid red");
         var list = document.querySelectorAll('input,select,textarea');
                var config = { attributes: true, childList: true, characterData: true }
-               console.log(list);
+               //console.log(list);
                 
                 var observer = new MutationObserver(function(mutations) {
                     mutations.forEach(function(mutation) {
                         $target=$(mutation.target);
-                        console.log($target.attr("required"));
+                        //console.log($target.attr("required"));
                         if(mutation.attributeName=='required'){
                             if($target.attr("required")=='required'){
                                 $(mutation.target).parent().css("border-left","4px solid red");
@@ -166,7 +213,7 @@
                     if(list[cur_key] instanceof Node){
                         observer.observe(list[cur_key], config);
                     }else{
-                        console.log("No se escucha a "+list[cur_key]);
+                        //console.log("No se escucha a "+list[cur_key]);
                     }
                 }
         /**/

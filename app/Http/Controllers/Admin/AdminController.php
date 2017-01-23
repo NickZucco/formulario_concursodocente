@@ -140,19 +140,25 @@ class AdminController extends Controller {
 		$aspirantesArray[] = ['Documento', 'Tipo de documento', 'Ciudad de expedición', 'Nombres', 'Apellidos',
 			'Fecha de nacimiento', 'País de nacimiento', 'Pais de residencia', 'Dirección', 'Correo',
 			'Fecha de registro', 'Última fecha de actualización', 'Estado Civil', 'Ciudad en donde aplica', 
-			'Teléfono fijo', 'Celular', 'Perfil 1', 'Perfil 2', 'Perfil 3'];
+			'Teléfono fijo', 'Celular', 'Perfiles seleccionados'];
 		
 		// Convertir cada miembro de la colección retornada a array,
-		// agregar los perfiles seleccionados
-		// y anexarlo al array de aspirantes.
+		// agregar los perfiles seleccionados y anexarlo al array de aspirantes.
 		foreach ($aspirantes as $aspirante) {
 			$id = $aspirante['id'];
 			unset($aspirante['id']);
 			$perfiles_seleccionados = Perfil::join('aspirantes_perfiles', 'perfiles_id', '=', 'id')
                         ->where('aspirantes_id', '=', $id)->get();
 			$aspiranteArray = $aspirante->toArray();
+			$perfiles_string = '';
 			foreach ($perfiles_seleccionados as $perfil) {
-				array_push($aspiranteArray, $perfil['identificador']);
+				$perfiles_string = $perfiles_string . $perfil->identificador . ', ';
+			}
+			
+			//Remover la última coma del string
+			if (strlen($perfiles_string) > 0) {
+				$perfiles_string = substr($perfiles_string, 0, strlen($perfiles_string) - 2);
+				array_push($aspiranteArray, $perfiles_string);
 			}
 			$aspirantesArray[] = $aspiranteArray;
 		}
