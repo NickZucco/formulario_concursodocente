@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Auth;
+use DB;
 use App\Pais as Pais;
 use App\ExperienciaDocente as ExperienciaDocente;
 use App\TipoVinculacionDocente as TipoVinculacionDocente;
@@ -13,8 +14,26 @@ use App\Nivel as Nivel;
 class ExperienciaDocenteController extends Controller {
 
     public function show_info($msg = null) {
+		$aspirante_id = Auth::user()->id;
+		//Contamos la cantidad de registros de cada tipo de formulario para visualizarlos en las pestañas
+		//de la plantilla (main.blade.php)
+		$count = array();
+		$count['estudio'] = DB::table('estudios')->where('aspirantes_id', $aspirante_id)->count();
+		$count['distincion'] = DB::table('distinciones_academica')->where('aspirantes_id', $aspirante_id)->count();
+		$count['laboral'] = DB::table('experiencias_laboral')->where('aspirantes_id', $aspirante_id)->count();
+		$count['docente'] = DB::table('experiencias_docente')->where('aspirantes_id', $aspirante_id)->count();
+		$count['investigativa'] = DB::table('experiencias_investigativa')->where('aspirantes_id', $aspirante_id)->count();
+		$count['produccion'] = DB::table('produccion_intelectual')->where('aspirantes_id', $aspirante_id)->count();
+		$count['idioma'] = DB::table('idiomas_certificado')->where('aspirantes_id', $aspirante_id)->count();
+		$count['perfiles'] = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->count();
+		$count['ensayos'] = 0;
+		
+		$ensayos = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->get();
+		foreach($ensayos as $ensayo) {
+			if (!$ensayo->ruta_ensayo==null) $count['ensayos'] += 1;
+		}
+		
         $user_email = Auth::user()->email;
-        $aspirante_id = Auth::user()->id;
 
         $experiencias_docente_info = ExperienciaDocente::where('aspirantes_id', '=', $aspirante_id)->get();
         $tipos_vinculacion_docente = TipoVinculacionDocente::all();
@@ -34,7 +53,8 @@ class ExperienciaDocenteController extends Controller {
             'tipos_vinculacion_docente' => $tipos_vinculacion_docente,
             'niveles' => $niveles,
             'paises' => $paises,
-            'msg' => $msg
+            'msg' => $msg,
+			'count' => $count
         );
         return view('experiencia_docente', $data);
     }
@@ -42,11 +62,20 @@ class ExperienciaDocenteController extends Controller {
     public function insert() {
         $input = Input::all();
         $id = Auth::user()->id;
-
+		
+		//Verificamos si la vinculación está en curso para no tener en cuenta la fecha de finalización
+		if ($input['en_curso']==1) {
+			unset($input['fecha_finalizacion']);
+		}
+		
+		$aleatorio = rand(111111, 999999);
+		$titulo = substr($input['nombre_institucion'], 0, 12);
+		$titulo = $titulo . $aleatorio;
+		$titulo = str_replace(' ', '_', $titulo);
         //Guardamos el archivo de soporte de experiencia docente si existe
 		if (isset($input['adjunto'])) {
 			$file = Input::file('adjunto');
-			$titulo = str_replace(' ', '_', $input['nombre_institucion']) . '_' . $input['fecha_inicio'];
+			//$titulo = str_replace(' ', '_', $input['nombre_institucion']) . '_' . $input['fecha_inicio'];
 			$file->move(public_path() . '/file/' . $id . '/experiencia_docente/' , $titulo . '.pdf');
 			
 			$input['ruta_adjunto'] = 'file/' . $id . '/experiencia_docente/' . $titulo . '.pdf';

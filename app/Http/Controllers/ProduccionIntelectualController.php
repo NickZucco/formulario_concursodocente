@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests;
 use Auth;
-
+use DB;
 use App\Pais as Pais;
 use App\Idioma as Idioma;
 use App\ProduccionIntelectual as ProduccionIntelectual;
@@ -16,8 +16,26 @@ use App\TipoProduccionIntelectual as TipoProduccionIntelectual;
 class ProduccionIntelectualController extends Controller {
     
     public function show_info($msg = null) {
+		$aspirante_id = Auth::user()->id;
+		//Contamos la cantidad de registros de cada tipo de formulario para visualizarlos en las pestañas
+		//de la plantilla (main.blade.php)
+		$count = array();
+		$count['estudio'] = DB::table('estudios')->where('aspirantes_id', $aspirante_id)->count();
+		$count['distincion'] = DB::table('distinciones_academica')->where('aspirantes_id', $aspirante_id)->count();
+		$count['laboral'] = DB::table('experiencias_laboral')->where('aspirantes_id', $aspirante_id)->count();
+		$count['docente'] = DB::table('experiencias_docente')->where('aspirantes_id', $aspirante_id)->count();
+		$count['investigativa'] = DB::table('experiencias_investigativa')->where('aspirantes_id', $aspirante_id)->count();
+		$count['produccion'] = DB::table('produccion_intelectual')->where('aspirantes_id', $aspirante_id)->count();
+		$count['idioma'] = DB::table('idiomas_certificado')->where('aspirantes_id', $aspirante_id)->count();
+		$count['perfiles'] = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->count();
+		$count['ensayos'] = 0;
+		
+		$ensayos = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->get();
+		foreach($ensayos as $ensayo) {
+			if (!$ensayo->ruta_ensayo==null) $count['ensayos'] += 1;
+		}
+		
         $user_email = Auth::user()->email;
-        $aspirante_id = Auth::user()->id;
 
         $producciones_intelectual = ProduccionIntelectual::where('aspirantes_id', '=', $aspirante_id)->get();
         
@@ -32,6 +50,7 @@ class ProduccionIntelectualController extends Controller {
             'tipos_produccion_intelectual' => $tipos_produccion_intelectual,
             'producciones_intelectual' => $producciones_intelectual,
             'msg' => $msg,
+			'count' => $count
         );
         return view('produccion_intelectual', $data);
     }
@@ -41,21 +60,38 @@ class ProduccionIntelectualController extends Controller {
         $id = Auth::user()->id;
         
         //Efectuamos las operaciones sobre el archivo
+		$aleatorio = rand(111111, 999999);
+		$titulo = substr($input['nombre'], 0, 12);
+		$titulo = $titulo . $aleatorio;
+		$titulo = str_replace(' ', '_', $titulo);
 		$file = Input::file('adjunto');
 		switch($input['tipos_produccion_intelectual_id']){
 			case 1:
-				$titulo = 'Revista_' . str_replace(' ', '_', $input['nombre']);
+				if ($input['volumen']=='') {
+					unset($input['volumen']);
+				}
+				if ($input['clasificacion_revista']=='') {
+					unset($input['clasificacion_revista']);
+				}
+				$titulo = 'Revista_' . $titulo;
 				break;
 			case 2:
-				$titulo = 'Libro_' . str_replace(' ', '_', $input['nombre']);
+				if ($input['isbn']=='') {
+					unset($input['isbn']);
+				}
+				$titulo = 'Libro_' . $titulo;
 				break;
 			case 3:
-				$titulo = 'Capitulo_' . str_replace(' ', '_', $input['nombre']);			
+				if ($input['isbn']=='') {
+					unset($input['isbn']);
+				}
+				$titulo = 'Capitulo_' . $titulo;			
 				break;
 			case 4:
-				$titulo = 'Patente_' . str_replace(' ', '_', $input['nombre']);
+				$titulo = 'Patente_' . $titulo;
 				break;
 		}
+		//dd($input);
 		$file->move(public_path() . '/file/' . $id . '/produccion_intelectual/' , $titulo . '.pdf');	
 		$input['ruta_adjunto'] = 'file/' . $id . '/produccion_intelectual/' . $titulo . '.pdf';
 		unset($input['adjunto']);

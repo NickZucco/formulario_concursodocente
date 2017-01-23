@@ -28,7 +28,7 @@
                 <label for="tipos_produccion_intelectual_id" class="col-sm-12 col-md-2 control-label">Tipo de producción intelectual</label>
                 <div class="col-sm-12 col-md-3">
                     <select id="tipos_publicacion" name="tipos_produccion_intelectual_id" class="form-control">
-                        <option value="">--Seleccione una opción--</option>
+                        <option value="0">--Seleccione una opción--</option>
                         @foreach($tipos_produccion_intelectual as $tipo_produccion_intelectual)
                         <option value="{{$tipo_produccion_intelectual->id}}">{{$tipo_produccion_intelectual->nombre}}</option>
                         @endforeach
@@ -150,7 +150,7 @@
                         </div>
                         <div class="form-group">
                             <label for="isbn" class="col-sm-12 col-md-2 control-label">ISBN</label>
-                            <div class="col-md-5 col-sm-12">
+                            <div class="col-sm-12 col-md-9">
                                 <input type="text" class="form-control" id="isbn" name="isbn">
                             </div>
                         </div>
@@ -199,8 +199,8 @@
                         </div>
                         <div class="form-group">
                             <label for="isbn" class="col-sm-12 col-md-2 control-label">ISBN</label>
-                            <div class="col-md-10 col-sm-12">
-                                <input type="text" class="form-control" id="isbn" name="isbn">
+                            <div class="col-sm-12 col-md-9">
+                                <input type="text" class="form-control" id="isbn2" name="isbn">
                             </div>
                         </div>
                         <div class="form-group">
@@ -222,6 +222,7 @@
                                 <select id="tipo_patente" name="tipo_patente" class="form-control">
                                     <option value="PATENTE">Patente</option>
                                     <option value="SOFTWARE">Software</option>
+									<option value="MODELO DE UTILIDAD">Modelo de utilidad</option>
                                 </select>
                             </div>
                         </div>
@@ -362,6 +363,7 @@
             $(".publication_form").find("input,select,textarea").attr("disabled","disabled");
             $(".publication_form").find("input,select,textarea").attr("readonly","readonly");
             $(".publication_form").find("input,select,textarea").removeAttr("required","required");
+			
             //
             var id = $("#tipos_publicacion option:selected").val();
             $("#" + id).show();
@@ -369,8 +371,27 @@
             $("#" + id).find("input,select,textarea").attr("required","required");
             $("#" + id).find("input,select,textarea").removeAttr("readonly");
             $("#tipo_produccion_lbl").text($("#tipos_publicacion option:selected").text());
-            $("#msg_form").hide();
-            $("#additional_fields").show();
+			switch(id) {
+				case '1':
+					$("#volumen").removeAttr("required","required");
+					$("#clasificacion_revista").removeAttr("required","required");
+					break;
+				case '2':
+					$("#isbn").removeAttr("required","required");
+					break;
+				case '3':
+					$("#isbn2").removeAttr("required","required");
+					break;
+			}
+			if (id != 0) {
+				$("#msg_form").hide();
+				$("#additional_fields").show();
+			}
+			else {
+				$("#msg_form").show();
+				$("#additional_fields").hide();
+			}
+			
         });
 		
 		$("#año").change(function(){

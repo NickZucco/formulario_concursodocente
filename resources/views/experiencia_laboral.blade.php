@@ -43,16 +43,31 @@
                     </select>
                 </div>
             </div>
+			
             <div class="form-group">
                 <label for="fecha_inicio" class="col-sm-12 col-md-2 control-label">Fecha de inicio de vinculación</label>
-                <div class="col-sm-12 col-md-4">
-                    <input type="text" class="datepicker form-control" id="fecha_inicio" name="fecha_inicio" placeholder="####-##-##" required>
+                <div class="col-sm-12 col-md-2">
+                    <input type="text" class="start datepicker form-control" id="fecha_inicio" name="fecha_inicio" placeholder="####-##-##" required>
                 </div>
-                <label for="fecha_finalizacion" class="col-sm-12 col-md-2 control-label">Fecha de fin de vinculación</label>
-                <div class="col-sm-12 col-md-4">
-                    <input type="text" class="datepicker form-control" id="fecha_finalizacion" name="fecha_finalizacion" placeholder="####-##-##" required>
+				<div class="col-md-4">
+                    <div id="fecha_finalizacion">
+                        <label for="fecha_finalizacion" class="col-sm-12 col-md-6 control-label">Fecha de finalización de vinculación</label>
+                        <div class="col-sm-12 col-md-6">
+                            <input type="text"  class="datepicker end maxToday form-control" name="fecha_finalizacion" placeholder="####-##-##">
+                        </div>
+                    </div>
+                </div>              
+                <label for="en_curso" class="col-sm-12 col-md-1 control-label">¿Vinculación vigente?</label>
+                <div class="col-md-2">
+                    <label class="radio-inline">
+                        <input type="radio" name="en_curso" data-id="fecha_finalizacion" value="1" required>Si
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="en_curso" data-id="fecha_finalizacion" value="0">No
+                    </label>
                 </div>
             </div>
+			
             <div class="form-group">
                 <label for="nombre_cargo" class="col-sm-12 col-md-2 control-label">Nombre del cargo</label>
                 <div class="col-sm-12 col-md-4">
@@ -112,7 +127,11 @@
                     {{$experiencia_laboral->fecha_inicio}}
                 </td>
                 <td>
-                    {{$experiencia_laboral->fecha_finalizacion}}
+                    @if(!$experiencia_laboral->fecha_finalizacion==null)
+						{{$experiencia_laboral->fecha_finalizacion}}
+                    @else
+						Vinculación vigente
+                    @endif  
                 </td>
                 <td>
                     {{$experiencia_laboral->nombre_cargo}}
@@ -185,6 +204,19 @@
 		
         $('#nombre_institucion').bind('typeahead:select', function (ev, suggestion) {
             unal_selected = true;
+        });
+		
+		$("input[name='en_curso']").on("change", function () {
+            var $this = $(this);			
+            if ($this.val() == 0) {				
+                $("#" + $(this).data("id")).show();
+                $("#" + $(this).data("id") + " input").removeAttr("disabled");
+				$("#" + $(this).data("id") + " input").attr("required", "required");
+            } else {				
+                $("#" + $(this).data("id")).hide();
+                $("#" + $(this).data("id") + " input").attr("disabled");				
+				$("#" + $(this).data("id") + " input").removeAttr("required");
+            }
         });
 		
 		$("input[type='file']").fileinput({

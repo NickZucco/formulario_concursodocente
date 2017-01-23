@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests;
 use Auth;
+use DB;
 use App\ExperienciaDocente as ExperienciaDocente;
 use App\Pais as Pais;
 use App\ExperienciaInvestigativa as ExperienciaInvestigativa;
@@ -14,8 +15,26 @@ use App\ExperienciaInvestigativa as ExperienciaInvestigativa;
 class ExperienciaInvestigativaController extends Controller {
     
     public function show_info($msg = null) {
+		$aspirante_id = Auth::user()->id;
+		//Contamos la cantidad de registros de cada tipo de formulario para visualizarlos en las pestañas
+		//de la plantilla (main.blade.php)
+		$count = array();
+		$count['estudio'] = DB::table('estudios')->where('aspirantes_id', $aspirante_id)->count();
+		$count['distincion'] = DB::table('distinciones_academica')->where('aspirantes_id', $aspirante_id)->count();
+		$count['laboral'] = DB::table('experiencias_laboral')->where('aspirantes_id', $aspirante_id)->count();
+		$count['docente'] = DB::table('experiencias_docente')->where('aspirantes_id', $aspirante_id)->count();
+		$count['investigativa'] = DB::table('experiencias_investigativa')->where('aspirantes_id', $aspirante_id)->count();
+		$count['produccion'] = DB::table('produccion_intelectual')->where('aspirantes_id', $aspirante_id)->count();
+		$count['idioma'] = DB::table('idiomas_certificado')->where('aspirantes_id', $aspirante_id)->count();
+		$count['perfiles'] = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->count();
+		$count['ensayos'] = 0;
+		
+		$ensayos = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->get();
+		foreach($ensayos as $ensayo) {
+			if (!$ensayo->ruta_ensayo==null) $count['ensayos'] += 1;
+		}
+		
         $user_email = Auth::user()->email;
-        $aspirante_id = Auth::user()->id;
 
         $experiencia_investigativa = ExperienciaInvestigativa::where('aspirantes_id', '=', $aspirante_id)->get();
         $paises = Pais::orderBy('nombre')->get();
@@ -24,7 +43,8 @@ class ExperienciaInvestigativaController extends Controller {
             'aspirante_id' => $aspirante_id,
             'experiencias_investigativa' => $experiencia_investigativa,
             'paises' => $paises,
-            'msg' => $msg
+            'msg' => $msg,
+			'count' => $count
         );
         return view('experiencia_investigativa', $data);
     }
@@ -38,10 +58,14 @@ class ExperienciaInvestigativaController extends Controller {
 			unset($input['fecha_finalizacion']);
 		}
         
+		$aleatorio = rand(111111, 999999);
+		$titulo = substr($input['nombre_proyecto'], 0, 12);
+		$titulo = $titulo . $aleatorio;
+		$titulo = str_replace(' ', '_', $titulo);
         //Guardamos el archivo de soporte adjunto si existe
 		if (isset($input['adjunto'])) {
 			$file = Input::file('adjunto');
-			$titulo = str_replace(' ', '_', $input['nombre_proyecto']);
+			//$titulo = str_replace(' ', '_', $input['nombre_proyecto']);
 			$file->move(public_path() . '/file/' . $id . '/experiencia_investigativa/' , $titulo . '.pdf');
 			
 			$input['ruta_adjunto'] = 'file/' . $id . '/experiencia_investigativa/' . $titulo . '.pdf';

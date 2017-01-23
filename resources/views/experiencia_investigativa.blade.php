@@ -52,7 +52,7 @@
             </div>
 
             <div class="form-group">
-                <label for="fecha_inicio" class="col-sm-12 col-md-3 control-label">Fecha de inicio de la vinculación</label>
+                <label for="fecha_inicio" class="col-sm-12 col-md-3 control-label">Fecha de inicio de vinculación</label>
                 <div class="col-sm-12 col-md-2">
                     <input type="text" class="start datepicker form-control" id="fecha_inicio" name="fecha_inicio" placeholder="####-##-##" required>
                 </div>
@@ -213,12 +213,10 @@
                 $("#" + $(this).data("id")).show();
                 $("#" + $(this).data("id") + " input").removeAttr("disabled");
 				$("#" + $(this).data("id") + " input").attr("required", "required");
-				console.log("#" + $(this).data("id"));
             } else {				
                 $("#" + $(this).data("id")).hide();
                 $("#" + $(this).data("id") + " input").attr("disabled");				
 				$("#" + $(this).data("id") + " input").removeAttr("required");
-				console.log("#" + $(this).data("id"));
             }
         });
 		

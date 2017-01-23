@@ -66,7 +66,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group adjunto">
                 <div class="col-sm-12 col-md-2 ">
                     <label for="adjunto" class="control-label">Documento de soporte: </label>
                 </div>
@@ -77,7 +77,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group additional_attatchments">
 
                 <div class="col-sm-12 col-md-6">
                     <input type="radio" name="additional_attatchments" value="adjunto_entramite_minedu">¿Desea adjuntar documento que manifieste se encuentra en trámite ante el Ministerio de Educación la convalidación de título obtenido en el exterior?<br>
@@ -184,16 +184,51 @@
  	});
 
     (function ($) {
+		//Función que se ejecuta cada vez que cambia el valor del radio button En curso?
         $("input[name='en_curso']").on("change", function () {
             var $this = $(this);
+			//Si el valor es No
             if ($this.val() == 0) {
+				//Mostrar la fecha de finalización y los campos para carga de adjuntos
                 $("#" + $(this).data("id")).show();
+				$(".adjunto").show();
+				$(".additional_attatchments").show();
+				//La fecha de finalización se habilita, y ahora es un campo requerido
                 $("#" + $(this).data("id") + " input").removeAttr("disabled");
 				$("#" + $(this).data("id") + " input").attr("required", "required");
-            } else {
+				//El campo de adjunto se habilita
+				$("#adjunto").removeAttr("disabled");
+				//Revisar los valores del país y la institución seleccionadas actualmente en el formulario
+				var pais = $("#paises_id").val();
+				var institucion = $('#institucion').val();
+				//Si la institución no es la UN Sede Bogotá, entonces el campo de adjunto es requedido
+				if (institucion != 'Universidad Nacional de Colombia - Sede Bogotá') {
+					$("#adjunto").attr("required", "required");
+				}
+				//Si el país no es Colombia, entonces los adjuntos de resolución o convalidación ante MinEdu
+				//son requeridos.
+				if (pais != 57) {
+					$("input[name='additional_attatchments']").attr("required", "required");
+					$("#adjunto_entramite_minedu").removeAttr("disabled");
+					$("#adjunto_res_convalidacion").removeAttr("disabled");
+				}
+            } 
+			//Si el valor es Sí
+			else {
+				//Ocultar la fecha de finalización y los campos para carga de adjuntos
                 $("#" + $(this).data("id")).hide();
+				$(".adjunto").hide();
+				$(".additional_attatchments").hide();
+				//Deshabilitar y quitar atributo requerido a fecha de finalización
                 $("#" + $(this).data("id") + " input").attr("disabled");
 				$("#" + $(this).data("id") + " input").removeAttr("required");
+				//Deshabilitar y quitar atributo requerido al campo de adjunto
+				$("#adjunto").attr("disabled");
+				$("#adjunto").removeAttr("required");
+				//Deshabilitar y quitar atributo requerido a los adjuntos de resolución o convalidación ante MinEdu
+				$("input[name='additional_attatchments']").removeAttr("required");
+				$("#adjunto_entramite_minedu").attr("disabled");
+				$("#adjunto_res_convalidacion").attr("disabled");
             }
         });
 		
@@ -255,14 +290,15 @@
             var $selected=$(this).find("option:selected");
             
             if ($.trim($selected.text().toLowerCase()) != 'colombia') {
-                //console.log($.trim($selected.text().toLowerCase())+"!="+'colombia');
+				$("input[name='additional_attatchments']").attr('disabled', false);
                 $("input[name='additional_attatchments']").attr("required", "required");
             } else {
-                //console.log("colombia");
                 $("input[name='additional_attatchments']").removeAttr("required");
 				$("input[name='additional_attatchments']").prop('checked', false);
+				$("input[name='additional_attatchments']").attr('disabled', true);
                 $("input[name='additional_attatchments']").each(function (i, e) {
                     $("#" + $(this).val()).removeAttr("required");
+					$("#" + $(this).val()).attr('disabled', true);
                 });
             }
 

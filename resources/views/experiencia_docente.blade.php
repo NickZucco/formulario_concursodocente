@@ -41,14 +41,28 @@
                     </select>
                 </div>
             </div>
+			
             <div class="form-group">
                 <label for="fecha_inicio" class="col-sm-12 col-md-2 control-label">Fecha de inicio de vinculación</label>
-                <div class="col-sm-12 col-md-4">
-                    <input type="text" class="datepicker start form-control" id="fecha_inicio" name="fecha_inicio" placeholder="####-##-##" required>
+                <div class="col-sm-12 col-md-2">
+                    <input type="text" class="start datepicker form-control" id="fecha_inicio" name="fecha_inicio" placeholder="####-##-##" required>
                 </div>
-                <label for="fecha_finalizacion" class="col-sm-12 col-md-2 control-label">Fecha de finalización de vinculación</label>
-                <div class="col-sm-12 col-md-4">
-                    <input type="text" class="datepicker end form-control" id="fecha_finalizacion" name="fecha_finalizacion" placeholder="####-##-##" required>
+				<div class="col-md-4">
+                    <div id="fecha_finalizacion">
+                        <label for="fecha_finalizacion" class="col-sm-12 col-md-6 control-label">Fecha de finalización de vinculación</label>
+                        <div class="col-sm-12 col-md-6">
+                            <input type="text"  class="datepicker end maxToday form-control" name="fecha_finalizacion" placeholder="####-##-##">
+                        </div>
+                    </div>
+                </div>              
+                <label for="en_curso" class="col-sm-12 col-md-1 control-label">¿Vinculación vigente?</label>
+                <div class="col-md-2">
+                    <label class="radio-inline">
+                        <input type="radio" name="en_curso" data-id="fecha_finalizacion" value="1" required>Si
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="en_curso" data-id="fecha_finalizacion" value="0">No
+                    </label>
                 </div>
             </div>
 
@@ -138,7 +152,11 @@
                     {{$experiencia_docente->fecha_inicio}}
                 </td>
                 <td>
-                    {{$experiencia_docente->fecha_finalizacion}}
+                    @if(!$experiencia_docente->fecha_finalizacion==null)
+						{{$experiencia_docente->fecha_finalizacion}}
+                    @else
+						Vinculación vigente
+                    @endif
                 </td>
                 <td>
                     <table class="toJSONTable" data-json="{{$experiencia_docente->info_asignaturas}}">
