@@ -305,6 +305,19 @@
         $(".toJSONTable").each(function (i, e) {
             buildHtmlTable($(this));
         });
+		
+		$("input[name='en_curso']").on("change", function () {
+            var $this = $(this);			
+            if ($this.val() == 0) {				
+                $("#" + $(this).data("id")).show();
+                $("#" + $(this).data("id") + " input").removeAttr("disabled");
+				$("#" + $(this).data("id") + " input").attr("required", "required");
+            } else {				
+                $("#" + $(this).data("id")).hide();
+                $("#" + $(this).data("id") + " input").attr("disabled");				
+				$("#" + $(this).data("id") + " input").removeAttr("required");
+            }
+        });
 
 		$("input[type='file']").fileinput({
             language: 'es',
