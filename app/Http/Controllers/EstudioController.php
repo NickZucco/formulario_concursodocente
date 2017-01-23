@@ -68,7 +68,6 @@ class EstudioController extends Controller {
 		//También se remueven posibles adjuntos que hayan quedado cargados en el formulario
 		if ($input['en_curso']==1) {
 			unset($input['fecha_finalizacion']);
-			unset($input['adjunto']);
 			unset($input['adjunto_entramite_minedu']);
 			unset($input['adjunto_res_convalidacion']);
 		}

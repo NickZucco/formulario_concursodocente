@@ -189,15 +189,12 @@
             var $this = $(this);
 			//Si el valor es No
             if ($this.val() == 0) {
-				//Mostrar la fecha de finalización y los campos para carga de adjuntos
+				//Mostrar la fecha de finalización y los campos para carga de adjuntos de convalidación
                 $("#" + $(this).data("id")).show();
-				$(".adjunto").show();
 				$(".additional_attatchments").show();
 				//La fecha de finalización se habilita, y ahora es un campo requerido
                 $("#" + $(this).data("id") + " input").removeAttr("disabled");
 				$("#" + $(this).data("id") + " input").attr("required", "required");
-				//El campo de adjunto se habilita
-				$("#adjunto").removeAttr("disabled");
 				//Revisar los valores del país y la institución seleccionadas actualmente en el formulario
 				var pais = $("#paises_id").val();
 				var institucion = $('#institucion').val();
@@ -217,14 +214,10 @@
 			else {
 				//Ocultar la fecha de finalización y los campos para carga de adjuntos
                 $("#" + $(this).data("id")).hide();
-				$(".adjunto").hide();
 				$(".additional_attatchments").hide();
 				//Deshabilitar y quitar atributo requerido a fecha de finalización
                 $("#" + $(this).data("id") + " input").attr("disabled");
 				$("#" + $(this).data("id") + " input").removeAttr("required");
-				//Deshabilitar y quitar atributo requerido al campo de adjunto
-				$("#adjunto").attr("disabled");
-				$("#adjunto").removeAttr("required");
 				//Deshabilitar y quitar atributo requerido a los adjuntos de resolución o convalidación ante MinEdu
 				$("input[name='additional_attatchments']").removeAttr("required");
 				$("#adjunto_entramite_minedu").attr("disabled");
