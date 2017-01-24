@@ -35,8 +35,8 @@ class AdminController extends Controller {
      *
      * @var string
      */
-    protected $loginPath = '/admin/login'; // 
-    protected $redirectTo = '/admin/candidatos';
+    protected $loginPath = 'admin/login'; // 
+    protected $redirectTo = 'admin/candidatos';
     protected $activationService;
     
     public function __construct(ActivationService $activationService) {
