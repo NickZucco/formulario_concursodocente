@@ -89,11 +89,17 @@ Route::get('cerrar_formulario', ['middleware' => 'auth', 'uses' => 'AspiranteCon
 Route::post('cerrar_formulario', ['middleware' => 'auth', 'uses' => 'AspiranteController@close_form']);
 
 //Interfaz de consulta de registrados
+Route::get('admin/login', function() {
+    if (!Auth::guest()) {
+        return Redirect::to('admin/candidatos');
+    }
+});
+
 Route::get('admin/login', 'Admin\AdminController@getLogin');
-Route::get('admin/logout', 'Admin\AdminController@getLogout');
+Route::get('admin/logout', 'Admin\AdminController@logout');
 Route::post('admin/login', 'Admin\AdminController@postLogin');
 
-Route::get('admin/candidatos', 'Admin\AdminController@showCandidates');
-Route::get('admin/candidatos/adjuntos', 'Admin\AdminController@getAttachments');
-Route::get('admin/candidatos/reporte', 'Admin\AdminController@getReport');
-Route::get('admin/candidatos/excel', 'Admin\AdminController@excel');
+Route::get('admin/candidatos', ['middleware'=>'auth','uses'=>'Admin\AdminController@showCandidates']);
+Route::get('admin/candidatos/adjuntos', ['middleware'=>'auth','uses'=>'Admin\AdminController@getAttachments']);
+Route::get('admin/candidatos/reporte', ['middleware'=>'auth','uses'=>'Admin\AdminController@getReport']);
+Route::get('admin/candidatos/excel', ['middleware'=>'auth','uses'=>'Admin\AdminController@excel']);

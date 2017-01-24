@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests;
 
+use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use App\ActivationService as ActivationService;
+
 use App\User as User;
 use App\Aspirante as Aspirante;
 use App\Perfil as Perfil;
@@ -23,20 +27,37 @@ use JasperPHP\JasperPHP;
 
 class AdminController extends Controller {
 
+    use AuthenticatesAndRegistersUsers,
+    ThrottlesLogins;
+
+    /**
+     * Where to redirect users after login / registration.
+     *
+     * @var string
+     */
+    protected $loginPath = '/admin/login'; // 
+    protected $redirectTo = '/admin/candidatos';
+    protected $activationService;
+    
+    public function __construct(ActivationService $activationService) {
+        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+        $this->activationService = $activationService;
+    }
+    
     public function getLogin() {
         $data = array(
             'msg' => null
         );
         return view('admin/login', $data);
     }
-    public function getLogout(){
-        
-        $data = array(
-            'msg' => "Se ha cerrado la sesión exitosamente"
-        );
-        
+    
+    public function getLogout() {
+        //$this->auth->logout();
+        auth()->logout();
+        Session::flush();
         return view('admin/login', $data);
     }
+    
     public function postLogin(Request $request) {
         $input = Input::all();
         $msg = null;
@@ -45,17 +66,16 @@ class AdminController extends Controller {
         
         $redirect_to='admin/login';
 
-        $ldap_data = AdminController::ldapSearch($input['email'], $input['password']);
+        $ldap_data = AdminController::ldapSearch($input['username'], $input['password']);
         
         if ($ldap_data) {
-            $admin_user=User::where('email','=',$input['email'])
-                    ->where('isadmin','=',1)
-                    ->where('id','<>',0)                           //La primera entrada vacia de la base de datos es un comodin
-                    ->get()
-                    ->keyBy('id');
+            
+            $admin_user=User::where('email','=',$input['username']."@unal.edu.co")
+                    ->where('isadmin','=',1)->first();
+            
             if($admin_user){
-                //Guardamos nuestra sesión
-                //$request->session->put('admin_session',$admin_user);
+                //Buscamos y autenticamos al usuario (de la tabla 'user')    
+                auth()->loginUsingId($admin_user->id);
                 return $this->showCandidates();
             }else{
                 $msg="Actualmente usted no cuenta con permisos de consulta sobre este módulo.";
@@ -73,7 +93,7 @@ class AdminController extends Controller {
     public function showCandidates(){
         $aspirantes = Aspirante::where('id','<>',0)->get()->keyBy('id');
         $perfiles = Perfil::all();
-		$aspirantes_perfiles = AspirantePerfil::all()->toJson();
+	$aspirantes_perfiles = AspirantePerfil::all()->toJson();
         $tipos_documento = TipoDocumento::all()->keyBy('id');
         
         $msg=null;

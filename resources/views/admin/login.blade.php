@@ -20,9 +20,9 @@
             <form name="login" id="login" method="post" action="{{ env('APP_URL') }}admin/login" class="form-horizontal" style="margin:20px 0">     
                 {!! csrf_field() !!}
                 <div class="form-group"> 
-                    <label for="email" class="control-label col-sm-5">Usuario de correo electrónico institucional ('sin @unal.edu.co')</label>
+                    <label for="usernames" class="control-label col-sm-5">Usuario de correo electrónico institucional ('sin @unal.edu.co')</label>
                     <div class="col-sm-12 col-md-7">
-                        <input type="text" name="email" id="email" class="form-control" placeholder="micorreo">    
+                        <input type="text" name="username" id="username" class="form-control" placeholder="micorreo">    
                     </div>
                 </div>
 
