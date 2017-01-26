@@ -56,7 +56,6 @@ class AdminController extends Controller {
 	}
 	
 	public function excel(){
-		Debugbar::info("Intentamos descargar Excel");
 		// Ejecutar la consulta para obtener los datos de los aspirantes.
 		// Se deben realizar los siguientes joins:
 		// -- con la tabla tipos_documento para obtener el nombre del documento (Cédula de ciudadanía, etc)
