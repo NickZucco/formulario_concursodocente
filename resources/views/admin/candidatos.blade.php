@@ -22,9 +22,16 @@
                 <button type="submit" class="btn btn-info">
                     Exportar a Excel
                 </button>
-                <div class="col-md-0  toppad  pull-right col-md-offset-3 ">
-                    <a href="/admin/logout" class="btn btn-danger"><span class="glyphicon glyphicon-log-out"></span> Cerrar sesión</a>
-                </div>
+                
+            </form>
+        </div>
+		<div class="col-md-3">
+            <form method="get" action="{{ env('APP_URL') }}auth/logout">     
+                {!! csrf_field() !!}
+                <button type="submit" class="btn btn-danger">
+                    Cerrar sesión
+                </button>
+                
             </form>
         </div>
     </div>

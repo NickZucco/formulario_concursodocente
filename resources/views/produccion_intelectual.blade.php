@@ -282,7 +282,7 @@
                     <div class="row">
                         <label for="adjunto" class="col-sm-12 col-md-2 control-label">Documento de soporte: </label>
                         <div class="col-sm-12 col-md-9">
-                            <input id="adjunto" type="file" class="form-control" name="adjunto" required />
+                            <input id="adjunto" type="file" class="form-control" name="adjunto" required/>
                             <br><em>Por favor, tenga en cuenta que el archivo adjunto debe estar en formato PDF y no tener un tamaño superior a 10MB</em>
                         </div>
                     </div>
@@ -370,6 +370,7 @@
             $("#" + id).find("input,select,textarea").removeAttr("disabled");
             $("#" + id).find("input,select,textarea").attr("required","required");
             $("#" + id).find("input,select,textarea").removeAttr("readonly");
+			$("#adjunto").attr("required", "required");
             $("#tipo_produccion_lbl").text($("#tipos_publicacion option:selected").text());
 			switch(id) {
 				case '1':

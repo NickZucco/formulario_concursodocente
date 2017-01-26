@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests;
 
-use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-use App\ActivationService as ActivationService;
-
 use App\User as User;
 use App\Aspirante as Aspirante;
 use App\Perfil as Perfil;
@@ -27,73 +23,10 @@ use JasperPHP\JasperPHP;
 
 class AdminController extends Controller {
 
-    use AuthenticatesAndRegistersUsers,
-    ThrottlesLogins;
-
-    /**
-     * Where to redirect users after login / registration.
-     *
-     * @var string
-     */
-    protected $loginPath = 'admin/login'; // 
-    protected $redirectTo = 'admin/candidatos';
-    protected $activationService;
-    
-    public function __construct(ActivationService $activationService) {
-        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
-        $this->activationService = $activationService;
-    }
-    
-    public function getLogin() {
-        $data = array(
-            'msg' => null
-        );
-        return view('admin/login', $data);
-    }
-    
-    public function getLogout() {
-        //$this->auth->logout();
-        auth()->logout();
-        Session::flush();
-        return view('admin/login', $data);
-    }
-    
-    public function postLogin(Request $request) {
-        $input = Input::all();
-        $msg = null;
-        $ldap_data = null;
-        $admin_user=null;
-        
-        $redirect_to='admin/login';
-
-        $ldap_data = AdminController::ldapSearch($input['username'], $input['password']);
-        
-        if ($ldap_data) {
-            
-            $admin_user=User::where('email','=',$input['username']."@unal.edu.co")
-                    ->where('isadmin','=',1)->first();
-            
-            if($admin_user){
-                //Buscamos y autenticamos al usuario (de la tabla 'user')    
-                auth()->loginUsingId($admin_user->id);
-                return $this->showCandidates();
-            }else{
-                $msg="Actualmente usted no cuenta con permisos de consulta sobre este módulo.";
-            }
-        }else{
-            $msg="No se encontró el usuario/password en el sistema de autenticación institucional.";
-        }
-        $data = array(
-            'msg' => $msg,
-            'user_info'=>$admin_user,
-        );
-        return view($redirect_to,$data);
-    }
-
     public function showCandidates(){
         $aspirantes = Aspirante::where('id','<>',0)->get()->keyBy('id');
         $perfiles = Perfil::all();
-	$aspirantes_perfiles = AspirantePerfil::all()->toJson();
+		$aspirantes_perfiles = AspirantePerfil::all()->toJson();
         $tipos_documento = TipoDocumento::all()->keyBy('id');
         
         $msg=null;
@@ -104,7 +37,7 @@ class AdminController extends Controller {
 			'aspirantes_perfiles'=>$aspirantes_perfiles,
             'tipos_documento'=>$tipos_documento,
         );
-        return view('admin/candidatos',$data);
+        return view('admin/candidatos', $data);
     }
 	
 	public function getAttachments(){
@@ -123,6 +56,7 @@ class AdminController extends Controller {
 	}
 	
 	public function excel(){
+		Debugbar::info("Intentamos descargar Excel");
 		// Ejecutar la consulta para obtener los datos de los aspirantes.
 		// Se deben realizar los siguientes joins:
 		// -- con la tabla tipos_documento para obtener el nombre del documento (Cédula de ciudadanía, etc)

@@ -59,6 +59,13 @@ use AuthenticatesAndRegistersUsers,
                     'g-recaptcha-response' => 'required',
         ]);
     }
+	
+	protected function authenticated($request, $user) {
+		if($user->isadmin) {
+			return redirect('admin/candidatos');
+		}
+		return redirect('datos');
+	}
 
     /**
      * Create a new user instance after a valid registration.

@@ -169,7 +169,6 @@ return [
 		//Zipper
 		'Chumper\Zipper\ZipperServiceProvider',
 		'Maatwebsite\Excel\ExcelServiceProvider',
-
     ],
 
     /*

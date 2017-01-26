@@ -140,17 +140,4 @@ class AspiranteController extends Controller {
         }
     }
 
-    public function show_close_form() {
-        $msg=null; 
-        
-        $data = array(
-            'msg' => $msg
-        );
-        return view('cerrar_formulario', $data);
-    }
-
-    public function close_form() {
-       
-    }
-
 }
