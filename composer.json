@@ -12,7 +12,8 @@
         "greggilbert/recaptcha": "dev-master",
         "copam/phpjasper": "^1.0",
         "chumper/zipper": "0.6.x",
-		"maatwebsite/excel": "~2.1.0"
+		"maatwebsite/excel": "~2.1.0",
+        "barryvdh/laravel-dompdf": "^0.7.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

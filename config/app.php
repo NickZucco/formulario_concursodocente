@@ -168,7 +168,9 @@ return [
 		
 		//Zipper
 		'Chumper\Zipper\ZipperServiceProvider',
+		
 		'Maatwebsite\Excel\ExcelServiceProvider',
+		Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -223,6 +225,7 @@ return [
 		
 		'Zipper' => 'Chumper\Zipper\Zipper',
 		'Excel' => 'Maatwebsite\Excel\Facades\Excel',
+		'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

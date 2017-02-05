@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests;
 use Auth;
 use DB;
-use App\ExperienciaDocente as ExperienciaDocente;
 use App\Pais as Pais;
 use App\ExperienciaInvestigativa as ExperienciaInvestigativa;
 
@@ -29,6 +28,7 @@ class ExperienciaInvestigativaController extends Controller {
 		$count['perfiles'] = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->count();
 		$count['ensayos'] = 0;
 		
+		//Contamos cuantos ensayos han sido subidos
 		$ensayos = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->get();
 		foreach($ensayos as $ensayo) {
 			if (!$ensayo->ruta_ensayo==null) $count['ensayos'] += 1;

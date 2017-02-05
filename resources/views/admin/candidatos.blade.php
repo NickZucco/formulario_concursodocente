@@ -16,7 +16,7 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <form method="get" action="{{ env('APP_URL') }}admin/candidatos/excel">     
                 {!! csrf_field() !!}
                 <button type="submit" class="btn btn-info">
@@ -44,37 +44,43 @@
     <table id="candidates" class="datatable table table-striped">
         <thead>
             <tr>
-                <th>Documento de identidad</th>
-                <th>Nombres y apellidos</th>
-                <th>Correo</th>
-                <th>Fecha de registro</th>
-                <th>Fecha de última actualización</th>
-                <th>Hoja de vida</th>
-                <th>Adjuntos</th>
+				<th style="text-align: center">Número</th>
+                <th style="text-align: center">Documento de identidad</th>
+                <th style="text-align: center">Nombres y apellidos</th>
+                <th style="text-align: center">Correo</th>
+                <th style="text-align: center">Fecha de registro</th>
+                <th style="text-align: center">Fecha de última actualización</th>
+                <th style="text-align: center">Hoja de vida</th>
+                <th style="text-align: center">Adjuntos</th>
             </tr>
         </thead>
         <tbody>
             <tr id="not_selected_profile">
                 <td colspan="8"> No se ha seleccionado ningun perfil todavia. Por favor, seleccione al menos un perfil para mostrar la lista de candidatos inscritos.</td>
             </tr>
+			<?php $numero_candidatos = 1; ?>
             @foreach($aspirantes as $aspirante)
             <tr data-id="{{$aspirante->id}}" class="candidate_row">
-                <td>
+				<td style="text-align: center">
+                    <strong>{{$numero_candidatos}}</strong>
+					<?php $numero_candidatos++; ?>
+                </td>
+                <td style="text-align: center"> 
                     {{$aspirante->documento}}
                 </td>
-                <td>
+                <td style="text-align: center">
                     {{$aspirante->nombre}} {{$aspirante->apellido}}
                 </td>
-                <td>
+                <td style="text-align: center">
                     {{$aspirante->correo}}
                 </td>
-                <td>
+                <td style="text-align: center">
                     {{$aspirante->created_at}}
                 </td>
-                <td>
+                <td style="text-align: center">
                     {{$aspirante->updated_at}}
                 </td>
-                <td>
+                <td style="text-align: center">
                     <form method="get" action="{{ env('APP_URL') }}admin/candidatos/reporte" style="margin:20px 0">     
                         {!! csrf_field() !!}
                         <input type="hidden" name="id" value="{{$aspirante->id}}"/>
@@ -83,7 +89,7 @@
                         </button>
                     </form>
                 </td>
-                <td>
+                <td style="text-align: center">
                     <form method="get" action="{{ env('APP_URL') }}admin/candidatos/adjuntos" style="margin:20px 0">     
                         {!! csrf_field() !!}
                         <input type="hidden" name="id" value="{{$aspirante->id}}"/>
