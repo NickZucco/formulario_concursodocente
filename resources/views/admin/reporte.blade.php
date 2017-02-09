@@ -395,7 +395,6 @@
 						@endif
 					</tr>
 				</table>
-				<br>
 				<hr>
 				<!-- Aumentamos el número de experiencias en 1 y verificamos si ya se han colocado
 					 4 experiencias en la hoja de vida y si aún quedan más experiencias pendientes
