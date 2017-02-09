@@ -16,16 +16,24 @@
 			h1 {
 				text-align: center;
 				padding-bottom: -10px;
+				padding-top: 20px;
+				font-size: 30px;
 			}
 			p {
 				text-align: center;
 				padding-bottom: -15px;
+				font-size: 14px;
 			}
 			#datos_encabezado{
 				padding-top: 30px;
+				padding-bottom: 30px;
+				font-size: 24px;
+			}
+			#datos_encabezado2{
+				font-size: 24px;
 			}
 			.tabla_datos{
-				font-size: 15px;
+				font-size: 11px;
 				width: 100%;
 				border-collapse: collapse;
 				border: 1px solid;
@@ -41,6 +49,29 @@
 		<h1>HOJA DE VIDA DE ASPIRANTE</h1>
 		<p>Universidad Nacional de Colombia - Sede Bogotá<p>
 		<p>Facultad de Ingeniería - Concurso Docente 2017<p>
+		
+		<!-- Sección de perfiles seleccionados, tomados de la variable $perfiles -->
+		<h2 id="datos_encabezado">Perfiles</h2>
+		<hr>
+		<br>
+		<table class="tabla_datos">
+			@foreach ($perfiles as $perfil)
+			<tr>
+				<td>
+					<strong>Perfil</strong>
+				</td>
+				<td>
+					{{$perfil->identificador}}
+				</td>
+				<td>
+					<strong>Área de desempeño</strong>
+				</td>
+				<td>
+					{{$perfil->area}}
+				</td>
+			</tr>
+			@endforeach
+		</table>
 		
 		<!-- Sección de datos personales, tomados de la variable $aspirante -->
 		<h2 id="datos_encabezado">Datos Personales</h2>
@@ -151,29 +182,6 @@
 			</tr>
 		</table>
 		
-		<!-- Sección de perfiles seleccionados, tomados de la variable $perfiles -->
-		<h2 id="datos_encabezado">Perfiles</h2>
-		<hr>
-		<br>
-		<table class="tabla_datos">
-			@foreach ($perfiles as $perfil)
-			<tr>
-				<td>
-					<strong>Perfil</strong>
-				</td>
-				<td>
-					{{$perfil->identificador}}
-				</td>
-				<td>
-					<strong>Área de desempeño</strong>
-				</td>
-				<td>
-					{{$perfil->area}}
-				</td>
-			</tr>
-			@endforeach
-		</table>
-		
 		<!-- Sección de estudios, tomados de la variable $estudios -->
 		<!-- Declaración de una variable para contar el número de estudios y saber cuando
 			 crear una página nueva y otra variable con el número total de estudios -->
@@ -184,7 +192,7 @@
 		@if ($total_estudios > 0)
 			<!-- Nueva página -->
 			<div class="page-break"></div>
-			<h2 id="datos_encabezado">Estudios</h2>
+			<h2 id="datos_encabezado2">Estudios</h2>
 			<hr>
 			<br>
 			@foreach ($estudios as $estudio)
@@ -246,14 +254,14 @@
 				</table>
 				<br>
 				<hr>
-				<br>
 				<!-- Aumentamos el número de estudios en 1 y verificamos si ya se han colocado
-					 3 estudios en la hoja de vida y si aún quedan más estudios pendientes
+					 4 estudios en la hoja de vida y si aún quedan más estudios pendientes
 					 para agregar una página nueva -->
 				<?php $numero_estudios++; ?>
-				@if ($numero_estudios % 3 == 0 && $numero_estudios < $total_estudios )
+				@if ($numero_estudios % 4 == 0 && $numero_estudios < $total_estudios )
 					<!-- Nueva página -->
 					<div class="page-break"></div>
+					<hr>
 				@endif
 			@endforeach
 		@endif
@@ -268,7 +276,7 @@
 		@if ($total_distinciones > 0)
 			<!-- Nueva página -->
 			<div class="page-break"></div>
-			<h2 id="datos_encabezado">Distinciones académicas</h2>
+			<h2 id="datos_encabezado2">Distinciones académicas</h2>
 			<hr>
 			<br>
 			@foreach ($distinciones as $distincion)
@@ -300,14 +308,14 @@
 				</table>
 				<br>
 				<hr>
-				<br>
 				<!-- Aumentamos el número de distinciones en 1 y verificamos si ya se han colocado
-					 4 distinciones en la hoja de vida y si aún quedan más distinciones pendientes
+					 5 distinciones en la hoja de vida y si aún quedan más distinciones pendientes
 					 para agregar una página nueva -->
 				<?php $numero_distinciones++; ?>
-				@if ($numero_distinciones % 4 == 0 && $numero_distinciones < $total_distinciones )
+				@if ($numero_distinciones % 5 == 0 && $numero_distinciones < $total_distinciones )
 					<!-- Nueva página -->
 					<div class="page-break"></div>
+					<hr>
 				@endif
 			@endforeach
 		@endif
@@ -322,9 +330,8 @@
 		@if ($total_experiencias > 0)
 			<!-- Nueva página -->
 			<div class="page-break"></div>
-			<h2 id="datos_encabezado">Experiencia laboral</h2>
+			<h2 id="datos_encabezado2">Experiencia laboral</h2>
 			<hr>
-			<br>
 			@foreach ($experiencia_laboral as $laboral)
 				<table class="tabla_datos">
 					<tr>
@@ -390,17 +397,14 @@
 				</table>
 				<br>
 				<hr>
-				<br>
 				<!-- Aumentamos el número de experiencias en 1 y verificamos si ya se han colocado
-					 2 o 3 experiencias en la hoja de vida y si aún quedan más experiencias pendientes
+					 4 experiencias en la hoja de vida y si aún quedan más experiencias pendientes
 					 para agregar una página nueva -->
 				<?php $numero_experiencias++; ?>
-				@if ($numero_experiencias % 2 == 0 && $numero_experiencias < 3)
+				@if ($numero_experiencias % 4 == 0 && $numero_experiencias < $total_experiencias)
 					<!-- Nueva página -->
 					<div class="page-break"></div>
-				@elseif ($numero_experiencias > 2 && ($numero_experiencias-2) % 3 == 0 && $numero_experiencias < $total_experiencias)
-					<!-- Nueva página -->
-					<div class="page-break"></div>
+					<hr>
 				@endif
 			@endforeach
 		@endif
@@ -415,7 +419,7 @@
 		@if ($total_experiencias > 0)
 			<!-- Nueva página -->
 			<div class="page-break"></div>
-			<h2 id="datos_encabezado">Experiencia docente</h2>
+			<h2 id="datos_encabezado2">Experiencia docente</h2>
 			<hr>
 			<br>
 			@foreach ($experiencia_docente as $docente)
@@ -463,7 +467,7 @@
 							<strong>Fecha de inicio</strong>
 						</td>
 						<td>
-							{{$laboral->fecha_inicio}}
+							{{$docente->fecha_inicio}}
 						</td>
 						@if ($docente->en_curso == 0)
 							<td>
@@ -510,6 +514,7 @@
 				@if ($numero_experiencias < $total_experiencias)
 					<!-- Nueva página -->
 					<div class="page-break"></div>
+					<hr>
 				@endif
 			@endforeach
 		@endif
@@ -524,7 +529,7 @@
 		@if ($total_experiencias > 0)
 			<!-- Nueva página -->
 			<div class="page-break"></div>
-			<h2 id="datos_encabezado">Experiencia investigativa</h2>
+			<h2 id="datos_encabezado2">Experiencia investigativa</h2>
 			<hr>
 			<br>
 			@foreach ($experiencia_investigativa as $investigativa)
@@ -604,14 +609,14 @@
 				</table>
 				<br>
 				<hr>
-				<br>
 				<!-- Aumentamos el número de experiencias en 1 y verificamos si ya se han colocado
-					 2 experiencias en la hoja de vida y si aún quedan más experiencias pendientes
+					 3 experiencias en la hoja de vida y si aún quedan más experiencias pendientes
 					 para agregar una página nueva -->
 				<?php $numero_experiencias++; ?>
-				@if ($numero_experiencias % 2 == 0 && $numero_experiencias < $total_experiencias )
+				@if ($numero_experiencias % 3 == 0 && $numero_experiencias < $total_experiencias )
 					<!-- Nueva página -->
 					<div class="page-break"></div>
+					<hr>
 				@endif
 			@endforeach
 		@endif
@@ -628,7 +633,7 @@
 		@if ($total_producciones > 0)
 			<!-- Nueva página -->
 			<div class="page-break"></div>
-			<h2 id="datos_encabezado">Producción intelectual</h2>
+			<h2 id="datos_encabezado2">Producción intelectual</h2>
 			<hr>
 			<br>
 			@foreach ($produccion_intelectual as $produccion)
@@ -919,27 +924,46 @@
 				<hr>
 				<!-- Aumentamos el número de producciones en 1. Una página tiene espacio para colocar
 					 producciones en alguna de las siguientes distribuciones:
-					 - 3 libros/capitulos de libro
-					 - 2 artículos de revista/patentes
-					 - 2 libros/capitulos de libro y 1 artículos de revista/patentes
+					 - 4 libros/capitulos de libro
+					 - 3 artículos de revista/patentes
+					 - 3 libros/capitulos de libro y 1 artículos de revista/patentes
+					 - 2 artículos de revista/patentes y 2 libros/capitulos
 					 Cuando alguna de esas distribuciones se complete, es necesario crear una nueva página -->
 				<?php $numero_producciones++; ?>
-				@if ($produccion_pagina_articulo_patente == 2 && $numero_producciones < $total_producciones)
+				@if ($produccion_pagina_articulo_patente == 3 && $numero_producciones < $total_producciones)
 					<!-- Nueva página -->
 					<div class="page-break"></div>
-					<?php $produccion_pagina_articulo_patente = 0; ?>
-				@elseif ($produccion_pagina_articulo_patente == 1 && $produccion_pagina_libro_capitulo == 2 
-				&& $numero_producciones < $total_producciones)
-					<!-- Nueva página -->
-					<div class="page-break"></div>
+					<hr>
 					<?php 
 						$produccion_pagina_articulo_patente = 0;
 						$produccion_pagina_libro_capitulo = 0;
 					?>
-				@elseif ($produccion_pagina_libro_capitulo == 3 && $numero_producciones < $total_producciones)
+				@elseif ($produccion_pagina_articulo_patente == 1 && $produccion_pagina_libro_capitulo == 3 
+				&& $numero_producciones < $total_producciones)
 					<!-- Nueva página -->
 					<div class="page-break"></div>
-					<?php $produccion_pagina_libro_capitulo = 0; ?>	
+					<hr>
+					<?php 
+						$produccion_pagina_articulo_patente = 0;
+						$produccion_pagina_libro_capitulo = 0;
+					?>
+				@elseif ($produccion_pagina_libro_capitulo == 4 && $numero_producciones < $total_producciones)
+					<!-- Nueva página -->
+					<div class="page-break"></div>
+					<hr>
+					<?php 
+						$produccion_pagina_articulo_patente = 0;
+						$produccion_pagina_libro_capitulo = 0;
+					?>
+				@elseif ($produccion_pagina_libro_capitulo == 2 && $produccion_pagina_articulo_patente == 2
+				&& $numero_producciones < $total_producciones)
+					<!-- Nueva página -->
+					<div class="page-break"></div>
+					<hr>
+					<?php 
+						$produccion_pagina_articulo_patente = 0;
+						$produccion_pagina_libro_capitulo = 0;
+					?>	
 				@endif
 			@endforeach
 		@endif
@@ -954,7 +978,7 @@
 		@if ($total_idiomas > 0)
 			<!-- Nueva página -->
 			<div class="page-break"></div>
-			<h2 id="datos_encabezado">Idiomas certificados</h2>
+			<h2 id="datos_encabezado2">Idiomas certificados</h2>
 			<hr>
 			<br>
 			@foreach ($idiomas_certificados as $idioma_certificado)
@@ -1008,14 +1032,14 @@
 				</table>
 				<br>
 				<hr>
-				<br>
 				<!-- Aumentamos el número de idiomas en 1 y verificamos si ya se han colocado
-					 5 idiomas en la hoja de vida y si aún quedan más idiomas pendientes
+					 6 idiomas en la hoja de vida y si aún quedan más idiomas pendientes
 					 para agregar una página nueva -->
 				<?php $numero_idiomas++; ?>
-				@if ($numero_idiomas % 5 == 0 && $numero_idiomas < $total_idiomas )
+				@if ($numero_idiomas % 6 == 0 && $numero_idiomas < $total_idiomas )
 					<!-- Nueva página -->
 					<div class="page-break"></div>
+					<hr>
 				@endif
 			@endforeach
 		@endif

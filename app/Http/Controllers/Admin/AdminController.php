@@ -27,7 +27,7 @@ use App\TipoProduccionIntelectual as TipoProduccionIntelectual;
 use App\IdiomaCertificado as IdiomaCertificado;
 use Zipper;
 use Excel;
-use PDF;
+use Dompdf\Dompdf;
 
 use JasperPHP\JasperPHP;
 
@@ -99,8 +99,25 @@ class AdminController extends Controller {
 				'perfiles.identificador as identificador',
 				'perfiles.area_desempeno as area'
 			)->where('aspirantes_id', '=', $id)->get();
+			
+		$nombre_aspirante = $aspirante->nombre . ' ' . $aspirante->apellido;
+		//Generar un string con los perfiles seleccionados separados con una coma
+		$perfiles_string = '';
+		foreach ($perfiles as $perfil) {
+			$perfiles_string = $perfiles_string . $perfil->identificador . ', ';
+		}
+			
+		//Remover la última coma y espacio del string
+		if (strlen($perfiles_string) > 0) {
+			$perfiles_string = substr($perfiles_string, 0, strlen($perfiles_string) - 2);
+		}
 		
-		$estudios = Estudio::join('paises', 'estudios.paises_id', '=', 'paises.id')
+		$pathtofile = public_path() . '/file/' . $id . '/' . $nombre_aspirante . '_HV.pdf';
+		/*if (File::exists($pathtofile)){
+			return response()->download($pathtofile);
+		}
+		else{*/
+			$estudios = Estudio::join('paises', 'estudios.paises_id', '=', 'paises.id')
 			->select(
 				'estudios.titulo as titulo',
 				'estudios.institucion as institucion',
@@ -110,100 +127,110 @@ class AdminController extends Controller {
 				'paises.nombre as pais'
 			)->where('aspirantes_id', '=', $id)->get();
 		
-		$distinciones = Distincion::where('aspirantes_id', '=', $id)->get();
-		
-		$experiencia_laboral = ExperienciaLaboral::join('tipos_vinculacion_laboral', 
-			'experiencias_laboral.tipos_vinculacion_laboral_id', '=', 'tipos_vinculacion_laboral.id')
-			->select(
-				'experiencias_laboral.nombre_cargo as cargo',
-				'tipos_vinculacion_laboral.nombre as tipo_vinculacion',
-				'experiencias_laboral.nombre_institucion as institucion',
-				'experiencias_laboral.funcion_principal as funcion',
-				'experiencias_laboral.fecha_inicio as fecha_inicio',
-				'experiencias_laboral.fecha_finalizacion as fecha_finalizacion',
-				'experiencias_laboral.en_curso as en_curso'
-			)->where('aspirantes_id', '=', $id)
-			->orderBy('experiencias_laboral.fecha_inicio', 'asc')->get();
+			$distinciones = Distincion::where('aspirantes_id', '=', $id)->get();
 			
-		$experiencia_docente = ExperienciaDocente::join('tipos_vinculacion_docente',
-			'experiencias_docente.dedicacion', '=', 'tipos_vinculacion_docente.id')
-			->select(
-				'experiencias_docente.nombre_institucion as institucion',
-				'tipos_vinculacion_docente.nombre as dedicacion',
-				'experiencias_docente.fecha_inicio as fecha_inicio',
-				'experiencias_docente.fecha_finalizacion as fecha_finalizacion',
-				'experiencias_docente.en_curso as en_curso',
-				'experiencias_docente.area_trabajo as area',
-				'experiencias_docente.info_asignaturas as asignaturas'
-			)->where('aspirantes_id', '=', $id)
-			->orderBy('experiencias_docente.fecha_inicio', 'asc')->get();
+			$experiencia_laboral = ExperienciaLaboral::join('tipos_vinculacion_laboral', 
+				'experiencias_laboral.tipos_vinculacion_laboral_id', '=', 'tipos_vinculacion_laboral.id')
+				->select(
+					'experiencias_laboral.nombre_cargo as cargo',
+					'tipos_vinculacion_laboral.nombre as tipo_vinculacion',
+					'experiencias_laboral.nombre_institucion as institucion',
+					'experiencias_laboral.funcion_principal as funcion',
+					'experiencias_laboral.fecha_inicio as fecha_inicio',
+					'experiencias_laboral.fecha_finalizacion as fecha_finalizacion',
+					'experiencias_laboral.en_curso as en_curso'
+				)->where('aspirantes_id', '=', $id)
+				->orderBy('experiencias_laboral.fecha_inicio', 'asc')->get();
+				
+			$experiencia_docente = ExperienciaDocente::join('tipos_vinculacion_docente',
+				'experiencias_docente.dedicacion', '=', 'tipos_vinculacion_docente.id')
+				->select(
+					'experiencias_docente.nombre_institucion as institucion',
+					'tipos_vinculacion_docente.nombre as dedicacion',
+					'experiencias_docente.fecha_inicio as fecha_inicio',
+					'experiencias_docente.fecha_finalizacion as fecha_finalizacion',
+					'experiencias_docente.en_curso as en_curso',
+					'experiencias_docente.area_trabajo as area',
+					'experiencias_docente.info_asignaturas as asignaturas'
+				)->where('aspirantes_id', '=', $id)
+				->orderBy('experiencias_docente.fecha_inicio', 'asc')->get();
+				
+			$experiencia_investigativa = ExperienciaInvestigativa::join('paises', 
+				'experiencias_investigativa.paises_id', '=', 'paises.id')
+				->select(
+					'experiencias_investigativa.nombre_proyecto as proyecto',
+					'experiencias_investigativa.institucion as institucion',
+					'experiencias_investigativa.area_proyecto as area_proyecto',
+					'experiencias_investigativa.funcion_principal as funcion_principal',
+					'experiencias_investigativa.fecha_inicio as fecha_inicio',
+					'experiencias_investigativa.fecha_finalizacion as fecha_finalizacion',
+					'experiencias_investigativa.en_curso as en_curso',
+					'paises.nombre as pais'
+				)->where('aspirantes_id', '=', $id)
+				->orderBy('experiencias_investigativa.fecha_inicio', 'asc')->get();
+				
+			$produccion_intelectual = ProduccionIntelectual::join('paises', 
+				'produccion_intelectual.paises_id', '=', 'paises.id', 'left outer')
+				->join('idiomas', 'produccion_intelectual.idiomas_id', '=', 'idiomas.id')
+				->join('tipos_produccion_intelectual', 'produccion_intelectual.tipos_produccion_intelectual_id',
+					'=', 'tipos_produccion_intelectual.id')
+				->select(
+					'produccion_intelectual.nombre as nombre_produccion',
+					'produccion_intelectual.publicacion_titulo as revista',
+					'produccion_intelectual.publicacion_autor as autor',
+					'produccion_intelectual.paginas as paginas',
+					'produccion_intelectual.año as año',
+					'produccion_intelectual.ISSN as ISSN',
+					'produccion_intelectual.nombre_editorial as editorial',
+					'produccion_intelectual.nombre_libro as nombre_libro',
+					'produccion_intelectual.tipo as tipo_articulo',
+					'produccion_intelectual.volumen as volumen_revista',
+					'produccion_intelectual.clasificacion_revista as clasificacion_revista',
+					'produccion_intelectual.ISBN as ISBN',
+					'produccion_intelectual.descripcion as descripcion_patente',
+					'produccion_intelectual.numero_patente as numero_patente',
+					'produccion_intelectual.tipo_patente as tipo_patente',
+					'produccion_intelectual.entidad_patente as entidad_patente',
+					'paises.nombre as pais',
+					'idiomas.nombre as idioma',
+					'tipos_produccion_intelectual.nombre as tipo_produccion'
+				)->where('aspirantes_id', '=', $id)
+				->orderBy('produccion_intelectual.año', 'asc')->get();
+				
+			$idiomas_certificados=IdiomaCertificado::join('idiomas', 'idiomas_certificado.idiomas_id',
+				'=', 'idiomas.id')
+				->select(
+					'idiomas.nombre as idioma',
+					'idiomas_certificado.nativo as nativo',
+					'idiomas_certificado.nombre_certificado as certificado',
+					'idiomas_certificado.puntaje as puntaje'
+				)
+				->where('aspirantes_id','=',$id)->get();
 			
-		$experiencia_investigativa = ExperienciaInvestigativa::join('paises', 
-			'experiencias_investigativa.paises_id', '=', 'paises.id')
-			->select(
-				'experiencias_investigativa.nombre_proyecto as proyecto',
-				'experiencias_investigativa.institucion as institucion',
-				'experiencias_investigativa.area_proyecto as area_proyecto',
-				'experiencias_investigativa.funcion_principal as funcion_principal',
-				'experiencias_investigativa.fecha_inicio as fecha_inicio',
-				'experiencias_investigativa.fecha_finalizacion as fecha_finalizacion',
-				'experiencias_investigativa.en_curso as en_curso',
-				'paises.nombre as pais'
-			)->where('aspirantes_id', '=', $id)
-			->orderBy('experiencias_investigativa.fecha_inicio', 'asc')->get();
+			$data = array(
+				'aspirante' => $aspirante,
+				'perfiles' => $perfiles,
+				'estudios' => $estudios,
+				'distinciones' => $distinciones,
+				'experiencia_laboral' => $experiencia_laboral,
+				'experiencia_docente' => $experiencia_docente,
+				'experiencia_investigativa' => $experiencia_investigativa,
+				'produccion_intelectual' => $produccion_intelectual,
+				'idiomas_certificados' => $idiomas_certificados
+			);
 			
-		$produccion_intelectual = ProduccionIntelectual::join('paises', 
-			'produccion_intelectual.paises_id', '=', 'paises.id', 'left outer')
-			->join('idiomas', 'produccion_intelectual.idiomas_id', '=', 'idiomas.id')
-			->join('tipos_produccion_intelectual', 'produccion_intelectual.tipos_produccion_intelectual_id',
-				'=', 'tipos_produccion_intelectual.id')
-			->select(
-				'produccion_intelectual.nombre as nombre_produccion',
-				'produccion_intelectual.publicacion_titulo as revista',
-				'produccion_intelectual.publicacion_autor as autor',
-				'produccion_intelectual.paginas as paginas',
-				'produccion_intelectual.año as año',
-				'produccion_intelectual.ISSN as ISSN',
-				'produccion_intelectual.nombre_editorial as editorial',
-				'produccion_intelectual.nombre_libro as nombre_libro',
-				'produccion_intelectual.tipo as tipo_articulo',
-				'produccion_intelectual.volumen as volumen_revista',
-				'produccion_intelectual.clasificacion_revista as clasificacion_revista',
-				'produccion_intelectual.ISBN as ISBN',
-				'produccion_intelectual.descripcion as descripcion_patente',
-				'produccion_intelectual.numero_patente as numero_patente',
-				'produccion_intelectual.tipo_patente as tipo_patente',
-				'produccion_intelectual.entidad_patente as entidad_patente',
-				'paises.nombre as pais',
-				'idiomas.nombre as idioma',
-				'tipos_produccion_intelectual.nombre as tipo_produccion'
-			)->where('aspirantes_id', '=', $id)
-			->orderBy('produccion_intelectual.año', 'asc')->get();
-			
-		$idiomas_certificados=IdiomaCertificado::join('idiomas', 'idiomas_certificado.idiomas_id',
-			'=', 'idiomas.id')
-			->select(
-				'idiomas.nombre as idioma',
-				'idiomas_certificado.nativo as nativo',
-				'idiomas_certificado.nombre_certificado as certificado',
-				'idiomas_certificado.puntaje as puntaje'
-			)
-			->where('aspirantes_id','=',$id)->get();
-		
-		$data = array(
-			'aspirante' => $aspirante,
-			'perfiles' => $perfiles,
-			'estudios' => $estudios,
-			'distinciones' => $distinciones,
-			'experiencia_laboral' => $experiencia_laboral,
-			'experiencia_docente' => $experiencia_docente,
-			'experiencia_investigativa' => $experiencia_investigativa,
-			'produccion_intelectual' => $produccion_intelectual,
-			'idiomas_certificados' => $idiomas_certificados
-		);
-		$pdf = \App::make('dompdf.wrapper');
-		$pdf->loadView('admin/reporte', $data);
-		return $pdf->download('test.pdf');
+			$pdf = \App::make('dompdf.wrapper');
+			$pdf->loadView('admin/reporte', $data);
+			$pdf->output();
+			$dom_pdf = $pdf->getDomPDF();
+			$canvas = $dom_pdf ->get_canvas();
+			$canvas->page_text(15, 15, 'Página {PAGE_NUM} de {PAGE_COUNT} - ' . $nombre_aspirante . ' - ' 
+								. $perfiles_string, null, 8, array(0, 0, 0));
+			$pdf->save($pathtofile);
+			return response()->download($pathtofile);
+		/*
+		}
+		*/
 	}
 	
 	public function excel(){
