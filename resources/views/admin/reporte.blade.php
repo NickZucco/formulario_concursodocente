@@ -16,17 +16,15 @@
 			h1 {
 				text-align: center;
 				padding-bottom: -10px;
-				padding-top: 20px;
-				font-size: 30px;
+				padding-top: 10px;
 			}
 			p {
 				text-align: center;
 				padding-bottom: -15px;
-				font-size: 14px;
 			}
 			#datos_encabezado{
-				padding-top: 30px;
-				padding-bottom: 30px;
+				padding-top: 15px;
+				padding-bottom: 15px;
 				font-size: 24px;
 			}
 			#datos_encabezado2{
@@ -34,6 +32,12 @@
 			}
 			.tabla_datos{
 				font-size: 11px;
+				width: 100%;
+				border-collapse: collapse;
+				border: 1px solid;
+			}
+			.tabla_datos_personales{
+				font-size: 12px;
 				width: 100%;
 				border-collapse: collapse;
 				border: 1px solid;
@@ -54,7 +58,7 @@
 		<h2 id="datos_encabezado">Perfiles</h2>
 		<hr>
 		<br>
-		<table class="tabla_datos">
+		<table class="tabla_datos_personales">
 			@foreach ($perfiles as $perfil)
 			<tr>
 				<td>
@@ -72,12 +76,13 @@
 			</tr>
 			@endforeach
 		</table>
+		<br>
 		
 		<!-- Sección de datos personales, tomados de la variable $aspirante -->
 		<h2 id="datos_encabezado">Datos Personales</h2>
 		<hr>
 		<br>
-		<table class="tabla_datos">
+		<table class="tabla_datos_personales">
 			<tr>
 				<td>
 					<strong>Apellidos</strong>
