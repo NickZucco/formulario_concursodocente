@@ -98,7 +98,7 @@
 				</td>
 			</tr>
 		</table>
-		<table class="tabla_datos">
+		<table class="tabla_datos_personales">
 			<tr>
 				<td>
 					<strong>Correo electrónico</strong>
@@ -108,7 +108,7 @@
 				</td>
 			</tr>
 		</table>
-		<table class="tabla_datos">
+		<table class="tabla_datos_personales">
 			<tr>
 				<td>
 					<strong>Tipo de documento</strong>
@@ -170,7 +170,7 @@
 				</td>
 			</tr>
 		</table>
-		<table class="tabla_datos">
+		<table class="tabla_datos_personales">
 			<tr>
 				<td>
 					<strong>Teléfono fijo</strong>
@@ -193,6 +193,7 @@
 		<?php 
 			$numero_estudios = 0; 
 			$total_estudios = count($estudios);
+			$sobrantes = $total_estudios % 4;
 		?>
 		@if ($total_estudios > 0)
 			<!-- Nueva página -->
@@ -263,10 +264,16 @@
 					 4 estudios en la hoja de vida y si aún quedan más estudios pendientes
 					 para agregar una página nueva -->
 				<?php $numero_estudios++; ?>
-				@if ($numero_estudios % 4 == 0 && $numero_estudios < $total_estudios )
+				@if ($numero_estudios % 4 == 0 && $numero_estudios < $total_estudios)
 					<!-- Nueva página -->
 					<div class="page-break"></div>
 					<hr>
+				@elseif ($numero_estudios == $total_estudios)
+					@if ($sobrantes == 0)
+						<!-- Nueva página para las distinciones académicas-->
+						<div class="page-break"></div>
+						<hr>
+					@endif
 				@endif
 			@endforeach
 		@endif
@@ -277,10 +284,26 @@
 		<?php 
 			$numero_distinciones = 0; 
 			$total_distinciones = count($distinciones);
+			$estudios_sobrantes = $sobrantes;
 		?>
+		@if ($estudios_sobrantes == 1)
+			<?php 
+				$numero_distinciones = 1; 
+				$total_distinciones = $total_distinciones + 1;
+			?>
+		@elseif ($estudios_sobrantes == 2)
+			<?php 
+				$numero_distinciones = 2; 
+				$total_distinciones = $total_distinciones + 2;
+			?>
+		@elseif ($estudios_sobrantes == 3)
+			<?php 
+				$numero_distinciones = 4; 
+				$total_distinciones = $total_distinciones + 4;
+			?>
+		@endif
+		<?php $sobrantes = $total_distinciones % 5; ?>
 		@if ($total_distinciones > 0)
-			<!-- Nueva página -->
-			<div class="page-break"></div>
 			<h2 id="datos_encabezado2">Distinciones académicas</h2>
 			<hr>
 			<br>
@@ -321,6 +344,13 @@
 					<!-- Nueva página -->
 					<div class="page-break"></div>
 					<hr>
+					<br>
+				@elseif ($numero_distinciones == $total_distinciones)
+					@if ($sobrantes == 0)
+						<!-- Nueva página para las experiencias laborales-->
+						<div class="page-break"></div>
+						<hr>
+					@endif
 				@endif
 			@endforeach
 		@endif
@@ -331,10 +361,31 @@
 		<?php 
 			$numero_experiencias = 0; 
 			$total_experiencias = count($experiencia_laboral);
+			$distinciones_sobrantes = $sobrantes;
 		?>
+		@if ($distinciones_sobrantes == 1)
+			<?php 
+				$numero_experiencias = 1; 
+				$total_experiencias = $total_experiencias + 1;
+			?>
+		@elseif ($distinciones_sobrantes == 2)
+			<?php 
+				$numero_experiencias = 2; 
+				$total_experiencias = $total_experiencias + 2;
+			?>
+		@elseif ($distinciones_sobrantes == 3)
+			<?php 
+				$numero_experiencias = 3; 
+				$total_experiencias = $total_experiencias + 3;
+			?>
+		@elseif ($distinciones_sobrantes == 4)
+			<?php 
+				$numero_experiencias = 3; 
+				$total_experiencias = $total_experiencias + 3;
+			?>
+		@endif
+		<?php $sobrantes = $total_experiencias % 4; ?>
 		@if ($total_experiencias > 0)
-			<!-- Nueva página -->
-			<div class="page-break"></div>
 			<h2 id="datos_encabezado2">Experiencia laboral</h2>
 			<hr>
 			@foreach ($experiencia_laboral as $laboral)
@@ -390,14 +441,16 @@
 						<td>
 							{{$laboral->fecha_inicio}}
 						</td>
-						@if ($laboral->en_curso == 0)
-							<td>
-								<strong>Fecha de finalización</strong>
-							</td>
-							<td>
+						<td>
+							<strong>Fecha de finalización</strong>
+						</td>
+						<td>
+							@if ($laboral->en_curso == 1)
+								N/A
+							@else
 								{{$laboral->fecha_finalizacion}}
-							</td>
-						@endif
+							@endif
+						</td>
 					</tr>
 				</table>
 				<hr>
@@ -409,116 +462,12 @@
 					<!-- Nueva página -->
 					<div class="page-break"></div>
 					<hr>
-				@endif
-			@endforeach
-		@endif
-		
-		<!-- Sección de experiencia docente, tomadas de la variable $experiencia_docente -->
-		<!-- Declaración de una variable para contar el número de experiencias y saber cuando
-			 crear una página nueva y otra variable con el número total de experiencias -->
-		<?php 
-			$numero_experiencias = 0; 
-			$total_experiencias = count($experiencia_docente);
-		?>
-		@if ($total_experiencias > 0)
-			<!-- Nueva página -->
-			<div class="page-break"></div>
-			<h2 id="datos_encabezado2">Experiencia docente</h2>
-			<hr>
-			<br>
-			@foreach ($experiencia_docente as $docente)
-				<table class="tabla_datos">
-					<tr>
-						<td>
-							<strong>Nombre de la institución</strong>
-						</td>
-						<td>
-							{{$docente->institucion}}
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<strong>Dedicación</strong>
-						</td>
-						<td>
-							{{$docente->dedicacion}}
-						</td>
-					</tr>
-					@if (!$docente->area==null)
-					<tr>
-						<td>
-							<strong>Áreas de trabajo</strong>
-						</td>
-						<td>
-							{{$docente->area}}
-						</td>
-					</tr>
+				@elseif ($numero_experiencias == $total_experiencias)
+					@if ($sobrantes == 0 || $sobrantes == 3)
+						<!-- Nueva página para las experiencias investigativas-->
+						<div class="page-break"></div>
+						<hr>
 					@endif
-				</table>
-				<table class="tabla_datos">
-					<tr>
-						<td>
-							<strong>¿En curso?</strong>
-						</td>
-						<td>
-							@if ($docente->en_curso == 1)
-								Sí
-							@else
-								No
-							@endif
-						</td>
-						<td>
-							<strong>Fecha de inicio</strong>
-						</td>
-						<td>
-							{{$docente->fecha_inicio}}
-						</td>
-						@if ($docente->en_curso == 0)
-							<td>
-								<strong>Fecha de finalización</strong>
-							</td>
-							<td>
-								{{$docente->fecha_finalizacion}}
-							</td>
-						@endif
-					</tr>
-				</table>
-				<!-- La información de las asignaturas impartidas se almacena en la base de datos en formato
-					 JSON, por lo tanto es necesario primero pasarlo a un array asociativo para manipular
-					 los datos -->
-				<?php $asignaturas = json_decode($docente->asignaturas, true); ?>
-				<!-- En base al array $asignaturas se construye una tabla de asignaturas impartidas -->
-				<table class="tabla_datos">
-					<tr>
-						<td>
-							<strong>Asignatura</strong>
-						</td>
-						<td>
-							<strong>Intensidad (horas/semana)</strong>
-						</td>
-					</tr>
-					@foreach($asignaturas as $asignatura)
-						<tr>
-							<td>
-								{{$asignatura["nombre"]}}
-							</td>
-							<td>
-								{{$asignatura["intensidad"]}}
-							</td>
-						</tr>
-					@endforeach
-				</table>
-				<br>
-				<hr>
-				<!-- Dada la variabilidad en la longitud de la información que puede ser agregada como
-					 experiencia docente, se decide que cada experiencia ocupará una página completa.
-					 El campo "áreas de trabajo" puede contener mucho texto, así como también el docente
-					 pudo haber estado a cargo de 3 o más asignaturas durante su vinculación -->
-				<?php $numero_experiencias++; ?>
-				@if ($numero_experiencias < $total_experiencias)
-					<!-- Nueva página -->
-					<div class="page-break"></div>
-					<hr>
 				@endif
 			@endforeach
 		@endif
@@ -529,10 +478,21 @@
 		<?php 
 			$numero_experiencias = 0; 
 			$total_experiencias = count($experiencia_investigativa);
+			$laborales_sobrantes = $sobrantes;
 		?>
+		@if ($laborales_sobrantes == 1)
+			<?php 
+				$numero_experiencias = 1; 
+				$total_experiencias = $total_experiencias + 1;
+			?>
+		@elseif ($laborales_sobrantes == 2)
+			<?php 
+				$numero_experiencias = 2; 
+				$total_experiencias = $total_experiencias + 2;
+			?>
+		@endif
+		<?php $sobrantes = $total_experiencias % 3; ?>
 		@if ($total_experiencias > 0)
-			<!-- Nueva página -->
-			<div class="page-break"></div>
 			<h2 id="datos_encabezado2">Experiencia investigativa</h2>
 			<hr>
 			<br>
@@ -611,7 +571,6 @@
 						@endif
 					</tr>
 				</table>
-				<br>
 				<hr>
 				<!-- Aumentamos el número de experiencias en 1 y verificamos si ya se han colocado
 					 3 experiencias en la hoja de vida y si aún quedan más experiencias pendientes
@@ -621,6 +580,12 @@
 					<!-- Nueva página -->
 					<div class="page-break"></div>
 					<hr>
+				@elseif ($numero_experiencias == $total_experiencias)
+					@if ($sobrantes == 0)
+						<!-- Nueva página para las experiencias investigativas-->
+						<div class="page-break"></div>
+						<hr>
+					@endif
 				@endif
 			@endforeach
 		@endif
@@ -633,13 +598,23 @@
 			$produccion_pagina_libro_capitulo = 0;
 			$produccion_pagina_articulo_patente = 0;
 			$total_producciones = count($produccion_intelectual);
+			$investigativa_sobrantes = $sobrantes;
 		?>
+		@if ($investigativa_sobrantes == 1)
+			<?php 
+				$produccion_pagina_articulo_patente = 1; 
+				$total_experiencias = $total_experiencias + 1;
+			?>
+		@elseif ($investigativa_sobrantes == 2)
+			<?php 
+				$produccion_pagina_articulo_patente = 2;
+				$total_experiencias = $total_experiencias + 2;
+			?>
+		@endif
+		<?php $sobrantes = $total_producciones % 3; ?>
 		@if ($total_producciones > 0)
-			<!-- Nueva página -->
-			<div class="page-break"></div>
 			<h2 id="datos_encabezado2">Producción intelectual</h2>
 			<hr>
-			<br>
 			@foreach ($produccion_intelectual as $produccion)
 				<table class="tabla_datos">
 					<tr>
@@ -924,14 +899,13 @@
 					</table>
 					<?php $produccion_pagina_articulo_patente++; ?>
 				@endif
-				<br>
 				<hr>
 				<!-- Aumentamos el número de producciones en 1. Una página tiene espacio para colocar
 					 producciones en alguna de las siguientes distribuciones:
-					 - 4 libros/capitulos de libro
-					 - 3 artículos de revista/patentes
-					 - 3 libros/capitulos de libro y 1 artículos de revista/patentes
-					 - 2 artículos de revista/patentes y 2 libros/capitulos
+					 - 4 libros/capitulos de libro (6 sobrantes)
+					 - 3 artículos de revista/patentes (6 sobrantes)
+					 - 3 libros/capitulos de libro y 1 artículos de revista/patentes (7 sobrantes)
+					 - 2 artículos de revista/patentes y 2 libros/capitulos (7 sobrantes)
 					 Cuando alguna de esas distribuciones se complete, es necesario crear una nueva página -->
 				<?php $numero_producciones++; ?>
 				@if ($produccion_pagina_articulo_patente == 3 && $numero_producciones < $total_producciones)
@@ -967,7 +941,16 @@
 					<?php 
 						$produccion_pagina_articulo_patente = 0;
 						$produccion_pagina_libro_capitulo = 0;
-					?>	
+					?>
+				@elseif ($numero_producciones == $total_producciones)
+					<?php 
+						$sobrantes = ceil(($produccion_pagina_articulo_patente * 2) + 
+						($produccion_pagina_libro_capitulo * 1.5));
+					?>
+					@if ($sobrantes >= 6)
+						<!-- Nueva página para los certificados de idiomas-->
+						<div class="page-break"></div>
+					@endif
 				@endif
 			@endforeach
 		@endif
@@ -978,10 +961,16 @@
 		<?php 
 			$numero_idiomas = 0;
 			$total_idiomas = count($idiomas_certificados);
+			$producciones_sobrantes = $sobrantes;
 		?>
+		@if ($producciones_sobrantes < 6)
+			<?php 
+				$numero_idiomas = $producciones_sobrantes; 
+				$total_idiomas = $total_idiomas + $producciones_sobrantes;
+			?>
+		@endif
+		<?php $sobrantes = $total_idiomas % 7; ?>
 		@if ($total_idiomas > 0)
-			<!-- Nueva página -->
-			<div class="page-break"></div>
 			<h2 id="datos_encabezado2">Idiomas certificados</h2>
 			<hr>
 			<br>
@@ -1037,14 +1026,114 @@
 				<br>
 				<hr>
 				<!-- Aumentamos el número de idiomas en 1 y verificamos si ya se han colocado
-					 6 idiomas en la hoja de vida y si aún quedan más idiomas pendientes
+					 7 idiomas en la hoja de vida y si aún quedan más idiomas pendientes
 					 para agregar una página nueva -->
 				<?php $numero_idiomas++; ?>
-				@if ($numero_idiomas % 6 == 0 && $numero_idiomas < $total_idiomas )
+				@if ($numero_idiomas % 7 == 0 && $numero_idiomas < $total_idiomas )
 					<!-- Nueva página -->
 					<div class="page-break"></div>
 					<hr>
 				@endif
+			@endforeach
+		@endif
+		
+		<!-- Sección de experiencia docente, tomadas de la variable $experiencia_docente -->
+		<!-- Declaración de una variable para contar el número de experiencias y saber cuando
+			 crear una página nueva y otra variable con el número total de experiencias -->
+		<?php 
+			$numero_experiencias = 0; 
+			$total_experiencias = count($experiencia_docente);
+		?>
+		@if ($total_experiencias > 0)
+			
+			<h2 id="datos_encabezado2">Experiencia docente</h2>
+			<hr>
+			<br>
+			@foreach ($experiencia_docente as $docente)
+				<table class="tabla_datos">
+					<tr>
+						<td>
+							<strong>Nombre de la institución</strong>
+						</td>
+						<td>
+							{{$docente->institucion}}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<strong>Dedicación</strong>
+						</td>
+						<td>
+							{{$docente->dedicacion}}
+						</td>
+					</tr>
+					@if (!$docente->area==null)
+					<tr>
+						<td>
+							<strong>Áreas de trabajo</strong>
+						</td>
+						<td>
+							{{$docente->area}}
+						</td>
+					</tr>
+					@endif
+				</table>
+				<table class="tabla_datos">
+					<tr>
+						<td>
+							<strong>¿En curso?</strong>
+						</td>
+						<td>
+							@if ($docente->en_curso == 1)
+								Sí
+							@else
+								No
+							@endif
+						</td>
+						<td>
+							<strong>Fecha de inicio</strong>
+						</td>
+						<td>
+							{{$docente->fecha_inicio}}
+						</td>
+						@if ($docente->en_curso == 0)
+							<td>
+								<strong>Fecha de finalización</strong>
+							</td>
+							<td>
+								{{$docente->fecha_finalizacion}}
+							</td>
+						@endif
+					</tr>
+				</table>
+				<!-- La información de las asignaturas impartidas se almacena en la base de datos en formato
+					 JSON, por lo tanto es necesario primero pasarlo a un array asociativo para manipular
+					 los datos -->
+				<?php $asignaturas = json_decode($docente->asignaturas, true); ?>
+				<!-- En base al array $asignaturas se construye una tabla de asignaturas impartidas -->
+				<table class="tabla_datos">
+					<tr>
+						<td>
+							<strong>Asignatura</strong>
+						</td>
+						<td>
+							<strong>Intensidad (horas/semana)</strong>
+						</td>
+					</tr>
+					@foreach($asignaturas as $asignatura)
+						<tr>
+							<td>
+								{{$asignatura["nombre"]}}
+							</td>
+							<td>
+								{{$asignatura["intensidad"]}}
+							</td>
+						</tr>
+					@endforeach
+				</table>
+				<br>
+				<hr>
+				
 			@endforeach
 		@endif
 	</body>
