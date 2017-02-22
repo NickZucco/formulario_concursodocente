@@ -370,5 +370,4 @@ class AdminController extends Controller {
         }
         return $retorno;
     }
-
 }

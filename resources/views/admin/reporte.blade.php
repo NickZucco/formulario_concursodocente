@@ -190,12 +190,12 @@
 		<!-- Sección de estudios, tomados de la variable $estudios -->
 		<!-- Declaración de una variable para contar el número de estudios y saber cuando
 			 crear una página nueva y otra variable con el número total de estudios -->
-		<?php 
-			$numero_estudios = 0; 
-			$total_estudios = count($estudios);
-			$sobrantes = $total_estudios % 4;
-		?>
+		<?php $total_estudios = count($estudios); ?>
 		@if ($total_estudios > 0)
+			<?php 
+				$numero_estudios = 0;
+				$sobrantes = $total_estudios % 4;
+			?>
 			<!-- Nueva página -->
 			<div class="page-break"></div>
 			<h2 id="datos_encabezado2">Estudios</h2>
@@ -281,29 +281,29 @@
 		<!-- Sección de distinciones académicas, tomadas de la variable $distinciones -->
 		<!-- Declaración de una variable para contar el número de distinciones y saber cuando
 			 crear una página nueva y otra variable con el número total de distinciones -->
-		<?php 
-			$numero_distinciones = 0; 
-			$total_distinciones = count($distinciones);
-			$estudios_sobrantes = $sobrantes;
-		?>
-		@if ($estudios_sobrantes == 1)
-			<?php 
-				$numero_distinciones = 1; 
-				$total_distinciones = $total_distinciones + 1;
-			?>
-		@elseif ($estudios_sobrantes == 2)
-			<?php 
-				$numero_distinciones = 2; 
-				$total_distinciones = $total_distinciones + 2;
-			?>
-		@elseif ($estudios_sobrantes == 3)
-			<?php 
-				$numero_distinciones = 4; 
-				$total_distinciones = $total_distinciones + 4;
-			?>
-		@endif
-		<?php $sobrantes = $total_distinciones % 5; ?>
+		<?php $total_distinciones = count($distinciones); ?>
 		@if ($total_distinciones > 0)
+			<?php 
+				$numero_distinciones = 0; 
+				$estudios_sobrantes = $sobrantes;
+			?>
+			@if ($estudios_sobrantes == 1)
+				<?php 
+					$numero_distinciones = 1; 
+					$total_distinciones = $total_distinciones + 1;
+				?>
+			@elseif ($estudios_sobrantes == 2)
+				<?php 
+					$numero_distinciones = 2; 
+					$total_distinciones = $total_distinciones + 2;
+				?>
+			@elseif ($estudios_sobrantes == 3)
+				<?php 
+					$numero_distinciones = 4; 
+					$total_distinciones = $total_distinciones + 4;
+				?>
+			@endif
+			<?php $sobrantes = $total_distinciones % 5; ?>
 			<h2 id="datos_encabezado2">Distinciones académicas</h2>
 			<hr>
 			<br>
@@ -358,34 +358,34 @@
 		<!-- Sección de experiencia laboral, tomadas de la variable $experiencia_laboral -->
 		<!-- Declaración de una variable para contar el número de experiencias y saber cuando
 			 crear una página nueva y otra variable con el número total de experiencias -->
-		<?php 
-			$numero_experiencias = 0; 
-			$total_experiencias = count($experiencia_laboral);
-			$distinciones_sobrantes = $sobrantes;
-		?>
-		@if ($distinciones_sobrantes == 1)
-			<?php 
-				$numero_experiencias = 1; 
-				$total_experiencias = $total_experiencias + 1;
-			?>
-		@elseif ($distinciones_sobrantes == 2)
-			<?php 
-				$numero_experiencias = 2; 
-				$total_experiencias = $total_experiencias + 2;
-			?>
-		@elseif ($distinciones_sobrantes == 3)
-			<?php 
-				$numero_experiencias = 3; 
-				$total_experiencias = $total_experiencias + 3;
-			?>
-		@elseif ($distinciones_sobrantes == 4)
-			<?php 
-				$numero_experiencias = 3; 
-				$total_experiencias = $total_experiencias + 3;
-			?>
-		@endif
-		<?php $sobrantes = $total_experiencias % 4; ?>
+		<?php $total_experiencias = count($experiencia_laboral); ?>
 		@if ($total_experiencias > 0)
+			<?php
+				$numero_experiencias = 0;			
+				$distinciones_sobrantes = $sobrantes;
+			?>
+			@if ($distinciones_sobrantes == 1)
+				<?php 
+					$numero_experiencias = 1; 
+					$total_experiencias = $total_experiencias + 1;
+				?>
+			@elseif ($distinciones_sobrantes == 2)
+				<?php 
+					$numero_experiencias = 2; 
+					$total_experiencias = $total_experiencias + 2;
+				?>
+			@elseif ($distinciones_sobrantes == 3)
+				<?php 
+					$numero_experiencias = 3; 
+					$total_experiencias = $total_experiencias + 3;
+				?>
+			@elseif ($distinciones_sobrantes == 4)
+				<?php 
+					$numero_experiencias = 3; 
+					$total_experiencias = $total_experiencias + 3;
+				?>
+			@endif
+			<?php $sobrantes = $total_experiencias % 4; ?>
 			<h2 id="datos_encabezado2">Experiencia laboral</h2>
 			<hr>
 			@foreach ($experiencia_laboral as $laboral)
@@ -475,24 +475,24 @@
 		<!-- Sección de experiencia investigativa, tomadas de la variable $experiencia_investigativa -->
 		<!-- Declaración de una variable para contar el número de experiencias y saber cuando
 			 crear una página nueva y otra variable con el número total de experiencias -->
-		<?php 
-			$numero_experiencias = 0; 
-			$total_experiencias = count($experiencia_investigativa);
-			$laborales_sobrantes = $sobrantes;
-		?>
-		@if ($laborales_sobrantes == 1)
-			<?php 
-				$numero_experiencias = 1; 
-				$total_experiencias = $total_experiencias + 1;
-			?>
-		@elseif ($laborales_sobrantes == 2)
-			<?php 
-				$numero_experiencias = 2; 
-				$total_experiencias = $total_experiencias + 2;
-			?>
-		@endif
-		<?php $sobrantes = $total_experiencias % 3; ?>
+		<?php $total_experiencias = count($experiencia_investigativa); ?>
 		@if ($total_experiencias > 0)
+			<?php
+				$numero_experiencias = 0;			
+				$laborales_sobrantes = $sobrantes;
+			?>
+			@if ($laborales_sobrantes == 1)
+				<?php 
+					$numero_experiencias = 1; 
+					$total_experiencias = $total_experiencias + 1;
+				?>
+			@elseif ($laborales_sobrantes == 2)
+				<?php 
+					$numero_experiencias = 2; 
+					$total_experiencias = $total_experiencias + 2;
+				?>
+			@endif
+			<?php $sobrantes = $total_experiencias % 3; ?>
 			<h2 id="datos_encabezado2">Experiencia investigativa</h2>
 			<hr>
 			<br>
@@ -593,26 +593,26 @@
 		<!-- Sección de producciones intelectual, tomadas de la variable $produccion_intelectual -->
 		<!-- Declaración de una variable para contar el número de producciones y saber cuando
 			 crear una página nueva y otra variable con el número total de producciones -->
-		<?php 
-			$numero_producciones = 0;
-			$produccion_pagina_libro_capitulo = 0;
-			$produccion_pagina_articulo_patente = 0;
-			$total_producciones = count($produccion_intelectual);
-			$investigativa_sobrantes = $sobrantes;
-		?>
-		@if ($investigativa_sobrantes == 1)
-			<?php 
-				$produccion_pagina_articulo_patente = 1; 
-				$total_experiencias = $total_experiencias + 1;
-			?>
-		@elseif ($investigativa_sobrantes == 2)
-			<?php 
-				$produccion_pagina_articulo_patente = 2;
-				$total_experiencias = $total_experiencias + 2;
-			?>
-		@endif
-		<?php $sobrantes = $total_producciones % 3; ?>
+		<?php $total_producciones = count($produccion_intelectual); ?>
 		@if ($total_producciones > 0)
+			<?php
+				$numero_producciones = 0;
+				$produccion_pagina_libro_capitulo = 0;
+				$produccion_pagina_articulo_patente = 0;			
+				$investigativa_sobrantes = $sobrantes;
+			?>
+			@if ($investigativa_sobrantes == 1)
+				<?php 
+					$produccion_pagina_articulo_patente = 1; 
+					$total_experiencias = $total_experiencias + 1;
+				?>
+			@elseif ($investigativa_sobrantes == 2)
+				<?php 
+					$produccion_pagina_articulo_patente = 2;
+					$total_experiencias = $total_experiencias + 2;
+				?>
+			@endif
+			<?php $sobrantes = $total_producciones % 3; ?>
 			<h2 id="datos_encabezado2">Producción intelectual</h2>
 			<hr>
 			@foreach ($produccion_intelectual as $produccion)
@@ -958,19 +958,19 @@
 		<!-- Sección de certificados de idiomas, tomadas de la variable $idiomas_certificados -->
 		<!-- Declaración de una variable para contar el número de certificados y saber cuando
 			 crear una página nueva y otra variable con el número total de certificados -->
-		<?php 
-			$numero_idiomas = 0;
-			$total_idiomas = count($idiomas_certificados);
-			$producciones_sobrantes = $sobrantes;
-		?>
-		@if ($producciones_sobrantes < 6)
-			<?php 
-				$numero_idiomas = $producciones_sobrantes; 
-				$total_idiomas = $total_idiomas + $producciones_sobrantes;
-			?>
-		@endif
-		<?php $sobrantes = $total_idiomas % 7; ?>
+		<?php $total_idiomas = count($idiomas_certificados); ?>
 		@if ($total_idiomas > 0)
+			<?php
+				$numero_idiomas = 0;			
+				$producciones_sobrantes = $sobrantes;
+			?>
+			@if ($producciones_sobrantes < 6)
+				<?php 
+					$numero_idiomas = $producciones_sobrantes; 
+					$total_idiomas = $total_idiomas + $producciones_sobrantes;
+				?>
+			@endif
+			<?php $sobrantes = $total_idiomas % 7; ?>
 			<h2 id="datos_encabezado2">Idiomas certificados</h2>
 			<hr>
 			<br>
@@ -1045,7 +1045,6 @@
 			$total_experiencias = count($experiencia_docente);
 		?>
 		@if ($total_experiencias > 0)
-			
 			<h2 id="datos_encabezado2">Experiencia docente</h2>
 			<hr>
 			<br>
@@ -1133,7 +1132,6 @@
 				</table>
 				<br>
 				<hr>
-				
 			@endforeach
 		@endif
 	</body>
