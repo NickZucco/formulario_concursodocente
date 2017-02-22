@@ -294,8 +294,8 @@
 				?>
 			@elseif ($estudios_sobrantes == 2)
 				<?php 
-					$numero_distinciones = 2; 
-					$total_distinciones = $total_distinciones + 2;
+					$numero_distinciones = 3; 
+					$total_distinciones = $total_distinciones + 3;
 				?>
 			@elseif ($estudios_sobrantes == 3)
 				<?php 
