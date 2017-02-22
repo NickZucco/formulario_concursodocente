@@ -289,8 +289,8 @@
 			?>
 			@if ($estudios_sobrantes == 1)
 				<?php 
-					$numero_distinciones = 1; 
-					$total_distinciones = $total_distinciones + 1;
+					$numero_distinciones = 2; 
+					$total_distinciones = $total_distinciones + 2;
 				?>
 			@elseif ($estudios_sobrantes == 2)
 				<?php 
