@@ -48,8 +48,6 @@
                 <th style="text-align: center">Documento de identidad</th>
                 <th style="text-align: center">Nombres y apellidos</th>
                 <th style="text-align: center">Correo</th>
-                <th style="text-align: center">Fecha de registro</th>
-                <th style="text-align: center">Fecha de última actualización</th>
                 <th style="text-align: center">Hoja de vida</th>
                 <th style="text-align: center">Adjuntos</th>
             </tr>
@@ -73,12 +71,6 @@
                 </td>
                 <td style="text-align: center">
                     {{$aspirante->correo}}
-                </td>
-                <td style="text-align: center">
-                    {{$aspirante->created_at}}
-                </td>
-                <td style="text-align: center">
-                    {{$aspirante->updated_at}}
                 </td>
                 <td style="text-align: center">
                     <form method="get" action="{{ env('APP_URL') }}admin/candidatos/reporte" style="margin:20px 0">     
