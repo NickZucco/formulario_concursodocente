@@ -65,6 +65,7 @@ class AdminController extends Controller {
 		/*
 		}
 		*/
+		Storage::delete($pathtofile);
 	}
 	
 	public function getReport(){
