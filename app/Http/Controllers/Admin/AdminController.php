@@ -61,11 +61,10 @@ class AdminController extends Controller {
 		else{*/
 			$files = public_path() . '/file/' . $id;		
 			Zipper::make($pathtofile)->add($files)->close();
-			return response()->download($pathtofile);
+			return response()->download($pathtofile)->deleteFileAfterSend(true);
 		/*
 		}
 		*/
-		Storage::delete($pathtofile);
 	}
 	
 	public function getReport(){
