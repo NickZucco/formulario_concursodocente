@@ -273,7 +273,8 @@ class AdminController extends Controller {
 				'aspirantes.ciudad_aplicante as ciudad_aplicante',
 				'aspirantes.telefono_fijo as telefono_fijo',
 				'aspirantes.telefono_movil as celular'
-			)->get();
+			)->orderBy('aspirantes.id', 'asc')
+			->get();
 		}
 		//De lo contrario seleccionar solo los aspirantes de los perfiles seleccionados.
 		else {
@@ -299,6 +300,7 @@ class AdminController extends Controller {
 				'aspirantes.telefono_fijo as telefono_fijo',
 				'aspirantes.telefono_movil as celular'
 			)->whereIn('aspirantes_perfiles.perfiles_id', $selected_profiles_array)
+			->orderBy('aspirantes.id', 'asc')
 			->get();
 		}
 		
