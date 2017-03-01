@@ -228,7 +228,7 @@ class AdminController extends Controller {
 			$canvas = $dom_pdf ->get_canvas();
 			$canvas->page_text(15, 15, 'Página {PAGE_NUM} de {PAGE_COUNT} - ' . $nombre_aspirante . ' - ' 
 								. $perfiles_string, null, 8, array(0, 0, 0));
-			$pdf->save($pathtofile);
+			//$pdf->save($pathtofile);
 			return response()->download($pathtofile);
 		/*
 		}
