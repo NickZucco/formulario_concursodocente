@@ -236,13 +236,24 @@ class AdminController extends Controller {
 	}
 	
 	public function excel(){
+		//Recibimos de la vista candidatos.blade.php la lista de los ids con los perfiles seleccionados.
+		$input = Input::all();
+		$selected_profiles = $input['selected_profiles'];
+		
+		//Creamos un array a partir del string separado por comas
+		$selected_profiles_array = explode(',', $selected_profiles);
+		
 		// Ejecutar la consulta para obtener los datos de los aspirantes.
 		// Se deben realizar los siguientes joins:
 		// -- con la tabla tipos_documento para obtener el nombre del documento (Cédula de ciudadanía, etc)
 		// -- con la tabla países con un alias p1 para el país de nacimiento
 		// -- con la tabla países con un alias p2 para el país de residencia
 		// -- con la tabla estados_civil para conocer el nombre del estado civil (Soltero, Casado, etc)
-		$aspirantes = Aspirante::join('tipos_documento', 'aspirantes.tipo_documento_id', '=', 'tipos_documento.id')
+		
+		//Si en la lista de perfiles seleccionados se encuentra el número 0, eso quiere decir que el usuario
+		//seleccionó todos los candidatos
+		if(in_array('0', $selected_profiles_array)){
+			$aspirantes = Aspirante::join('tipos_documento', 'aspirantes.tipo_documento_id', '=', 'tipos_documento.id')
 			->join('paises as p1', 'aspirantes.pais_nacimiento', '=', 'p1.id')
 			->join('paises as p2', 'aspirantes.pais_residencia', '=', 'p2.id')
 			->join('estados_civil', 'aspirantes.estado_civil_id', '=', 'estados_civil.id')
@@ -263,6 +274,33 @@ class AdminController extends Controller {
 				'aspirantes.telefono_fijo as telefono_fijo',
 				'aspirantes.telefono_movil as celular'
 			)->get();
+		}
+		//De lo contrario seleccionar solo los aspirantes de los perfiles seleccionados.
+		else {
+			$aspirantes = Aspirante::join('tipos_documento', 'aspirantes.tipo_documento_id', '=', 'tipos_documento.id')
+			->join('paises as p1', 'aspirantes.pais_nacimiento', '=', 'p1.id')
+			->join('paises as p2', 'aspirantes.pais_residencia', '=', 'p2.id')
+			->join('estados_civil', 'aspirantes.estado_civil_id', '=', 'estados_civil.id')
+			->join('aspirantes_perfiles', 'aspirantes.id', '=', 'aspirantes_perfiles.aspirantes_id')
+			->select(
+				'aspirantes.id as id',
+				'aspirantes.documento as documento',
+				'tipos_documento.nombre as tipo_documento',
+				'aspirantes.ciudad_expedicion_documento as ciudad_documento',
+				'aspirantes.nombre as nombre',
+				'aspirantes.apellido as apellido',
+				'aspirantes.fecha_nacimiento as fecha_nacimiento',
+				'p1.nombre as pais_nacimiento',
+				'p2.nombre as pais_residencia',
+				'aspirantes.direccion_residencia as direccion',
+				'aspirantes.correo as correo',
+				'estados_civil.nombre as estado_civil',
+				'aspirantes.ciudad_aplicante as ciudad_aplicante',
+				'aspirantes.telefono_fijo as telefono_fijo',
+				'aspirantes.telefono_movil as celular'
+			)->whereIn('aspirantes_perfiles.perfiles_id', $selected_profiles_array)
+			->get();
+		}
 		
 		// Inicializar el array que será pasado al Excel generator
 		$aspirantesArray = [];
@@ -274,23 +312,28 @@ class AdminController extends Controller {
 		
 		// Convertir cada miembro de la colección retornada a array,
 		// agregar los perfiles seleccionados y anexarlo al array de aspirantes.
+		// No repetir aspirantes que estén postulados a más de un perfil.
+		$repetido = array();
 		foreach ($aspirantes as $aspirante) {
 			$id = $aspirante['id'];
-			unset($aspirante['id']);
-			$perfiles_seleccionados = Perfil::join('aspirantes_perfiles', 'perfiles_id', '=', 'id')
-                        ->where('aspirantes_id', '=', $id)->get();
-			$aspiranteArray = $aspirante->toArray();
-			$perfiles_string = '';
-			foreach ($perfiles_seleccionados as $perfil) {
-				$perfiles_string = $perfiles_string . $perfil->identificador . ', ';
+			if(!in_array($id, $repetido)) {
+				array_push($repetido, $id);
+				unset($aspirante['id']);
+				$perfiles_seleccionados = Perfil::join('aspirantes_perfiles', 'perfiles_id', '=', 'id')
+							->where('aspirantes_id', '=', $id)->get();
+				$aspiranteArray = $aspirante->toArray();
+				$perfiles_string = '';
+				foreach ($perfiles_seleccionados as $perfil) {
+					$perfiles_string = $perfiles_string . $perfil->identificador . ', ';
+				}
+				
+				//Remover la última coma y espacio del string
+				if (strlen($perfiles_string) > 0) {
+					$perfiles_string = substr($perfiles_string, 0, strlen($perfiles_string) - 2);
+					array_push($aspiranteArray, $perfiles_string);
+				}
+				$aspirantesArray[] = $aspiranteArray;
 			}
-			
-			//Remover la última coma y espacio del string
-			if (strlen($perfiles_string) > 0) {
-				$perfiles_string = substr($perfiles_string, 0, strlen($perfiles_string) - 2);
-				array_push($aspiranteArray, $perfiles_string);
-			}
-			$aspirantesArray[] = $aspiranteArray;
 		}
 		
 		// Generar y descargar la hoja de cálculo

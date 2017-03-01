@@ -187,6 +187,9 @@
 			</tr>
 		</table>
 		
+		<!-- Inicialización de la variable global sobrantes -->
+		<?php $sobrantes = 0 ?>
+		
 		<!-- Sección de estudios, tomados de la variable $estudios -->
 		<!-- Declaración de una variable para contar el número de estudios y saber cuando
 			 crear una página nueva y otra variable con el número total de estudios -->

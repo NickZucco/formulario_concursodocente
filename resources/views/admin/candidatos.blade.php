@@ -19,6 +19,7 @@
         <div class="col-md-2">
             <form method="get" action="{{ env('APP_URL') }}admin/candidatos/excel">     
                 {!! csrf_field() !!}
+				<input id="excel_input" type="hidden" name="selected_profiles" value="0"/>
                 <button type="submit" class="btn btn-info">
                     Exportar a Excel
                 </button>
@@ -63,7 +64,7 @@
                     <strong>{{$numero_candidatos}}</strong>
 					<?php $numero_candidatos++; ?>
                 </td>
-                <td style="text-align: center"> 
+                <td style="text-align: center">
                     {{$aspirante->documento}}
                 </td>
                 <td style="text-align: center">
@@ -99,21 +100,32 @@
     (function ($) {
 		var aspirantes_perfiles = {!!$aspirantes_perfiles!!};
         var selected_profile_ids = [];
-
+		
+		//La variable excel_input es utilizada para cambiar dinámicamente el value del elemento input
+		//que tiene el id "excel_input". Como se sabe, el value de un campo input debe tener la forma
+		//value="1" o value="mi_nombre", es decir, estar asignado a un string. Dado que en este campo
+		//input se quiere pasar como parámetro al controlador AdminController el listado de los IDs de
+		//los perfiles seleccionados de la lista desplegable, es necesario modificar el string que se le
+		//asigna a value por medio de JavaScript.
+		var excel_input = document.getElementById("excel_input");
+		
         $("#candidates .candidate_row").hide();
 
         function updateCandidates(index, checked) {
 			$("#not_selected_profile").hide();
             $("#candidates .candidate_row").hide();
-						
+			console.log("Entrada a la función " + selected_profile_ids);
 			if (!checked) {
+				console.log("If !checked ||" + selected_profile_ids);
 				var itr = selected_profile_ids.indexOf(index);
 				if (index > -1) {
+					console.log("If index > -1 ||" + selected_profile_ids);
 					selected_profile_ids.splice(itr, 1);
 				}
 			}
 			else {
 				selected_profile_ids.push(index);
+				console.log("If !checked else ||" + selected_profile_ids);
 			}
 			
 			if(selected_profile_ids.length<=0){
@@ -122,8 +134,10 @@
 			else {
 				if ($.inArray('0', selected_profile_ids) != -1) {
 					$("#candidates .candidate_row").show();
+					console.log("All selected");
 				}
 				else {
+					console.log("Following are selected " + selected_profile_ids);
 					$.each(selected_profile_ids, function (index, item) {
 						$.each(aspirantes_perfiles, function (spids_index, spids_item) {
 							if (spids_item.perfiles_id == item) {
@@ -132,13 +146,15 @@
 						});
 					});
 				}
-			}          
+			}
+			//Cambiamos el value del campo input con id "excel_input"
+			excel_input.value = selected_profile_ids.toString();
         }
 		
         $('#profile_list').multiselect({			
             nSelectedText: 'seleccionados',
             nonSelectedText: 'No hay elementos seleccionados',
-            numberDisplayed: 10,
+            numberDisplayed: 5,
             onChange: function (option, checked, select) {
                 updateCandidates($(option).val(), checked);
             }
