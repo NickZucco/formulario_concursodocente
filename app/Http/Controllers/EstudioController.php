@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Auth;
 use DB;
+use App\Configuracion as Configuracion;
 use App\Estudio as Estudio;
 use App\Pais as Pais;
 use App\Perfil as Perfil;
@@ -13,50 +14,59 @@ use App\Perfil as Perfil;
 class EstudioController extends Controller {
 
     public function show_info($msg = null) {
-		$aspirante_id = Auth::user()->id;
-		//Contamos la cantidad de registros de cada tipo de formulario para visualizarlos en las pestañas
-		//de la plantilla (main.blade.php)
-		$count = array();
-		$count['estudio'] = DB::table('estudios')->where('aspirantes_id', $aspirante_id)->count();
-		$count['distincion'] = DB::table('distinciones_academica')->where('aspirantes_id', $aspirante_id)->count();
-		$count['laboral'] = DB::table('experiencias_laboral')->where('aspirantes_id', $aspirante_id)->count();
-		$count['docente'] = DB::table('experiencias_docente')->where('aspirantes_id', $aspirante_id)->count();
-		$count['investigativa'] = DB::table('experiencias_investigativa')->where('aspirantes_id', $aspirante_id)->count();
-		$count['produccion'] = DB::table('produccion_intelectual')->where('aspirantes_id', $aspirante_id)->count();
-		$count['idioma'] = DB::table('idiomas_certificado')->where('aspirantes_id', $aspirante_id)->count();
-		$count['perfiles'] = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->count();
-		$count['ensayos'] = 0;
-		
-		$ensayos = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->get();
-		foreach($ensayos as $ensayo) {
-			if (!$ensayo->ruta_ensayo==null) $count['ensayos'] += 1;
+		$configuracion = Configuracion::where('llave', '=', 'limit_date')->first();
+		if (strtotime($configuracion['valor']) > time() || Auth::user()->isAdmin()) {
+			$aspirante_id = Auth::user()->id;
+			//Contamos la cantidad de registros de cada tipo de formulario para visualizarlos en las pestañas
+			//de la plantilla (main.blade.php)
+			$count = array();
+			$count['estudio'] = DB::table('estudios')->where('aspirantes_id', $aspirante_id)->count();
+			$count['distincion'] = DB::table('distinciones_academica')->where('aspirantes_id', $aspirante_id)->count();
+			$count['laboral'] = DB::table('experiencias_laboral')->where('aspirantes_id', $aspirante_id)->count();
+			$count['docente'] = DB::table('experiencias_docente')->where('aspirantes_id', $aspirante_id)->count();
+			$count['investigativa'] = DB::table('experiencias_investigativa')->where('aspirantes_id', $aspirante_id)->count();
+			$count['produccion'] = DB::table('produccion_intelectual')->where('aspirantes_id', $aspirante_id)->count();
+			$count['idioma'] = DB::table('idiomas_certificado')->where('aspirantes_id', $aspirante_id)->count();
+			$count['perfiles'] = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->count();
+			$count['ensayos'] = 0;
+			
+			$ensayos = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->get();
+			foreach($ensayos as $ensayo) {
+				if (!$ensayo->ruta_ensayo==null) $count['ensayos'] += 1;
+			}
+			
+			$user_email = Auth::user()->email;
+
+			$estudios_info = Estudio::where('aspirantes_id', '=', $aspirante_id)->get();
+			$perfiles_seleccionados_info = Perfil::leftJoin('aspirantes_perfiles','perfiles.id','=','perfiles_id')
+					->leftJoin('aspirantes','aspirantes.id','=','aspirantes_id')
+					->where('aspirantes.id','=',$aspirante_id)->get();
+			
+			//Si no hay entrada de adjunto válida, se crea una entrada con el id de usuario, por lo tanto, cambiamos el enlace para no mostrar esta información
+			foreach ($estudios_info as $cur_estudio_key=>$cur_estudio) {
+				if (preg_match("/^[0-9]+$/", $cur_estudio["ruta_adjunto"])) {            //La expresión regular para los ids autonuméricos
+					$estudios_info[$cur_estudio_key]["ruta_adjunto"]=null;
+				}
+			}
+			
+			$paises = Pais::orderBy('nombre')->get();
+
+			$data = array(
+				'aspirante_id' => $aspirante_id,
+				'estudios' => $estudios_info,
+				'perfiles_seleccionados' =>$perfiles_seleccionados_info,
+				'paises' => $paises,
+				'msg' => $msg,
+				'count' => $count
+			);
+			return view('estudio', $data);
 		}
-		
-        $user_email = Auth::user()->email;
-
-        $estudios_info = Estudio::where('aspirantes_id', '=', $aspirante_id)->get();
-        $perfiles_seleccionados_info = Perfil::leftJoin('aspirantes_perfiles','perfiles.id','=','perfiles_id')
-                ->leftJoin('aspirantes','aspirantes.id','=','aspirantes_id')
-                ->where('aspirantes.id','=',$aspirante_id)->get();
-        
-        //Si no hay entrada de adjunto válida, se crea una entrada con el id de usuario, por lo tanto, cambiamos el enlace para no mostrar esta información
-        foreach ($estudios_info as $cur_estudio_key=>$cur_estudio) {
-            if (preg_match("/^[0-9]+$/", $cur_estudio["ruta_adjunto"])) {            //La expresión regular para los ids autonuméricos
-                $estudios_info[$cur_estudio_key]["ruta_adjunto"]=null;
-            }
-        }
-        
-        $paises = Pais::orderBy('nombre')->get();
-
-        $data = array(
-            'aspirante_id' => $aspirante_id,
-            'estudios' => $estudios_info,
-            'perfiles_seleccionados' =>$perfiles_seleccionados_info,
-            'paises' => $paises,
-            'msg' => $msg,
-			'count' => $count
-        );
-        return view('estudio', $data);
+		else{
+			$data = array(
+				'limit_date' => $configuracion['valor']
+			);
+			return view('auth/timeout', $data);
+		}
     }
 
     public function insert() {

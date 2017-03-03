@@ -1,5 +1,7 @@
 <?php
 
+use App\Configuracion as Configuracion;
+
 /*
   |---------------------------------------------------------------
   | Application routes
@@ -13,6 +15,7 @@
 // Si el usuario está loggeado y no tiene el rol de admin, entonces lo redirige a datos, el formulario para 
 // completar los datos personales.
 Route::get('/', function() {
+	$configuracion = Configuracion::where('llave', '=', 'limit_date')->first();
     if (Auth::guest()) {
         return Redirect::to('auth/login');
     } else {
@@ -20,7 +23,15 @@ Route::get('/', function() {
 			return Redirect::to('admin/candidatos');
 		}
 		else {
-			return Redirect::to('datos');
+			if (strtotime($configuracion['valor']) > time()) {
+				return Redirect::to('datos');
+			}
+			else {
+				$data = array(
+					'limit_date' => $configuracion['valor']
+				);
+				return view('auth/timeout', $data);
+			}
 		}
     }
 });

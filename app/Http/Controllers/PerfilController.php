@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Auth;
 use DB;
+use App\Configuracion as Configuracion;
 use App\Perfil as Perfil;
 use App\ProgramaPregrado as ProgramaPregrado;
 use App\PerfilProgramaPregrado as PerfilProgramaPregrado;
@@ -14,45 +15,53 @@ use App\AspirantePerfil as AspirantePerfil;
 class PerfilController extends Controller {
 
     public function show_info($msg = null) {
-		$aspirante_id = Auth::user()->id;
-		//Contamos la cantidad de registros de cada tipo de formulario para visualizarlos en las pestañas
-		//de la plantilla (main.blade.php)
-		$count = array();
-		$count['estudio'] = DB::table('estudios')->where('aspirantes_id', $aspirante_id)->count();
-		$count['distincion'] = DB::table('distinciones_academica')->where('aspirantes_id', $aspirante_id)->count();
-		$count['laboral'] = DB::table('experiencias_laboral')->where('aspirantes_id', $aspirante_id)->count();
-		$count['docente'] = DB::table('experiencias_docente')->where('aspirantes_id', $aspirante_id)->count();
-		$count['investigativa'] = DB::table('experiencias_investigativa')->where('aspirantes_id', $aspirante_id)->count();
-		$count['produccion'] = DB::table('produccion_intelectual')->where('aspirantes_id', $aspirante_id)->count();
-		$count['idioma'] = DB::table('idiomas_certificado')->where('aspirantes_id', $aspirante_id)->count();
-		$count['perfiles'] = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->count();
-		$count['ensayos'] = 0;
-		
-		$ensayos = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->get();
-		foreach($ensayos as $ensayo) {
-			if (!$ensayo->ruta_ensayo==null) $count['ensayos'] += 1;
+		$configuracion = Configuracion::where('llave', '=', 'limit_date')->first();
+		if (strtotime($configuracion['valor']) > time() || Auth::user()->isAdmin()) {
+			$aspirante_id = Auth::user()->id;
+			//Contamos la cantidad de registros de cada tipo de formulario para visualizarlos en las pestañas
+			//de la plantilla (main.blade.php)
+			$count = array();
+			$count['estudio'] = DB::table('estudios')->where('aspirantes_id', $aspirante_id)->count();
+			$count['distincion'] = DB::table('distinciones_academica')->where('aspirantes_id', $aspirante_id)->count();
+			$count['laboral'] = DB::table('experiencias_laboral')->where('aspirantes_id', $aspirante_id)->count();
+			$count['docente'] = DB::table('experiencias_docente')->where('aspirantes_id', $aspirante_id)->count();
+			$count['investigativa'] = DB::table('experiencias_investigativa')->where('aspirantes_id', $aspirante_id)->count();
+			$count['produccion'] = DB::table('produccion_intelectual')->where('aspirantes_id', $aspirante_id)->count();
+			$count['idioma'] = DB::table('idiomas_certificado')->where('aspirantes_id', $aspirante_id)->count();
+			$count['perfiles'] = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->count();
+			$count['ensayos'] = 0;
+			
+			$ensayos = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->get();
+			foreach($ensayos as $ensayo) {
+				if (!$ensayo->ruta_ensayo==null) $count['ensayos'] += 1;
+			}
+			
+			//Inicializamos la información del formulario
+			$msg = "";
+			$perfiles_info = Perfil::all();
+			$programas_pregrado_info = ProgramaPregrado::all();
+			$perfiles_programas_pregrado_info = PerfilProgramaPregrado::all()->toJson();
+
+			$perfiles_seleccionados = Perfil::join('aspirantes_perfiles', 'perfiles_id', '=', 'id')
+							->where('aspirantes_id', '=', $aspirante_id)->get();
+
+
+			$data = array(
+				"perfiles_info" => $perfiles_info,
+				"perfiles_seleccionados" => $perfiles_seleccionados,
+				"programas_pregrado_info" => $programas_pregrado_info,
+				"perfiles_programas_pregrado_info" => $perfiles_programas_pregrado_info,
+				'msg' => $msg,
+				'count' => $count
+			);
+			return view('perfiles', $data);
 		}
-		
-        //Inicializamos la información del formulario
-        $msg = "";
-        $perfiles_info = Perfil::all();
-        $programas_pregrado_info = ProgramaPregrado::all();
-        $perfiles_programas_pregrado_info = PerfilProgramaPregrado::all()->toJson();
-
-        $perfiles_seleccionados = Perfil::join('aspirantes_perfiles', 'perfiles_id', '=', 'id')
-                        ->where('aspirantes_id', '=', $aspirante_id)->get();
-
-
-        $data = array(
-            "perfiles_info" => $perfiles_info,
-            "perfiles_seleccionados" => $perfiles_seleccionados,
-            "programas_pregrado_info" => $programas_pregrado_info,
-            "perfiles_programas_pregrado_info" => $perfiles_programas_pregrado_info,
-            'msg' => $msg,
-			'count' => $count
-        );
-		//dd($data);
-        return view('perfiles', $data);
+		else{
+			$data = array(
+				'limit_date' => $configuracion['valor']
+			);
+			return view('auth/timeout', $data);
+		}
     }
 
     public function insert() {
@@ -102,38 +111,47 @@ class PerfilController extends Controller {
     }
 
     public function show_essays($msg = null) {
-		$aspirante_id = Auth::user()->id;
-		//Contamos la cantidad de registros de cada tipo de formulario para visualizarlos en las pestañas
-		//de la plantilla (main.blade.php)
-		$count = array();
-		$count['estudio'] = DB::table('estudios')->where('aspirantes_id', $aspirante_id)->count();
-		$count['distincion'] = DB::table('distinciones_academica')->where('aspirantes_id', $aspirante_id)->count();
-		$count['laboral'] = DB::table('experiencias_laboral')->where('aspirantes_id', $aspirante_id)->count();
-		$count['docente'] = DB::table('experiencias_docente')->where('aspirantes_id', $aspirante_id)->count();
-		$count['investigativa'] = DB::table('experiencias_investigativa')->where('aspirantes_id', $aspirante_id)->count();
-		$count['produccion'] = DB::table('produccion_intelectual')->where('aspirantes_id', $aspirante_id)->count();
-		$count['idioma'] = DB::table('idiomas_certificado')->where('aspirantes_id', $aspirante_id)->count();
-		$count['perfiles'] = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->count();
-		$count['ensayos'] = 0;
-		
-		$ensayos = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->get();
-		foreach($ensayos as $ensayo) {
-			if (!$ensayo->ruta_ensayo==null) $count['ensayos'] += 1;
+		$configuracion = Configuracion::where('llave', '=', 'limit_date')->first();
+		if (strtotime($configuracion['valor']) > time() || Auth::user()->isAdmin()) {
+			$aspirante_id = Auth::user()->id;
+			//Contamos la cantidad de registros de cada tipo de formulario para visualizarlos en las pestañas
+			//de la plantilla (main.blade.php)
+			$count = array();
+			$count['estudio'] = DB::table('estudios')->where('aspirantes_id', $aspirante_id)->count();
+			$count['distincion'] = DB::table('distinciones_academica')->where('aspirantes_id', $aspirante_id)->count();
+			$count['laboral'] = DB::table('experiencias_laboral')->where('aspirantes_id', $aspirante_id)->count();
+			$count['docente'] = DB::table('experiencias_docente')->where('aspirantes_id', $aspirante_id)->count();
+			$count['investigativa'] = DB::table('experiencias_investigativa')->where('aspirantes_id', $aspirante_id)->count();
+			$count['produccion'] = DB::table('produccion_intelectual')->where('aspirantes_id', $aspirante_id)->count();
+			$count['idioma'] = DB::table('idiomas_certificado')->where('aspirantes_id', $aspirante_id)->count();
+			$count['perfiles'] = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->count();
+			$count['ensayos'] = 0;
+			
+			$ensayos = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->get();
+			foreach($ensayos as $ensayo) {
+				if (!$ensayo->ruta_ensayo==null) $count['ensayos'] += 1;
+			}
+			
+			//Inicializamos la información del formulario
+			$msg = "";
+
+			$perfiles_seleccionados = Perfil::join('aspirantes_perfiles', 'perfiles_id', '=', 'id')
+							->where('aspirantes_id', '=', $aspirante_id)->get();
+			
+			$data = array(
+				"perfiles_seleccionados" => $perfiles_seleccionados,
+				"msg" => $msg,
+				"count" => $count
+			);
+
+			return view('ensayos', $data);
 		}
-		
-        //Inicializamos la información del formulario
-        $msg = "";
-
-        $perfiles_seleccionados = Perfil::join('aspirantes_perfiles', 'perfiles_id', '=', 'id')
-                        ->where('aspirantes_id', '=', $aspirante_id)->get();
-		
-        $data = array(
-            "perfiles_seleccionados" => $perfiles_seleccionados,
-            "msg" => $msg,
-			"count" => $count
-        );
-
-        return view('ensayos', $data);
+		else{
+			$data = array(
+				'limit_date' => $configuracion['valor']
+			);
+			return view('auth/timeout', $data);
+		}
     }
 
     public function insertEssays() {

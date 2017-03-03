@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests;
 use Auth;
 use DB;
+use App\Configuracion as Configuracion;
 use App\Pais as Pais;
 use App\Idioma as Idioma;
 use App\ProduccionIntelectual as ProduccionIntelectual;
@@ -16,43 +17,52 @@ use App\TipoProduccionIntelectual as TipoProduccionIntelectual;
 class ProduccionIntelectualController extends Controller {
     
     public function show_info($msg = null) {
-		$aspirante_id = Auth::user()->id;
-		//Contamos la cantidad de registros de cada tipo de formulario para visualizarlos en las pestañas
-		//de la plantilla (main.blade.php)
-		$count = array();
-		$count['estudio'] = DB::table('estudios')->where('aspirantes_id', $aspirante_id)->count();
-		$count['distincion'] = DB::table('distinciones_academica')->where('aspirantes_id', $aspirante_id)->count();
-		$count['laboral'] = DB::table('experiencias_laboral')->where('aspirantes_id', $aspirante_id)->count();
-		$count['docente'] = DB::table('experiencias_docente')->where('aspirantes_id', $aspirante_id)->count();
-		$count['investigativa'] = DB::table('experiencias_investigativa')->where('aspirantes_id', $aspirante_id)->count();
-		$count['produccion'] = DB::table('produccion_intelectual')->where('aspirantes_id', $aspirante_id)->count();
-		$count['idioma'] = DB::table('idiomas_certificado')->where('aspirantes_id', $aspirante_id)->count();
-		$count['perfiles'] = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->count();
-		$count['ensayos'] = 0;
-		
-		$ensayos = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->get();
-		foreach($ensayos as $ensayo) {
-			if (!$ensayo->ruta_ensayo==null) $count['ensayos'] += 1;
+		$configuracion = Configuracion::where('llave', '=', 'limit_date')->first();
+		if (strtotime($configuracion['valor']) > time() || Auth::user()->isAdmin()) {
+			$aspirante_id = Auth::user()->id;
+			//Contamos la cantidad de registros de cada tipo de formulario para visualizarlos en las pestañas
+			//de la plantilla (main.blade.php)
+			$count = array();
+			$count['estudio'] = DB::table('estudios')->where('aspirantes_id', $aspirante_id)->count();
+			$count['distincion'] = DB::table('distinciones_academica')->where('aspirantes_id', $aspirante_id)->count();
+			$count['laboral'] = DB::table('experiencias_laboral')->where('aspirantes_id', $aspirante_id)->count();
+			$count['docente'] = DB::table('experiencias_docente')->where('aspirantes_id', $aspirante_id)->count();
+			$count['investigativa'] = DB::table('experiencias_investigativa')->where('aspirantes_id', $aspirante_id)->count();
+			$count['produccion'] = DB::table('produccion_intelectual')->where('aspirantes_id', $aspirante_id)->count();
+			$count['idioma'] = DB::table('idiomas_certificado')->where('aspirantes_id', $aspirante_id)->count();
+			$count['perfiles'] = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->count();
+			$count['ensayos'] = 0;
+			
+			$ensayos = DB::table('aspirantes_perfiles')->where('aspirantes_id', $aspirante_id)->get();
+			foreach($ensayos as $ensayo) {
+				if (!$ensayo->ruta_ensayo==null) $count['ensayos'] += 1;
+			}
+			
+			$user_email = Auth::user()->email;
+
+			$producciones_intelectual = ProduccionIntelectual::where('aspirantes_id', '=', $aspirante_id)->get();
+			
+			$paises = Pais::orderBy('nombre')->get();
+			$idiomas = Idioma::all()->keyBy('id');
+			$tipos_produccion_intelectual = TipoProduccionIntelectual::all()->keyBy('id');
+
+			$data = array(
+				'aspirantes_id' => $aspirante_id,
+				'paises'=>$paises,
+				'idiomas'=>$idiomas,
+				'tipos_produccion_intelectual' => $tipos_produccion_intelectual,
+				'producciones_intelectual' => $producciones_intelectual,
+				'msg' => $msg,
+				'count' => $count
+			);
+			return view('produccion_intelectual', $data);
 		}
-		
-        $user_email = Auth::user()->email;
-
-        $producciones_intelectual = ProduccionIntelectual::where('aspirantes_id', '=', $aspirante_id)->get();
-        
-        $paises = Pais::orderBy('nombre')->get();
-        $idiomas = Idioma::all()->keyBy('id');
-        $tipos_produccion_intelectual = TipoProduccionIntelectual::all()->keyBy('id');
-
-        $data = array(
-            'aspirantes_id' => $aspirante_id,
-            'paises'=>$paises,
-            'idiomas'=>$idiomas,
-            'tipos_produccion_intelectual' => $tipos_produccion_intelectual,
-            'producciones_intelectual' => $producciones_intelectual,
-            'msg' => $msg,
-			'count' => $count
-        );
-        return view('produccion_intelectual', $data);
+		else{
+			$data = array(
+				'limit_date' => $configuracion['valor']
+			);
+			return view('auth/timeout', $data);
+		}
     }
 
     public function insert() {

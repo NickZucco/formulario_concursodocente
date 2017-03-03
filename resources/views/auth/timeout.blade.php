@@ -15,7 +15,7 @@
                 <p>Le informamos que se ha vencido el plazo para acceder al formulario. La fecha limite de diligenciamiento del formulario es: {{$limit_date}}</p>
             </div>
             <div class="form-group"> 
-                <center><input class="form-control" type="button" name="envio" onclick="window.history.back();" value="Regresar"></center>
+                <li><a href="{{ env('APP_URL') }}auth/logout"><i class="glyphicon glyphicon-log-out"></i>&nbsp;Cerrar sesión</a></li>
             </div>
         </div>
     </div>

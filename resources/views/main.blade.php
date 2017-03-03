@@ -11,9 +11,9 @@
 <div class="row">
     <p>Bienvenido/a {{Auth::user()->name}}
     <br>
-    <div style="display:inline-block;float:right">
+    <!--<div style="display:inline-block;float:right">
         El formulario se cerrará en&nbsp;<span id="countdown" style="float:right"> </span>
-    </div>
+    </div>-->
 </div>
 
 <nav class="navbar navbar-default" role="navigation">
